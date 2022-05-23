@@ -1,15 +1,15 @@
 H5P.TextDroppable = (function ($) {
   //CSS Main Containers:
   //Special Sub-containers:
-  var SHOW_SOLUTION_CONTAINER = "h5p-drag-show-solution-container";
+  const SHOW_SOLUTION_CONTAINER = "h5p-drag-show-solution-container";
 
   //CSS Dropzone feedback:
-  var CORRECT_FEEDBACK = 'h5p-drag-correct-feedback';
-  var WRONG_FEEDBACK = 'h5p-drag-wrong-feedback';
+  const CORRECT_FEEDBACK = 'h5p-drag-correct-feedback';
+  const WRONG_FEEDBACK = 'h5p-drag-wrong-feedback';
 
   //CSS Draggable feedback:
-  var DRAGGABLE_FEEDBACK_CORRECT = 'h5p-drag-draggable-correct';
-  var DRAGGABLE_FEEDBACK_WRONG = 'h5p-drag-draggable-wrong';
+  const DRAGGABLE_FEEDBACK_CORRECT = 'h5p-drag-draggable-correct';
+  const DRAGGABLE_FEEDBACK_WRONG = 'h5p-drag-draggable-wrong';
 
   /**
    * Private class for keeping track of droppable zones.
@@ -23,7 +23,7 @@ H5P.TextDroppable = (function ($) {
    * @param {Object} params Behavior settings
    */
   function Droppable(text, tip, correctFeedback, incorrectFeedback, dropzone, dropzoneContainer, index, params) {
-    var self = this;
+    const self = this;
     self.text = text;
     self.tip = tip;
     self.correctFeedback = correctFeedback;
@@ -69,7 +69,7 @@ H5P.TextDroppable = (function ($) {
     const self = this;
 
     setTimeout(() => {
-      if(!self.$dropzone.is(':focus') && !self.$tip.is(':focus')){
+      if (!self.$dropzone.is (':focus') && !self.$tip.is (':focus')) {
         self.$tip.attr('tabindex', '-1');
       }
     }, 0);
@@ -135,7 +135,7 @@ H5P.TextDroppable = (function ($) {
    * @param {Draggable} droppedDraggable A draggable that has been dropped on this box.
    */
   Droppable.prototype.setDraggable = function (droppedDraggable) {
-    var self = this;
+    const self = this;
     if (self.containedDraggable === droppedDraggable) {
       return;
     }

@@ -35,17 +35,17 @@ const lex = solutionText => {
 
   if (tip) {
     text = text.replace(tip, '');
-    tip = tip[0].replace(':','');
+    tip = tip[0].replace(':', '');
     tip = tip.replace(/\s+$/, '');
   }
   if (correctFeedback) {
     text = text.replace(correctFeedback, '');
-    correctFeedback = correctFeedback[0].replace('\\+','');
+    correctFeedback = correctFeedback[0].replace('\\+', '');
     correctFeedback = correctFeedback.replace(/\s+$/, '');
   }
   if (incorrectFeedback) {
     text = text.replace(incorrectFeedback, '');
-    incorrectFeedback = incorrectFeedback[0].replace('\\-','');
+    incorrectFeedback = incorrectFeedback[0].replace('\\-', '');
     incorrectFeedback = incorrectFeedback.replace(/\s+$/, '');
   }
 

@@ -1,6 +1,6 @@
 H5P.TextDraggable = (function ($) {
   //CSS Draggable feedback:
-  var DRAGGABLE_DROPPED = 'h5p-drag-dropped';
+  const DRAGGABLE_DROPPED = 'h5p-drag-dropped';
   /**
    * Private class for keeping track of draggable text.
    *
@@ -11,7 +11,7 @@ H5P.TextDraggable = (function ($) {
    */
   function Draggable(text, draggable, index) {
     H5P.EventDispatcher.call(this);
-    var self = this;
+    const self = this;
     self.text = text;
     self.insideDropzone = null;
     self.$draggable = $(draggable);
@@ -85,8 +85,8 @@ H5P.TextDraggable = (function ($) {
    */
   Draggable.prototype.revertDraggableTo = function ($container) {
     // get the relative distance between draggable and container.
-    var offLeft = this.$draggable.offset().left - $container.offset().left;
-    var offTop = this.$draggable.offset().top - $container.offset().top;
+    const offLeft = this.$draggable.offset().left - $container.offset().left;
+    const offTop = this.$draggable.offset().top - $container.offset().top;
 
     // Prepend draggable to new container, but keep the offset,
     // then animate to new container's top:0, left:0
@@ -104,7 +104,8 @@ H5P.TextDraggable = (function ($) {
   Draggable.prototype.toggleDroppedFeedback = function (isDropped) {
     if (isDropped) {
       this.$draggable.addClass(DRAGGABLE_DROPPED);
-    } else {
+    }
+    else {
       this.$draggable.removeClass(DRAGGABLE_DROPPED);
     }
   };
@@ -142,8 +143,8 @@ H5P.TextDraggable = (function ($) {
 
   /**
    * Update the Draggable's aria-description attribute.
-   * 
-   * @param {String} description 
+   *
+   * @param {String} description
    */
   Draggable.prototype.updateAriaDescription = function (description) {
     this.$draggable.attr('aria-description', description);
@@ -165,7 +166,7 @@ H5P.TextDraggable = (function ($) {
    * @returns {Droppable}
    */
   Draggable.prototype.removeFromZone = function () {
-    var dropZone = this.insideDropzone;
+    const dropZone = this.insideDropzone;
 
     if (this.insideDropzone !== null) {
       this.insideDropzone.removeFeedback();
