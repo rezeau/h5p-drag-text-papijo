@@ -66,6 +66,12 @@ var cleanCharacter = curry(function(char, str) {
   return str;
 });
 
+var shuffleArray = function (array) {
+  array.sort(() => Math.random() - 0.5);
+  return array;
+}
+
+
 /**
  * Implements "Fisher-Yates Shuffle" algorithm for arrays
  *
@@ -75,12 +81,10 @@ var cleanCharacter = curry(function(char, str) {
  */
 var shuffle = function (array) {
   var counter = array.length;
-
   // While there are elements in the array
   while (counter > 0) {
     // Pick a random index
     var index = Math.floor(Math.random() * counter);
-
     // Decrease counter by 1
     counter--;
 

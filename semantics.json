@@ -310,6 +310,23 @@
         "type": "boolean",
         "default": false,
         "optional": true
+      },
+      {
+        "name": "keepCorrectAnswers",
+        "type": "boolean",
+        "label": "Keep correct answers",
+        "description": "Check this option if you want to keep the draggable text elements dropped in the correct blanks after pressing 'Retry'.",
+        "importance": "low",
+        "default": false,
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "instantFeedback",
+              "equals": false
+            }
+          ]
+        }
       }
     ]
   },

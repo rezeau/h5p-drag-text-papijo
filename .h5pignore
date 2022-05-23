@@ -13,3 +13,4 @@ README.md
 CONTRIBUTING.md
 package.json
 crowdin.yml
+package-lock.json

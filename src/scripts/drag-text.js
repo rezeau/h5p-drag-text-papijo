@@ -87,7 +87,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         enableRetry: true,
         enableSolutionsButton: true,
         enableCheckButton: true,
-        instantFeedback: false
+        instantFeedback: false,
+        keepCorrectAnswers: false
       },
       showSolution : "Show solution",
       dropZoneIndex: "Drop Zone @index.",
@@ -488,6 +489,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       // Reset and shuffle draggables if Question is answered
       if (self.answered) {
         // move draggables to original container
+        
         self.resetDraggables();
       }
       self.answered = false;
@@ -1166,6 +1168,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    */
   DragText.prototype.enableAllDropzonesAndDraggables = function () {
     this.enableDraggables();
+    
     this.droppables.forEach(function (droppable) {
       droppable.enableDropzone();
     });
@@ -1311,20 +1314,19 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Resets the position of all draggables shuffled.
    */
   DragText.prototype.resetDraggables = function () {
-    // TODO if keep correct answers, then remove the drag-text from the draggables array before sending to shuffle ???
-    var index = 0;
-    this.droppables.forEach(droppable => {
-      const draggable = droppable.containedDraggable;
-      index++;
-      if (droppable && draggable) {
-        if (droppable.isCorrect() ) {
-          // TODO try to mark found draggable zone (if keep answers)
-          //this.draggables[index].found = true;
+    // papi jo added keep correct answers option
+    if (!this.params.behaviour.keepCorrectAnswers) {
+      Util.shuffle(this.draggables).forEach(this.revert, this);
+    } else {
+      // TODO try to shuffle those draggables?
+      this.draggables.forEach(draggable => {
+        if (draggable.insideDropzone) {
+          if (draggable.text !== draggable.insideDropzone.text) {
+            this.revert(draggable);
+          }
         }
-      }
-    })
-    
-    Util.shuffle(this.draggables).forEach(this.revert, this);
+      })
+    }
   };
 
   /**
