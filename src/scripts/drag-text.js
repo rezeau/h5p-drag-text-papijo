@@ -151,22 +151,26 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       }
     }, this);
     this.on('drop', this.removeControlsFromEmptyDropZones, this);
+    
 
     // toggle label for draggable
     this.on('start', event => {
       const element = event.data.element;
       const draggable = this.getDraggableByElement(element);
-
+      const dropZone = event.data.target;
+      
       // on drag and drop, toggle aria-dropeffect between 'move', and 'none'
       this.toggleDropEffect();
       element.setAttribute('aria-grabbed', 'true');
+      
       this.setDraggableAriaLabel(draggable);
+      
     });
 
     this.on('stop', event => {
       const element = event.data.element;
       const draggable = this.getDraggableByElement(element);
-
+      
       // on drag and drop, toggle aria-dropeffect between 'move', and 'none'
       this.toggleDropEffect();
       element.setAttribute('aria-grabbed', 'false');
@@ -183,12 +187,16 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     // on revert, re add element to drag controls
     this.on ('revert', function (event) {
+      
       this.dragControls.insertElementAt(event.data.element, 0);
     }, this);
 
     this.on ('drop', this.updateDroppableElement, this);
     this.on ('revert', this.updateDroppableElement, this);
-
+    
+    this.on ('start', function (event) {      
+      this.dragControls.insertElementAt(event.data.element, 0);
+    }, this);
     // Init drag text task
     this.initDragText();
 
@@ -224,12 +232,22 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @param event
    */
   DragText.prototype.updateDroppableElement = function (event) {
+    
     const dropZone = event.data.target;
     const draggable = event.data.element;
     const droppable = this.getDroppableByElement(dropZone);
 
     if (dropZone) {
       this.setDroppableLabel(dropZone, draggable.textContent, droppable.getIndex());
+      //jr todo check moving draggable from dropzone to another dropzone! 
+      if (droppable && droppable.hasDraggable()) {
+        //dropZone.removeAttribute('aria-dropeffect');
+        
+        dropZone.setAttribute('aria-dropped', 'true');
+      } else {
+        //dropZone.setAttribute('aria-dropeffect', 'move');
+        dropZone.removeAttribute('aria-dropped', 'true');
+      }
     }
   };
 
@@ -250,6 +268,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       .filter(droppable => !droppable.hasDraggable())
       .map(droppable => droppable.getElement())
       .forEach(el => {
+        console.log('el = ' + el);
+        el.removeAttribute('aria-dropped');
         this.dropControls.removeElement(el);
       });
   };
@@ -328,6 +348,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       }
 
       dropZone.setAttribute('aria-label', ariaLabel);
+      // JR
+      //dropZone.removeAttribute('aria-dropeffect');
+      //dropZone.setAttribute('aria-dropped', 'true');
     }
   };
 
@@ -872,8 +895,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     this.widest = "auto";
     //Adjust all droppable to widest size.
     this.droppables.forEach(function (droppable) {
-      droppable.getDropzone().width(self.widest);
-      droppable.getDropzone().css({"min-width": narrowestDraggable + staticMinimumWidth});
+      //droppable.getDropzone().width(self.widest);
+      // no min-width for drag paragraphs
+      //droppable.getDropzone().css({"min-width": narrowestDraggable + staticMinimumWidth});
     });
   };
 
@@ -997,6 +1021,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.revert = function (draggable) {
+    
     const droppable = draggable.removeFromZone();
     const target = droppable ? droppable.getElement() : undefined;
     draggable.revertDraggableTo(this.$draggables);
@@ -1234,7 +1259,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Toogles the drop effect based on if an element is selected
    */
   DragText.prototype.toggleDropEffect = function () {
+    
     const hasSelectedElement = this.selectedElement !== undefined;
+    console.log('hasSelectedElement = ' + hasSelectedElement);
     this.ariaDropControls[hasSelectedElement ? 'setAllToMove' : 'setAllToNone']();
   };
 

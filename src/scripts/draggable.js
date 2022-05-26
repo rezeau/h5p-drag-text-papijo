@@ -186,6 +186,7 @@ H5P.TextDraggable = (function ($) {
    * @param {Droppable} droppable The droppable this draggable will be added to.
    */
   Draggable.prototype.addToZone = function (droppable) {
+    console.log('addToZone = ' + this.text);
     if (this.insideDropzone !== null) {
       this.insideDropzone.removeDraggable();
     }

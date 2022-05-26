@@ -225,6 +225,7 @@ H5P.TextDroppable = (function ($) {
    * Sets short format of draggable when inside a dropbox.
    */
   Droppable.prototype.setShortFormat = function () {
+    console.log('setShortFormat');
     if (this.containedDraggable !== null) {
       this.containedDraggable.setShortFormat();
     }

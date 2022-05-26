@@ -127,7 +127,7 @@
   margin: 0.3em;
   vertical-align: top;
   text-align: center;
-  display: inline-block;
+  display: inline.block;
   border: 0.1em solid #c6c6c6;
   overflow: hidden;
 
@@ -152,10 +152,11 @@
   //width: 100%;
   margin: -0.1em 0 0 0;
   padding: 0.1em 0.825em;
-  white-space: nowrap;
+  //white-space: nowrap;
   color: #1a4473;
   border: 0.1em solid #a9c3d0;
   background: #cee0f4;
+  display: inline;
 }
 
 .h5p-drag-text [aria-grabbed='true'] {
@@ -234,6 +235,9 @@
   text-overflow: ellipsis;
 }
 
+.h5p-drag-text [aria-dropped] {
+  display: inline;
+}
 .h5p-drag-text .correct-answer {
   width: 1px;
   height: 1px;
@@ -244,4 +248,12 @@
 
 .h5p-drag-text .h5p-question-introduction {
   outline: none;
+}
+
+.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wide-screen {
+  display: inline;
+}
+
+.h5p-drag-text.h5p-drag-dropped {
+  display: inline;
 }
