@@ -124,13 +124,11 @@
   background: #f7d0d0;
   padding-top: 2px;
   padding-bottom: 2px;
-  //padding-right: 1.5em;
 }
 
-.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-noshorten,
-.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-noshorten {
-  //background: transparent;
-  //margin-right: -1em!important;
+.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-noshorten-transparent,
+.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-noshorten-transparent {
+  background: transparent;
 }
 
 .h5p-drag-text [aria-dropeffect]:before {

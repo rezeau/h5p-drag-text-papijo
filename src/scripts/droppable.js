@@ -8,6 +8,7 @@ H5P.TextDroppable = (function ($) {
   const WRONG_FEEDBACK = 'h5p-drag-wrong-feedback';
   const CORRECT_FEEDBACK_NO_SHORTEN = 'h5p-drag-correct-feedback-noshorten';
   const WRONG_FEEDBACK_NO_SHORTEN = 'h5p-drag-wrong-feedback-noshorten';
+  const TRANSPARENT = '-transparent';
 
   //CSS Draggable feedback:
   const DRAGGABLE_FEEDBACK_CORRECT = 'h5p-drag-draggable-correct';
@@ -185,6 +186,11 @@ H5P.TextDroppable = (function ($) {
   Droppable.prototype.addFeedback = function () {
     const self = this;
     //Draggable is correct
+    // Option for displaying transparentBackground
+    let background = '';
+    if (this.params.behaviour.transparentBackground) {
+      background = TRANSPARENT;
+    }
     if (this.isCorrect()) {
       if (this.params.behaviour.shortenDraggableTexts) {
         this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK);
@@ -194,7 +200,7 @@ H5P.TextDroppable = (function ($) {
         if (self.$tip) {
           self.$tip.remove();
         }
-        this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).addClass(CORRECT_FEEDBACK_NO_SHORTEN);
+        this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).addClass(CORRECT_FEEDBACK_NO_SHORTEN + background);
       }
 
       //Draggable feedback
@@ -210,7 +216,7 @@ H5P.TextDroppable = (function ($) {
         this.$dropzone.removeClass(CORRECT_FEEDBACK).addClass(WRONG_FEEDBACK);
       }
       else {
-        this.$dropzone.removeClass(CORRECT_FEEDBACK_NO_SHORTEN).addClass(WRONG_FEEDBACK_NO_SHORTEN);
+        this.$dropzone.removeClass(CORRECT_FEEDBACK_NO_SHORTEN).addClass(WRONG_FEEDBACK_NO_SHORTEN + background);
       }
 
       //Draggable feedback

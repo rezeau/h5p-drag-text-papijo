@@ -90,7 +90,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         enableCheckButton: true,
         instantFeedback: false,
         shortenDraggableTexts: true,
-        keepCorrectAnswers: false
+        keepCorrectAnswers: false,
+        transparentBackground: false
       },
       showSolution : "Show solution",
       dropZoneIndex: "Drop Zone @index.",
