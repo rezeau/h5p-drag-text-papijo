@@ -6,6 +6,8 @@ H5P.TextDroppable = (function ($) {
   //CSS Dropzone feedback:
   const CORRECT_FEEDBACK = 'h5p-drag-correct-feedback';
   const WRONG_FEEDBACK = 'h5p-drag-wrong-feedback';
+  const CORRECT_FEEDBACK_NO_SHORTEN = 'h5p-drag-correct-feedback-noshorten';
+  const WRONG_FEEDBACK_NO_SHORTEN = 'h5p-drag-wrong-feedback-noshorten';
 
   //CSS Draggable feedback:
   const DRAGGABLE_FEEDBACK_CORRECT = 'h5p-drag-draggable-correct';
@@ -180,9 +182,19 @@ H5P.TextDroppable = (function ($) {
    * Sets CSS styling feedback for this drop box.
    */
   Droppable.prototype.addFeedback = function () {
+    const self = this;
     //Draggable is correct
     if (this.isCorrect()) {
-      this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK);
+      if (this.params.behaviour.shortenDraggableTexts) {
+        this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK);
+      }
+      else {
+        // Remove tip if draggable is correct!
+        if (self.$tip) {
+          self.$tip.remove();
+        }
+        this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).addClass(CORRECT_FEEDBACK_NO_SHORTEN);
+      }
 
       //Draggable feedback
       this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).addClass(DRAGGABLE_FEEDBACK_CORRECT);
@@ -193,7 +205,12 @@ H5P.TextDroppable = (function ($) {
     }
     else {
       //Draggable is wrong
-      this.$dropzone.removeClass(CORRECT_FEEDBACK).addClass(WRONG_FEEDBACK);
+      if (this.params.behaviour.shortenDraggableTexts) {
+        this.$dropzone.removeClass(CORRECT_FEEDBACK).addClass(WRONG_FEEDBACK);
+      }
+      else {
+        this.$dropzone.removeClass(CORRECT_FEEDBACK_NO_SHORTEN).addClass(WRONG_FEEDBACK_NO_SHORTEN);
+      }
 
       //Draggable feedback
       if (this.containedDraggable !== null) {
@@ -206,7 +223,12 @@ H5P.TextDroppable = (function ($) {
    * Removes all CSS styling feedback for this drop  *  * box.
    */
   Droppable.prototype.removeFeedback = function () {
-    this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK);
+    if (this.params.behaviour.shortenDraggableTexts) {
+      this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK);
+    }
+    else {
+      this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).removeClass(CORRECT_FEEDBACK_NO_SHORTEN);
+    }
 
     //Draggable feedback
     if (this.containedDraggable !== null) {
@@ -222,10 +244,17 @@ H5P.TextDroppable = (function ($) {
   };
 
   /**
+   * Returns true if the dropzone has visible correct feedback (if option Keep Answers)
+   */
+  Droppable.prototype.hasCorrectFeedback = function () {
+    return this.$dropzone.hasClass(CORRECT_FEEDBACK) || this.$dropzone.hasClass(CORRECT_FEEDBACK_NO_SHORTEN);
+  };
+
+
+  /**
    * Sets short format of draggable when inside a dropbox.
    */
   Droppable.prototype.setShortFormat = function () {
-    console.log('setShortFormat');
     if (this.containedDraggable !== null) {
       this.containedDraggable.setShortFormat();
     }

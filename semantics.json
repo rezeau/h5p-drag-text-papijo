@@ -58,7 +58,13 @@
       "hr",
       "pre",
       "code"
-    ]
+    ],
+    "font": {
+      "size": true,
+      "family": true,
+      "color": true,
+      "background": true
+    }
   },
   {
     "label": "Text",
@@ -309,6 +315,15 @@
         "name": "instantFeedback",
         "type": "boolean",
         "default": false,
+        "optional": true
+      },
+      {
+        "label": "Shorten the longish draggable texts",
+        "description": "Uncheck this option if you want to keep the original longish draggable texts. WARNING! Works best if draggable texts are in separate paragraphs!",
+        "importance": "low",
+        "name": "shortenDraggableTexts",
+        "type": "boolean",
+        "default": true,
         "optional": true
       },
       {

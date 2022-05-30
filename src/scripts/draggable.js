@@ -9,7 +9,7 @@ H5P.TextDraggable = (function ($) {
    * @param {jQuery} draggable Draggable object.
    * @param {number} index
    */
-  function Draggable(text, draggable, index) {
+  function Draggable(text, draggable, index, shorten) {
     H5P.EventDispatcher.call(this);
     const self = this;
     self.text = text;
@@ -18,11 +18,12 @@ H5P.TextDraggable = (function ($) {
     self.$ariaLabel = self.$draggable.find('.h5p-hidden-read');
     self.index = index;
     self.initialIndex = index;
-
     self.shortFormat = self.text;
-    //Shortens the draggable string if inside a dropbox.
-    if (self.shortFormat.length > 20 && !self.shortFormat.match(/\\\(.+\\\)|\\\[.+\\\]|\$\$.+\$\$/)) {
-      //self.shortFormat = self.shortFormat.slice(0, 17) + '...';
+    if (shorten) {
+      //Shortens the draggable string if inside a dropbox.
+      if (self.shortFormat.length > 20 && !self.shortFormat.match(/\\\(.+\\\)|\\\[.+\\\]|\$\$.+\$\$/)) {
+        self.shortFormat = self.shortFormat.slice(0, 17) + '&#8230'; // ellipsis character
+      }
     }
   }
 
@@ -186,7 +187,6 @@ H5P.TextDraggable = (function ($) {
    * @param {Droppable} droppable The droppable this draggable will be added to.
    */
   Draggable.prototype.addToZone = function (droppable) {
-    console.log('addToZone = ' + this.text);
     if (this.insideDropzone !== null) {
       this.insideDropzone.removeDraggable();
     }

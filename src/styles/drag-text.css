@@ -50,27 +50,38 @@
   position: absolute;
   z-index: 4;
   font-size: 0.9em;
+  margin-left:4px;
 }
 
 /* Feedback for dropzones */
 .h5p-drag-text .h5p-drag-correct-feedback:before {
   position: absolute;
-  right: 0em;
+  right: 0.5em;
   font-family: 'H5PFontAwesome4';
   content: "\f00c";
   color: #255c41;
-  margin-right: -0.8em;
-  top: -10px;
 }
 
 .h5p-drag-text .h5p-drag-wrong-feedback:before {
   position: absolute;
-  right: 0em;
+  right: 0.5em;
   font-family: 'H5PFontAwesome4';
   content: "\f00d";
   color: #b71c1c;
-  margin-right: -0.8em;
-  top: -10px;
+}
+
+.h5p-drag-text .h5p-drag-correct-feedback-noshorten:before {
+  font-family: 'H5PFontAwesome4';
+  content: "\f00c";
+  color: #255c41;
+  margin-right: -0.6em;
+}
+
+.h5p-drag-text .h5p-drag-wrong-feedback-noshorten:before {
+  font-family: 'H5PFontAwesome4';
+  content: "\f00d";
+  color: #b71c1c;
+  margin-right: -0.6em;
 }
 
 /* Dropzone styling */
@@ -79,7 +90,9 @@
   display: inline;
   padding-right: 0.1em;
 }
-.h5p-drag-text [aria-dropeffect] {
+
+.h5p-drag-text [aria-dropeffect],
+.h5p-drag-text [aria-dropped] {
   position:relative;
   top: -0.1em;
   width: 10em;
@@ -89,15 +102,35 @@
   display: inline-block;
   vertical-align: middle;
   text-align: center;
-  padding: 0.1em 0 0.1em 0;
+  padding: 0.1em 1.65em 0.1em 0;
 }
 
-.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback {
+.h5p-drag-text [aria-dropped] {
+  display: inline;
+  vertical-align: baseline;
+  padding-right: 0;
+}
+
+.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback,
+.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-noshorten {
   background: #9dd8bb;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  //padding-right: 1.5em;
 }
 
-.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback {
+.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback,
+.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-noshorten {
   background: #f7d0d0;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  //padding-right: 1.5em;
+}
+
+.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-noshorten,
+.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-noshorten {
+  //background: transparent;
+  //margin-right: -1em!important;
 }
 
 .h5p-drag-text [aria-dropeffect]:before {
@@ -125,15 +158,12 @@
   border-radius: 0.25em;
   padding: 0.1em 0.6em;
   margin: 0.3em;
-  vertical-align: top;
-  text-align: center;
-  display: inline.block;
+  //vertical-align: top;
+  text-align: left;
+  display: inline-block;
   border: 0.1em solid #c6c6c6;
   overflow: hidden;
-
-  width: fit-content;
   background: #ddd;
-
   box-shadow: 0 0 0.3em rgba(0,0,0,0.2);
   z-index: 3;
   -webkit-user-select: none;
@@ -141,48 +171,67 @@
   -ms-user-select: none;
 }
 
+.h5p-drag-text [aria-grabbed-noshorten] {
+  width: fit-content;
+  display: inline;
+  white-space: normal!important;
+  //text-align: left!important;
+  //margin-right: -10px;
+}
+
 .h5p-drag-text [aria-grabbed='true'],
 .h5p-drag-text [aria-grabbed].h5p-drag-dropped:not(.ui-state-disabled):hover,
-.h5p-drag-text [aria-grabbed]:not(.ui-state-disabled):hover {
+.h5p-drag-text [aria-grabbed]:not(.ui-state-disabled):hover,
+.h5p-drag-text [aria-grabbed]:not(.ui-draggable-disabled):hover {
   border: 0.1em solid rgb(212,190,216);
   color: #663366;
   background: #edd6e9;
-}
+  }
+
+
 .h5p-drag-text [aria-grabbed].h5p-drag-dropped {
-  //width: 100%;
+  width: 100%;
   margin: -0.1em 0 0 0;
   padding: 0.1em 0.825em;
-  //white-space: nowrap;
+  white-space: nowrap;
   color: #1a4473;
   border: 0.1em solid #a9c3d0;
   background: #cee0f4;
-  display: inline;
 }
 
 .h5p-drag-text [aria-grabbed='true'] {
-  opacity: 0.8;
+  opacity: 0.5;
   box-shadow: 0 0 0.8em rgba(0,0,0,0.5);
 }
+
 .h5p-drag-text [aria-grabbed].ui-state-disabled {
   opacity: 1;
+  cursor: default;
 }
 
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-correct {
-  padding: 0;
+.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-correct,
+.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong {
+  //padding-right: 1.5em;
   color: #255c41;
   border: none;
   box-shadow: none;
   line-height: 1.5;
   background: none;
+  cursor: default;
+}
+.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong {
+  color: #b71c1c;
 }
 
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong {
-  padding: 0;
-  border: none;
-  color: #b71c1c;
-  box-shadow: none;
-  line-height: 1.5;
-  background: none;
+.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-correct:hover,
+.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong:hover {
+  color: #255c41!important;
+  background: none!important;
+  border:0!important;
+}
+
+.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong:hover {
+  color: #b71c1c!important;
 }
 
 /* Show solution container */
@@ -206,8 +255,7 @@
 }
 
 .h5p-drag-text [aria-grabbed='true'] {
-  /* Display drag-text in front of potentially filled in drop zone*/
-  z-index: 99;
+  z-index: 2;
 }
 
 .h5p-drag-text .h5p-drag-task {
@@ -224,6 +272,7 @@
 
 .h5p-drag-text .h5p-drag-draggable-wide-screen {
   display: block;
+  width:fit-content;
 }
 
 .h5p-drag-text [aria-dropeffect].ui-droppable.ui-droppable-disabled.ui-state-disabled{
@@ -235,9 +284,6 @@
   text-overflow: ellipsis;
 }
 
-.h5p-drag-text [aria-dropped] {
-  display: inline;
-}
 .h5p-drag-text .correct-answer {
   width: 1px;
   height: 1px;
@@ -248,12 +294,4 @@
 
 .h5p-drag-text .h5p-question-introduction {
   outline: none;
-}
-
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wide-screen {
-  display: inline;
-}
-
-.h5p-drag-text.h5p-drag-dropped {
-  display: inline;
 }

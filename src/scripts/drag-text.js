@@ -88,6 +88,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         enableSolutionsButton: true,
         enableCheckButton: true,
         instantFeedback: false,
+        shortenDraggableTexts: true,
         keepCorrectAnswers: false
       },
       showSolution : "Show solution",
@@ -122,7 +123,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     // introduction field id
     this.introductionId = 'h5p-drag-text-' + contentId + '-introduction';
-
+    this.shortenDraggableTexts = this.params.behaviour.shortenDraggableTexts;
     /**
      * @type {HTMLElement} selectedElement
      */
@@ -146,31 +147,26 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     this.on('start', this.addAllDroppablesToControls, this);
     this.on('revert', this.removeControlsFromEmptyDropZones, this);
     this.on('stop', event => {
+
       if (!event.data.target) {
         this.removeControlsFromDropZonesIfAllEmpty();
       }
     }, this);
     this.on('drop', this.removeControlsFromEmptyDropZones, this);
-    
 
     // toggle label for draggable
     this.on('start', event => {
       const element = event.data.element;
       const draggable = this.getDraggableByElement(element);
-      const dropZone = event.data.target;
-      
       // on drag and drop, toggle aria-dropeffect between 'move', and 'none'
       this.toggleDropEffect();
       element.setAttribute('aria-grabbed', 'true');
-      
       this.setDraggableAriaLabel(draggable);
-      
     });
 
     this.on('stop', event => {
       const element = event.data.element;
       const draggable = this.getDraggableByElement(element);
-      
       // on drag and drop, toggle aria-dropeffect between 'move', and 'none'
       this.toggleDropEffect();
       element.setAttribute('aria-grabbed', 'false');
@@ -187,14 +183,12 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     // on revert, re add element to drag controls
     this.on ('revert', function (event) {
-      
       this.dragControls.insertElementAt(event.data.element, 0);
     }, this);
 
     this.on ('drop', this.updateDroppableElement, this);
     this.on ('revert', this.updateDroppableElement, this);
-    
-    this.on ('start', function (event) {      
+    this.on ('start', function (event) {
       this.dragControls.insertElementAt(event.data.element, 0);
     }, this);
     // Init drag text task
@@ -232,21 +226,21 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @param event
    */
   DragText.prototype.updateDroppableElement = function (event) {
-    
     const dropZone = event.data.target;
     const draggable = event.data.element;
     const droppable = this.getDroppableByElement(dropZone);
 
     if (dropZone) {
       this.setDroppableLabel(dropZone, draggable.textContent, droppable.getIndex());
-      //jr todo check moving draggable from dropzone to another dropzone! 
-      if (droppable && droppable.hasDraggable()) {
-        //dropZone.removeAttribute('aria-dropeffect');
-        
-        dropZone.setAttribute('aria-dropped', 'true');
-      } else {
-        //dropZone.setAttribute('aria-dropeffect', 'move');
-        dropZone.removeAttribute('aria-dropped', 'true');
+      if (!this.shortenDraggableTexts) {
+        if (droppable && droppable.hasDraggable()) {
+          dropZone.setAttribute('aria-dropped', 'true');
+          draggable.setAttribute('aria-grabbed-noshorten', 'true');
+        }
+        else {
+          dropZone.removeAttribute('aria-dropped');
+          draggable.removeAttribute('aria-grabbed-noshorten');
+        }
       }
     }
   };
@@ -268,8 +262,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       .filter(droppable => !droppable.hasDraggable())
       .map(droppable => droppable.getElement())
       .forEach(el => {
-        console.log('el = ' + el);
-        el.removeAttribute('aria-dropped');
+        // papi jo
+        el.removeAttribute('aria-dropped', 'aria-grabbed-noshorten');
         this.dropControls.removeElement(el);
       });
   };
@@ -433,7 +427,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     self.addDropzoneWidth();
 
     //Find ratio of width to em, and make sure it is less than the predefined ratio, make sure widest draggable is less than a third of parent width.
-    if ((self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 43) && (self.widestDraggable <= (self.$inner.width() / 3))) {
+    if (this.shortenDraggableTexts && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23) && (self.widestDraggable <= (self.$inner.width() / 3))) {
       // Adds a class that floats the draggables to the right.
       self.$draggables.addClass(DRAGGABLES_WIDE_SCREEN);
 
@@ -517,6 +511,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         // move draggables to original container
         self.resetDraggables();
       }
+
       self.answered = false;
       self.hideEvaluation();
       self.hideExplanation();
@@ -528,6 +523,12 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       else {
         self.showButton('check-answer');
         self.enableDraggables();
+        self.droppables.forEach(function (droppable) {
+          // papi jo
+          if (droppable.hasCorrectFeedback()) {
+            droppable.disableDropzoneAndContainedDraggable();
+          }
+        });
       }
       self.hideAllSolutions();
 
@@ -849,56 +850,53 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Matches the width of all dropzones to the widest draggable, and sets widest class variable.
    */
   DragText.prototype.addDropzoneWidth = function () {
-    const self = this;
-    let widest = 0;
-    let widestDragagble = 0;
-    let narrowestDraggable = 999;
-    const fontSize = parseInt(this.$inner.css('font-size'), 10);
-    const staticMinimumWidth = 1.6 * fontSize;
-    const staticPadding = fontSize; // Needed to make room for feedback icons
+    if (this.shortenDraggableTexts) {
+      const self = this;
+      let widest = 0;
+      let widestDragagble = 0;
+      const fontSize = parseInt(this.$inner.css('font-size'), 10);
+      const staticMinimumWidth = 3 * fontSize;
+      const staticPadding = fontSize; // Needed to make room for feedback icons
 
-    //Find widest draggable
-    this.draggables.forEach(function (draggable) {
-      const $draggableElement = draggable.getDraggableElement();
-      //Find the initial natural width of the draggable.
-      const $tmp = $draggableElement.clone().css({
-        'position': 'absolute',
-        'white-space': 'nowrap',
-        'width': 'auto',
-        'padding': 0,
-        'margin': 0
-      }).html(draggable.getAnswerText())
-        .appendTo($draggableElement.parent());
-      let width = $tmp.outerWidth();
+      //Find widest draggable
+      this.draggables.forEach(function (draggable) {
+        const $draggableElement = draggable.getDraggableElement();
 
-      widestDragagble = width > widestDragagble ? width : widestDragagble;
-      narrowestDraggable = width < narrowestDraggable ? width : narrowestDraggable;
+        //Find the initial natural width of the draggable.
+        const $tmp = $draggableElement.clone().css({
+          'position': 'absolute',
+          'white-space': 'nowrap',
+          'width': 'auto',
+          'padding': 0,
+          'margin': 0
+        }).html(draggable.getAnswerText())
+          .appendTo($draggableElement.parent());
+        let width = $tmp.outerWidth();
 
-      // Measure how big truncated draggable should be
-      if ($tmp.text().length >= 20) {
-        $tmp.html(draggable.getShortFormat());
-        width = $tmp.width();
+        widestDragagble = width > widestDragagble ? width : widestDragagble;
+
+        // Measure how big truncated draggable should be
+        if ($tmp.text().length >= 20) {
+          $tmp.html(draggable.getShortFormat());
+          width = $tmp.width();
+        }
+
+        if (width + staticPadding > widest) {
+          widest = width + staticPadding;
+        }
+        $tmp.remove();
+      });
+      // Set min size
+      if (widest < staticMinimumWidth) {
+        widest = staticMinimumWidth;
       }
-
-      if (width + staticPadding > widest) {
-        widest = width + staticPadding;
-      }
-      $tmp.remove();
-    });
-
-    // Set min size
-    if (widest < staticMinimumWidth) {
-      widest = staticMinimumWidth;
+      this.widestDraggable = widestDragagble;
+      this.widest = widest;
+      //Adjust all droppable to widest size.
+      this.droppables.forEach(function (droppable) {
+        droppable.getDropzone().width(self.widest);
+      });
     }
-    this.widestDraggable = widestDragagble;
-    //this.widest = widest;
-    this.widest = "auto";
-    //Adjust all droppable to widest size.
-    this.droppables.forEach(function (droppable) {
-      //droppable.getDropzone().width(self.widest);
-      // no min-width for drag paragraphs
-      //droppable.getDropzone().css({"min-width": narrowestDraggable + staticMinimumWidth});
-    });
   };
 
   /**
@@ -937,7 +935,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       'class': 'h5p-hidden-read'
     }));
 
-    const draggable = new Draggable(answer, $draggable, self.draggables.length);
+    const draggable = new Draggable(answer, $draggable, self.draggables.length, this.shortenDraggableTexts);
     draggable.on('addedToZone', function () {
       self.triggerXAPI('interacted');
     });
@@ -1021,7 +1019,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.revert = function (draggable) {
-    
     const droppable = draggable.removeFromZone();
     const target = droppable ? droppable.getElement() : undefined;
     draggable.revertDraggableTo(this.$draggables);
@@ -1212,7 +1209,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    */
   DragText.prototype.enableDraggables = function () {
     this.draggables.forEach(function (entry) {
-      entry.enableDraggable();
+      if (!entry.insideDropzone) {
+        entry.enableDraggable();
+      }
     });
   };
 
@@ -1259,9 +1258,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Toogles the drop effect based on if an element is selected
    */
   DragText.prototype.toggleDropEffect = function () {
-    
     const hasSelectedElement = this.selectedElement !== undefined;
-    console.log('hasSelectedElement = ' + hasSelectedElement);
     this.ariaDropControls[hasSelectedElement ? 'setAllToMove' : 'setAllToNone']();
   };
 
