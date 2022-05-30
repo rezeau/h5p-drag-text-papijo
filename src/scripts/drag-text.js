@@ -91,7 +91,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         instantFeedback: false,
         shortenDraggableTexts: true,
         keepCorrectAnswers: false,
-        transparentBackground: false
+        transparentBackground: false,
+        noWideScreenLayout: false
       },
       showSolution : "Show solution",
       dropZoneIndex: "Drop Zone @index.",
@@ -429,7 +430,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     self.addDropzoneWidth();
 
     //Find ratio of width to em, and make sure it is less than the predefined ratio, make sure widest draggable is less than a third of parent width.
-    if (this.shortenDraggableTexts && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23) && (self.widestDraggable <= (self.$inner.width() / 3))) {
+    if (this.shortenDraggableTexts && !self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23) && (self.widestDraggable <= (self.$inner.width() / 3))) {
       // Adds a class that floats the draggables to the right.
       self.$draggables.addClass(DRAGGABLES_WIDE_SCREEN);
 
