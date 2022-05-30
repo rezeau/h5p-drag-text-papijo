@@ -165,7 +165,8 @@
   overflow: hidden;
   background: #ddd;
   box-shadow: 0 0 0.3em rgba(0,0,0,0.2);
-  z-index: 3;
+  /* 3-> 1 papi jo to display over other draggables */
+  z-index: 1; 
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -294,4 +295,8 @@
 
 .h5p-drag-text .h5p-question-introduction {
   outline: none;
+}
+
+.h5p-drag-text .h5p-drag-dropzone-container.has-tip {
+  margin-right: 0.25em;
 }
