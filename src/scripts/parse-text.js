@@ -9,6 +9,7 @@ import Util from './util';
  *
  * @return {string[]}
  */
+
 const parseText = text => text.split(/(\*.*?\*)/).filter(str => str.length > 0);
 
 /**
@@ -25,14 +26,24 @@ const parseText = text => text.split(/(\*.*?\*)/).filter(str => str.length > 0);
  * @returns {Solution}
  */
 const lex = solutionText => {
-
+  /*
+    * Temporarily replace double colons with a replacement character,
+    * so they don't tamper with the detection of tips
+    */
+  const DOUBLE_COLON_REPLACEMENT = '\u250C'; // no-width space character
+  let escapedColon = solutionText.match(/\**\::/g);
+  if (escapedColon) {
+    solutionText = solutionText.replaceAll('::', DOUBLE_COLON_REPLACEMENT);
+  }
   let tip = solutionText.match(/(:([^\\*]+))/g);
+
   let correctFeedback = solutionText.match(/(\\\+([^\\*:]+))/g);
   let incorrectFeedback = solutionText.match(/(\\\-([^\\*:]+))/g);
 
   // Strip the tokens
   let text = Util.cleanCharacter('*', solutionText);
 
+  text = text.replaceAll(DOUBLE_COLON_REPLACEMENT, ':');
   if (tip) {
     text = text.replace(tip, '');
     tip = tip[0].replace(':', '');

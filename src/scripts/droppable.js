@@ -67,6 +67,9 @@ H5P.TextDroppable = (function ($) {
     self.$showSolution = $('<div/>', {
       'class': SHOW_SOLUTION_CONTAINER
     }).appendTo(self.$dropzoneContainer).hide();
+    if (self.tip) {
+      self.$showSolution.addClass('has-tip');
+    }
   }
 
   Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
@@ -185,20 +188,24 @@ H5P.TextDroppable = (function ($) {
    */
   Droppable.prototype.addFeedback = function () {
     const self = this;
+
     //Draggable is correct
     // Option for displaying transparentBackground
     let background = '';
     if (this.params.behaviour.transparentBackground) {
       background = TRANSPARENT;
     }
+
     if (this.isCorrect()) {
       if (this.params.behaviour.shortenDraggableTexts) {
         this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK);
       }
       else {
-        // Remove tip if draggable is correct!
         if (self.$tip) {
-          self.$tip.remove();
+          self.$tip.attr('style', 'display: none;');
+          if (background === TRANSPARENT) {
+            this.$dropzone.attr('style', 'margin-right: -1.25em;');
+          }
         }
         this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).addClass(CORRECT_FEEDBACK_NO_SHORTEN + background);
       }
@@ -216,6 +223,9 @@ H5P.TextDroppable = (function ($) {
         this.$dropzone.removeClass(CORRECT_FEEDBACK).addClass(WRONG_FEEDBACK);
       }
       else {
+        if (self.$tip && background === TRANSPARENT) {
+          this.$dropzone.attr('style', 'margin-right: -0.25em;');
+        }
         this.$dropzone.removeClass(CORRECT_FEEDBACK_NO_SHORTEN).addClass(WRONG_FEEDBACK_NO_SHORTEN + background);
       }
 
@@ -230,11 +240,16 @@ H5P.TextDroppable = (function ($) {
    * Removes all CSS styling feedback for this drop  *  * box.
    */
   Droppable.prototype.removeFeedback = function () {
+    // Option for displaying transparentBackground
+    let background = '';
+    if (this.params.behaviour.transparentBackground) {
+      background = TRANSPARENT;
+    }
     if (this.params.behaviour.shortenDraggableTexts) {
       this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK);
     }
     else {
-      this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).removeClass(CORRECT_FEEDBACK_NO_SHORTEN);
+      this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN + background).removeClass(CORRECT_FEEDBACK_NO_SHORTEN + background);
     }
 
     //Draggable feedback
@@ -254,7 +269,8 @@ H5P.TextDroppable = (function ($) {
    * Returns true if the dropzone has visible correct feedback (if option Keep Answers)
    */
   Droppable.prototype.hasCorrectFeedback = function () {
-    return this.$dropzone.hasClass(CORRECT_FEEDBACK) || this.$dropzone.hasClass(CORRECT_FEEDBACK_NO_SHORTEN);
+    return this.$dropzone.hasClass(CORRECT_FEEDBACK) || this.$dropzone.hasClass(CORRECT_FEEDBACK_NO_SHORTEN)
+       || this.$dropzone.hasClass(CORRECT_FEEDBACK_NO_SHORTEN + TRANSPARENT);
   };
 
 
@@ -309,6 +325,18 @@ H5P.TextDroppable = (function ($) {
    */
   Droppable.prototype.getIndex = function () {
     return this.index;
+  };
+
+  /**
+   * Return the unique index of the dropzone
+   *
+   * @returns {number}
+   */
+  Droppable.prototype.displayTip = function () {
+    const self = this;
+    if (self.tip) {
+      self.$tip.attr('style', 'display: initial;');
+    }
   };
 
   return Droppable;

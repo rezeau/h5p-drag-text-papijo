@@ -129,6 +129,8 @@
 .h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-noshorten-transparent,
 .h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-noshorten-transparent {
   background: transparent;
+  margin: -0.8em;
+  position: initial;
 }
 
 .h5p-drag-text [aria-dropeffect]:before {
@@ -295,6 +297,11 @@
   outline: none;
 }
 
-.h5p-drag-text .h5p-drag-dropzone-container.has-tip {
+.h5p-drag-text .h5p-drag-dropzone-container.has-tip,
+.h5p-drag-text .h5p-drag-show-solution-container.has-tip {
   margin-right: 0.25em;
+}
+
+.h5p-drag-text .noMargins {
+  color:blue;
 }

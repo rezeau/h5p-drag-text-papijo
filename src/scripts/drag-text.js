@@ -239,6 +239,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         if (droppable && droppable.hasDraggable()) {
           dropZone.setAttribute('aria-dropped', 'true');
           draggable.setAttribute('aria-grabbed-noshorten', 'true');
+          //droppable.displayTip();
         }
         else {
           dropZone.removeAttribute('aria-dropped');
@@ -531,6 +532,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
           if (droppable.hasCorrectFeedback()) {
             droppable.disableDropzoneAndContainedDraggable();
           }
+          else {
+            droppable.displayTip();
+          }
         });
       }
       self.hideAllSolutions();
@@ -629,11 +633,13 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       });
     }
     else if (droppable && droppable.hasDraggable() && !isShowingFeedback && !isCorrectInstantFeedback) {
+    //todo papi jo revise this, it seems not necessary?
+      /*
       const containsDropped = droppableElement.querySelector('[aria-grabbed]');
-
       this.createConfirmResetDialog(function () {
         self.revert(self.getDraggableByElement(containsDropped));
       }).show();
+      */
     }
   };
 
@@ -814,13 +820,19 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     });
 
     self.$wordContainer = $('<div/>', {'class': WORDS_CONTAINER});
-
+    /*
+       * Temporarily replace double asterisks with a replacement character,
+       * so they don't tamper with the detection of words/phrases to be dragged
+       */
+    const DOUBLE_ASTERISK_REPLACEMENT = '\u250C'; // no-width space character
+    self.textFieldHtml = self.textFieldHtml.replaceAll('**', DOUBLE_ASTERISK_REPLACEMENT);
     // parse text
     parseText(self.textFieldHtml)
       .forEach(function (part) {
         if (self.isAnswerPart(part)) {
           // is draggable/droppable
           const solution = lex(part);
+          solution.text = solution.text.replaceAll(DOUBLE_ASTERISK_REPLACEMENT, '*');
           self.createDraggable(solution.text);
           self.createDroppable(solution.text, solution.tip, solution.correctFeedback, solution.incorrectFeedback);
         }
