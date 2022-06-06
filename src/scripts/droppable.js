@@ -286,11 +286,13 @@ H5P.TextDroppable = (function ($) {
   /**
    * Disables dropzone and the contained draggable.
    */
+
   Droppable.prototype.disableDropzoneAndContainedDraggable = function () {
     if (this.containedDraggable !== null) {
       this.containedDraggable.disableDraggable();
     }
     this.$dropzone.droppable({ disabled: true});
+    this.$dropzone.droppable({ 'aria-disabled': true});
   };
 
   /**

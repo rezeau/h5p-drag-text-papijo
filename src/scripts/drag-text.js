@@ -633,13 +633,10 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       });
     }
     else if (droppable && droppable.hasDraggable() && !isShowingFeedback && !isCorrectInstantFeedback) {
-    //todo papi jo revise this, it seems not necessary?
-      /*
       const containsDropped = droppableElement.querySelector('[aria-grabbed]');
       this.createConfirmResetDialog(function () {
         self.revert(self.getDraggableByElement(containsDropped));
       }).show();
-      */
     }
   };
 
@@ -1043,6 +1040,10 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.revert = function (draggable) {
+    // todo papi jo refine this?
+    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone && draggable.text === draggable.insideDropzone.text) {
+      return;
+    }
     const droppable = draggable.removeFromZone();
     const target = droppable ? droppable.getElement() : undefined;
     draggable.revertDraggableTo(this.$draggables);
@@ -1064,8 +1065,12 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    */
   DragText.prototype.drop = function (draggable, droppable) {
     const self = this;
+    // Do not drop text on an existing correctly filled drop zone!
+    if (this.params.behaviour.keepCorrectAnswers && droppable.hasCorrectFeedback()) {
+      // TODO TRY TP set previous dropZone to -1
+      return;
+    }
     self.answered = true;
-
     draggable.removeFromZone();
 
     // if already contains draggable
@@ -1361,20 +1366,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Resets the position of all draggables shuffled.
    */
   DragText.prototype.resetDraggables = function () {
-    // papi jo added keep correct answers option
-    if (!this.params.behaviour.keepCorrectAnswers) {
-      Util.shuffle(this.draggables).forEach(this.revert, this);
-    }
-    else {
-      // TODO try to shuffle those draggables?
-      this.draggables.forEach(draggable => {
-        if (draggable.insideDropzone) {
-          if (draggable.text !== draggable.insideDropzone.text) {
-            this.revert(draggable);
-          }
-        }
-      });
-    }
+    Util.shuffle(this.draggables).forEach(this.revert, this);
   };
 
   /**
