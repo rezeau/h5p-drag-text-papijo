@@ -19,11 +19,16 @@
     },
     {
       "label": "Text",
-      "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula.",
+      "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula. Maths: *2**3* = 6 and *12::3* = 4",
+      "description": "",
       "important": {
-        "description": "<ul><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback.</li></ul>",
-        "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. <br /> H5P content is *interactive\\+Correct! \\-Incorrect, try again!*"
+        "description": "<ul><li>Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks can be added within droppable words/phrases by adding another asterisk, e.g. \"6 = *2**3*\" =&gt; \"2*3\".</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>Colons can be added within droppable words/phrases by adding another colon, e.g. \"6 = *12::3*\" =&gt; \"12:3\".</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback.</li></ul>"
       }
+    },
+    {
+      "label": "Distractors",
+      "placeholder": "*Reykjavík* *Helsinki*",
+      "description": "Enter extra solutions that are wrong as distractors. Use the same asterisk (*) scheme as for the text."
     },
     {
       "label": "Overall Feedback",
@@ -42,7 +47,6 @@
               {
                 "label": "Score Range"
               },
-              {},
               {
                 "label": "Feedback for defined score range",
                 "placeholder": "Fill in the feedback"
@@ -140,6 +144,22 @@
         },
         {
           "label": "Instant feedback"
+        },
+        {
+          "label": "Shorten the longish draggable texts",
+          "description": "Uncheck this option if you want to keep the original longish draggable texts. WARNING! Works best if draggable texts are in separate paragraphs!"
+        },
+        {
+          "label": "Keep correct answers",
+          "description": "Check this option if you want to keep the draggable text elements dropped in the correct blanks after pressing 'Retry'."
+        },
+        {
+          "label": "Display the correct and wrong feedback backgrounds transparent",
+          "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background upon checking the answers."
+        },
+        {
+          "label": "Solutions below content",
+          "description": "If set, will force solution texts to be displayed below the content."
         }
       ]
     },
