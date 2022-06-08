@@ -632,7 +632,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         target: droppable.getElement()
       });
     }
-    else if (droppable && droppable.hasDraggable() && !isShowingFeedback && !isCorrectInstantFeedback) {
+    else if (droppable && droppable.hasDraggable() && !isShowingFeedback
+      && !isCorrectInstantFeedback && !droppable.hasCorrectFeedback()) {
       const containsDropped = droppableElement.querySelector('[aria-grabbed]');
       this.createConfirmResetDialog(function () {
         self.revert(self.getDraggableByElement(containsDropped));
@@ -1040,9 +1041,13 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.revert = function (draggable) {
-    // todo papi jo refine this?
-    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone && draggable.text === draggable.insideDropzone.text) {
-      return;
+    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone) {
+      const currDropzone = draggable.insideDropzone.$dropzone;
+      if (currDropzone.hasClass('h5p-drag-correct-feedback')
+          || currDropzone.hasClass('h5p-drag-correct-feedback-noshorten')
+          || currDropzone.hasClass('h5p-drag-correct-feedback-noshorten-transparent')) {
+        return;
+      }
     }
     const droppable = draggable.removeFromZone();
     const target = droppable ? droppable.getElement() : undefined;
