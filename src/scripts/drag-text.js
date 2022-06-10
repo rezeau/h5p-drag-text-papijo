@@ -1041,7 +1041,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.revert = function (draggable) {
-    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone) {
+    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone && !this.resetCorrectAnswers) {
       const currDropzone = draggable.insideDropzone.$dropzone;
       if (currDropzone.hasClass('h5p-drag-correct-feedback')
           || currDropzone.hasClass('h5p-drag-correct-feedback-noshorten')
@@ -1350,8 +1350,12 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     const self = this;
     // Reset task answer
     self.answered = false;
+    // If keepCorrectAnswers option is enabled, allow resetting dropZones
+    this.resetCorrectAnswers = true;
     //Reset draggables parameters and position
     self.resetDraggables();
+    // re-disable potential resetting dropZones
+    this.resetCorrectAnswers = false;
     //Hides solution text and re-enable draggables
     self.hideEvaluation();
     self.hideExplanation();
