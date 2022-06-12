@@ -95,7 +95,7 @@
 .h5p-drag-text [aria-dropped] {
   position:relative;
   top: -0.1em;
-  width: 10em;
+  width: 8em;
   height: 1.25em;
   background-color: #cee0f4;
   border-radius: 0.25em;
@@ -125,10 +125,12 @@
   padding-bottom: 2px;
 }
 
+.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-transparent,
+.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-transparent,
 .h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-noshorten-transparent,
 .h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-noshorten-transparent {
   background: transparent;
-  margin: -0.8em;
+  margin: -0.875em;
   position: initial;
 }
 

@@ -328,7 +328,7 @@
       },
       {
         "label": "Shorten the longish draggable texts",
-        "description": "Uncheck this option if you want to keep the original longish draggable texts. WARNING! Works best if draggable texts are in separate paragraphs!",
+        "description": "Uncheck this option if you want to keep the original lengths of draggable texts.",
         "importance": "low",
         "name": "shortenDraggableTexts",
         "type": "boolean",
@@ -354,7 +354,7 @@
       },
       {
         "label": "Display the correct and wrong feedback backgrounds transparent",
-        "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background upon checking the answers.",
+        "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background (and a check icon) upon checking the answers. Useful when the draggable elements are parts of words. Only available if the 'Shorten the longish draggable texts' option is disabled.",
         "importance": "low",
         "name": "transparentBackground",
         "type": "boolean",
@@ -373,7 +373,7 @@
       {
         "name": "noWideScreenLayout",
         "label": "Solutions below content",
-        "description": "If set, will force solution texts to be displayed below the content.",
+        "description": "If set, will force solution texts to be displayed below the content. Only available if the 'Shorten the longish draggable texts' option is enabled.",
         "importance": "low",
         "type": "boolean",
         "default": false,

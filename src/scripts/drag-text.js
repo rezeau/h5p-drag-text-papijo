@@ -127,6 +127,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     // introduction field id
     this.introductionId = 'h5p-drag-text-' + contentId + '-introduction';
     this.shortenDraggableTexts = this.params.behaviour.shortenDraggableTexts;
+    if (this.shortenDraggableTexts) {
+      this.params.behaviour.transparentBackground = false;
+    }
     /**
      * @type {HTMLElement} selectedElement
      */
@@ -819,18 +822,36 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     self.$wordContainer = $('<div/>', {'class': WORDS_CONTAINER});
     /*
-       * Temporarily replace double asterisks with a replacement character,
+       * Temporarily replace escaped asterisks & colons with a replacement character,
        * so they don't tamper with the detection of words/phrases to be dragged
        */
-    const DOUBLE_ASTERISK_REPLACEMENT = '\u250C'; // no-width space character
-    self.textFieldHtml = self.textFieldHtml.replaceAll('**', DOUBLE_ASTERISK_REPLACEMENT);
+    const ESCAPED_ASTERISK_REPLACEMENT = '\u250C'; // BOX DRAWINGS LIGHT DOWN AND RIGHT unicode character
+    const ESCAPED_COLON_REPLACEMENT = '\u250D'; //BOX DRAWINGS DOWN LIGHT AND RIGHT HEAVY unicode character
+    const ASTERISK = '*';
+    const COLON = ':';
+    self.textFieldHtml = self.textFieldHtml.replaceAll('\\*', ESCAPED_ASTERISK_REPLACEMENT)
+      .replaceAll('\\:', ESCAPED_COLON_REPLACEMENT);
     // parse text
     parseText(self.textFieldHtml)
       .forEach(function (part) {
         if (self.isAnswerPart(part)) {
           // is draggable/droppable
           const solution = lex(part);
-          solution.text = solution.text.replaceAll(DOUBLE_ASTERISK_REPLACEMENT, '*');
+          solution.text = solution.text.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+            .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+          // Deal with potential escaped asterisks & escaped colons within tip.
+          if (solution.tip) {
+            solution.tip = solution.tip.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+              .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+          }
+          if (solution.correctFeedback) {
+            solution.correctFeedback = solution.correctFeedback.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+              .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+          }
+          if (solution.incorrectFeedback) {
+            solution.incorrectFeedback = solution.incorrectFeedback.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+              .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+          }
           self.createDraggable(solution.text);
           self.createDroppable(solution.text, solution.tip, solution.correctFeedback, solution.incorrectFeedback);
         }
