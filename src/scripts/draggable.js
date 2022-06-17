@@ -20,6 +20,7 @@ H5P.TextDraggable = (function ($) {
     self.initialIndex = index;
     self.shortFormat = self.text;
     if (shorten) {
+      self.shorten = shorten;
       //Shortens the draggable string if inside a dropbox.
       if (self.shortFormat.length > 20 && !self.shortFormat.match(/\\\(.+\\\)|\\\[.+\\\]|\$\$.+\$\$/)) {
         self.shortFormat = self.shortFormat.slice(0, 17) + '&#8230'; // ellipsis character
@@ -88,7 +89,6 @@ H5P.TextDraggable = (function ($) {
     // get the relative distance between draggable and container.
     const offLeft = this.$draggable.offset().left - $container.offset().left;
     const offTop = this.$draggable.offset().top - $container.offset().top;
-
     // Prepend draggable to new container, but keep the offset,
     // then animate to new container's top:0, left:0
     this.$draggable.detach()
@@ -176,6 +176,10 @@ H5P.TextDraggable = (function ($) {
     this.toggleDroppedFeedback(false);
     this.removeShortFormat();
     this.updateAriaDescription('');
+    // If not shorten, need to remove aria-grabbed-noshorten attribute from draggable when removed from its dropZone.
+    if (!this.shorten) {
+      this.$draggable.removeAttr('aria-grabbed-noshorten');
+    }
     this.insideDropzone = null;
 
     return dropZone;

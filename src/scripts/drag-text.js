@@ -242,7 +242,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         if (droppable && droppable.hasDraggable()) {
           dropZone.setAttribute('aria-dropped', 'true');
           draggable.setAttribute('aria-grabbed-noshorten', 'true');
-          //droppable.displayTip();
         }
         else {
           dropZone.removeAttribute('aria-dropped');
@@ -1073,6 +1072,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     const droppable = draggable.removeFromZone();
     const target = droppable ? droppable.getElement() : undefined;
     draggable.revertDraggableTo(this.$draggables);
+    
     this.setDraggableAriaLabel(draggable);
 
     this.trigger('revert', { element: draggable.getElement(), target: target });
