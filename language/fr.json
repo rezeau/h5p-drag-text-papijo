@@ -1,0 +1,185 @@
+{
+  "semantics": [
+    {
+      "label": "Média",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Média à afficher au-dessus de la question (facultatif)."
+        },
+        {
+          "label": "Désactiver le zoom sur image"
+        }
+      ]
+    },
+    {
+      "label": "Consigne",
+      "description": "La consigne indique ce que l'utilisateur doit faire.",
+      "default": "Glissez-déposez les mots ou groupes de mots dans les emplacements qui leur correspondent."
+    },
+    {
+      "label": "Text",
+      "placeholder": "*Oslo* est la capitale de la Norvège, *Stockholm* est la capitale de la Suède et *Copenhague* est la capitale du Danemark. Toutes ces villes sont situées dans la péninsule *Scandinave:Partie nord de l'Europe*. Maths : *2\\*3* = 6 et *12\\:3* = 4",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Tutoriel et Exemples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Le site de test Drupal de Papi Jo</a></span></li><li>Les mots (ou groupes de mots) qui seront supprimés du texte pour figurer dans la liste des éléments à glisser/déposer doivent être encadrés avec un astérisque (*) devant et derrière.</li><li>Des astérisques peuvent être ajoutés à l'intérieur des mots/phrases déposables en les échappant (avec une barre oblique inverse), par exemple :  \"6 = *2\\*3*\" =&gt; \"2*3\".</li><li>Vous pouvez ajouter un indice en plaçant 2 points (:) avant cet indice.</li><li>Les deux points peuvent être ajoutés à l'intérieur des mots/phrases déposables en les échappant (avec une barre oblique inverse), par exemple : \"6 = *12\\:3*\" =&gt; \"12:3\".</li><li>Il ne peut y avoir qu'un seul texte correct pour chaque espace à remplir.</li><li>Vous pouvez ajouter un feedback qui apparaîtra une fois l'exercice terminé. Utilisez '\\+' pour créer le feedback en cas de réponse correcte et '\\-' pour le feedback en cas de mauvaise réponse.</li></ul>",
+        "example": "Les contenus H5P peuvent être édités en utilisant un *navigateur:Quel type de programme utilisez vous pour consulter des sites Internet ?*. <br /> Un contenu H5P est *interactif\\+Correct ! \\-Incorrect, Recommencez !*<br />Maths: *2\\*3* = 6 et *12\\:3* = 4"
+        }
+    },
+    {
+      "label": "Distracteurs",
+      "placeholder": "*Reykjavík* *Helsinki*",
+      "description": "Indiquez les réponses optionnelles supplémentaires qui sont fausses en tant que distracteurs. Utilisez le même schéma d'astérisque (*) que pour le texte."
+    },
+    {
+      "label": "Feedback général",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Par défaut"
+            }
+          ],
+          "label": "Définissez le feedback pour chaque intervalle de scores",
+          "description": "Cliquez sur le bouton \"Ajouter Intervalle\" pour ajouter autant d'intervalles que vous le souhaitez. Exemple: 0-20% Mauvais score, 21-91% Score moyen, 91-100% Score excellent !",
+          "entity": "intervalle",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervalle de score"
+              },
+              {},
+              {
+                "label": "Feedback pour un intervalle de score défini",
+                "placeholder": "Remplir le feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texte du bouton \"Vérifier\"",
+      "default": "Vérifier"
+    },
+    {
+      "label": "Text for \"Submit\" button",
+      "default": "Submit"
+    },
+    {
+      "label": "Texte du bouton \"Recommencer\"",
+      "default": "Recommencer"
+    },
+    {
+      "label": "Texte pour le bouton \"Voir la correction\"",
+      "default": "Voir la correction"
+    },
+    {
+      "label": "Etiquette de la zone de dépôt numérotée",
+      "default": "Zone de dépôt @index.",
+      "description": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce le numéro de la zone de dépôt. Variable disponible : @index"
+    },
+    {
+      "label": "Etiquette zone de dépôt vide",
+      "default": "La zone de dépôt @index est vide.",
+      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que la zone de dépôt est vide"
+    },
+    {
+      "label": "Etiquette pour la zone de dépôt contient",
+      "default": "La zone de dépôt @index contient un élément déplaçable @draggable.",
+      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que la zone de dépôt contient un élément déplaçable"
+    },
+    {
+      "label": "Etiquette pour les éléments à déplacer",
+      "default": "@index sur @count éléments déplaçables.",
+      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que c'est un élément déplaçable. Variables disponibles : @index, @count"
+    },
+    {
+      "label": "Etiquette pour le bouton d'indice",
+      "default": "Montrer l'indice",
+      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce l'indice"
+    },
+    {
+      "label": "Texte exprimé par la synthèse vocale en cas de réponse correcte",
+      "default": "Correct !"
+    },
+    {
+      "label": "Texte exprimé par la synthèse vocale en cas de réponse incorrecte",
+      "default": "Incorrect !"
+    },
+    {
+      "label": "Intitulé de dialogue pour confirmer que l'utilisateur souhaite reparamétrer l'élément déplaçable",
+      "default": "Reparamétrer le déplacement"
+    },
+    {
+      "label": "Description du dialogue de confirmation pour reparamétrer un élément déplaçable",
+      "default": "Etes-vous certain de vouloir reparamétrer cet élément déplaçable ?"
+    },
+    {
+      "label": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que le déplacement d'un élément est initié",
+      "default": "L'élément déplaçable est saisi."
+    },
+    {
+      "label": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que le déplacement de l'élément est annulé",
+      "default": "Annuler le déplacement."
+    },
+    {
+      "label": "Etiquette utilisée pour l'accessibilité quand la bonne réponse est annoncée par la synthèse vocale",
+      "default": "Réponse correcte :"
+    },
+    {
+      "label": "Intitulé de l'espace contenant des feedbacks pour des réponses correctes/incorrectes",
+      "default": "Commentaire de retour"
+    },
+    {
+      "label": "Options générales.",
+      "description": "Ces options vous permettent de contrôler le déroulement de vos activités.",
+      "fields": [
+        {
+          "label": "Activer le bouton \"Recommencer\""
+        },
+        {
+          "label": "Activer le bouton \"Voir la solution\""
+        },
+        {
+          "label": "Activer le bouton \"Vérifier\""
+        },
+        {
+          "label": "Correction instantanée"
+        },
+        {
+          "label": "Raccourcir les textes à glisser-déposer un peu longs",
+          "description": "Décochez cette option si vous souhaitez conserver les longueurs originales des textes à glisser-déposer."
+        },
+        {
+          "label": "Conserver les réponses correctes",
+          "description": "Cochez cette option si vous voulez que les éléments de texte à glisser-déposer restent placés dans les bons emplacements après avoir appuyé sur 'Réessayer'."
+        },
+        {
+          "label": "Afficher les feedbacks corrects et incorrects sur fond transparent",
+          "description": "Cochez cette option si vous souhaitez afficher les éléments de texte à glisser-déposer corrects et incorrects sans fond de couleur (ni symbole correct/incorrect) lors de la vérification des réponses. Utile lorsque les éléments à glisser-déposer sont des parties de mots. Cette option n'est disponible que si l'option 'Raccourcir les longs textes à faire glisser' est désactivée."
+        },
+        {
+          "label": "Liste des éléments à glisser-déposer en dessous du texte",
+          "description": "Si cette option est activée, les éléments à glisser-déposer seront affichés au-dessous du texte. Cette option n'est disponible que si l'option 'Raccourcir les textes un peu longs' est activée."
+        }
+      ]
+    },
+    {
+      "label": "Représentation textuelle du panneau du score pour les utilisateurs des outils de la vocalisation (comme ReadSpeaker)",
+      "default": "Vous avez obtenu :num sur un total de :points"
+    },
+    {
+      "label": "Assistive technology label for \"Check\" button",
+      "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+    },
+    {
+      "label": "Assistive technology label for \"Show Solution\" button",
+      "default": "Show the solution. The task will be marked with its correct solution."
+    },
+    {
+      "label": "Assistive technology label for \"Retry\" button",
+      "default": "Retry the task. Reset all responses and start the task over again."
+    }
+  ]
+}

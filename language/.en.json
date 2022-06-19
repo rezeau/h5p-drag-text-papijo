@@ -19,16 +19,16 @@
     },
     {
       "label": "Text",
-      "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula. Maths: *2**3* = 6 and *12::3* = 4",
+      "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula. Maths: *2\\*3* = 6 and *12\\:3* = 4",
       "description": "",
       "important": {
-        "description": "<ul><li>Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks can be added within droppable words/phrases by adding another asterisk, e.g. \"6 = *2**3*\" =&gt; \"2*3\".</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>Colons can be added within droppable words/phrases by adding another colon, e.g. \"6 = *12::3*\" =&gt; \"12:3\".</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback.</li></ul>"
+        "description": "<ul><li>Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks can be added within droppable words/phrases by escaping them (with a backslash), e.g. \"6 = *2\\*3*\" =&gt; \"2*3\".</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>Colons can be added within droppable words/phrases by escaping them (with a backslash), e.g. \"6 = *12\\:3*\" =&gt; \"12:3\".</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback.</li></ul>"
       }
     },
     {
       "label": "Distractors",
       "placeholder": "*Reykjavík* *Helsinki*",
-      "description": "Enter extra solutions that are wrong as distractors. Use the same asterisk (*) scheme as for the text."
+      "description": "Enter optional extra solutions that are wrong as distractors. Use the same asterisk (*) scheme as for the text."
     },
     {
       "label": "Overall Feedback",
@@ -147,7 +147,7 @@
         },
         {
           "label": "Shorten the longish draggable texts",
-          "description": "Uncheck this option if you want to keep the original longish draggable texts. WARNING! Works best if draggable texts are in separate paragraphs!"
+          "description": "Uncheck this option if you want to keep the original lengths of draggable texts."
         },
         {
           "label": "Keep correct answers",
@@ -155,11 +155,11 @@
         },
         {
           "label": "Display the correct and wrong feedback backgrounds transparent",
-          "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background upon checking the answers."
+          "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background (and a check icon) upon checking the answers. Useful when the draggable elements are parts of words. Only available if the 'Shorten the longish draggable texts' option is disabled."
         },
         {
           "label": "Solutions below content",
-          "description": "If set, will force solution texts to be displayed below the content."
+          "description": "If set, will force solution texts to be displayed below the content. Only available if the 'Shorten the longish draggable texts' option is enabled."
         }
       ]
     },
