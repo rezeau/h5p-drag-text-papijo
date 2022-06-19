@@ -96,7 +96,7 @@
     },
     {
       "label": "Etiquette pour le bouton d'indice",
-      "default": "Montrer l'indice",
+      "default": "Montrer l’indice",
       "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce l'indice"
     },
     {
