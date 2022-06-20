@@ -373,20 +373,11 @@
       {
         "name": "noWideScreenLayout",
         "label": "Solutions below content",
-        "description": "If set, will force solution texts to be displayed below the content. Only available if the 'Shorten the longish draggable texts' option is enabled.",
+        "description": "If set, will force solution texts to be displayed below the content.",
         "importance": "low",
         "type": "boolean",
         "default": false,
-        "optional": true,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "shortenDraggableTexts",
-              "equals": true
-            }
-          ]
-        }
+        "optional": true
       }
     ]
   },

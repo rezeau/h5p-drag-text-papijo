@@ -22,6 +22,8 @@ import Mouse from 'h5p-lib-controls/src/scripts/ui/mouse';
  */
 /**
  * Drop event
+ * @event H5P.DragText#droptodo
+
  * @event H5P.DragText#drop
  * @type {H5P.DragTextEvent}
  */
@@ -55,6 +57,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   //Special Sub-containers:
   const DRAGGABLES_WIDE_SCREEN = 'h5p-drag-wide-screen';
   const DRAGGABLE_ELEMENT_WIDE_SCREEN = 'h5p-drag-draggable-wide-screen';
+  const DRAGGABLES_WIDE_SCREEN_NO_SHORTEN = 'h5p-drag-wide-screen-noshorten';
+  const DRAGGABLE_ELEMENT_WIDE_SCREEN_NO_SHORTEN = 'h5p-drag-draggable-wide-screen-noshorten';
 
   /**
    * Initialize module.
@@ -431,22 +435,27 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   DragText.prototype.changeLayoutToFitWidth = function () {
     const self = this;
     self.addDropzoneWidth();
-
     //Find ratio of width to em, and make sure it is less than the predefined ratio, make sure widest draggable is less than a third of parent width.
-    if (this.shortenDraggableTexts && !self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23) && (self.widestDraggable <= (self.$inner.width() / 3))) {
+    if (!self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23) && (self.widestDraggable <= (self.$inner.width() / 3))) {
+      if (this.shortenDraggableTexts) {
       // Adds a class that floats the draggables to the right.
-      self.$draggables.addClass(DRAGGABLES_WIDE_SCREEN);
+        self.$draggables.addClass(DRAGGABLES_WIDE_SCREEN);
 
-      // Detach and reappend the wordContainer so it will fill up the remaining space left by draggables.
-      self.$wordContainer.detach().appendTo(self.$taskContainer);
+        // Detach and reappend the wordContainer so it will fill up the remaining space left by draggables.
+        self.$wordContainer.detach().appendTo(self.$taskContainer);
 
-      // Set all draggables to be blocks
-      self.draggables.forEach(function (draggable) {
-        draggable.getDraggableElement().addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN);
-      });
-
-      // Set margin so the wordContainer does not expand when there are no more draggables left.
-      self.$wordContainer.css({'margin-right': self.$draggables.width()});
+        // Set all draggables to be blocks
+        self.draggables.forEach(function (draggable) {
+          draggable.getDraggableElement().addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN);
+        });
+        // Set margin so the wordContainer does not expand when there are no more draggables left.
+        self.$wordContainer.css({'margin-right': self.$draggables.width()});
+      }
+      else {
+        self.$draggables.detach().appendTo(self.$taskContainer);
+        self.$wordContainer.addClass(DRAGGABLES_WIDE_SCREEN_NO_SHORTEN);
+        self.$draggables.addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN_NO_SHORTEN);
+      }
     }
     else {
       // Remove the specific wide screen settings.
@@ -892,48 +901,48 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Matches the width of all dropzones to the widest draggable, and sets widest class variable.
    */
   DragText.prototype.addDropzoneWidth = function () {
-    if (this.shortenDraggableTexts) {
-      const self = this;
-      let widest = 0;
-      let widestDragagble = 0;
-      const fontSize = parseInt(this.$inner.css('font-size'), 10);
-      const staticMinimumWidth = 3 * fontSize;
-      const staticPadding = fontSize; // Needed to make room for feedback icons
+    const self = this;
+    let widest = 0;
+    let widestDragagble = 0;
+    const fontSize = parseInt(this.$inner.css('font-size'), 10);
+    const staticMinimumWidth = 3 * fontSize;
+    const staticPadding = fontSize; // Needed to make room for feedback icons
 
-      //Find widest draggable
-      this.draggables.forEach(function (draggable) {
-        const $draggableElement = draggable.getDraggableElement();
+    //Find widest draggable
+    this.draggables.forEach(function (draggable) {
+      const $draggableElement = draggable.getDraggableElement();
 
-        //Find the initial natural width of the draggable.
-        const $tmp = $draggableElement.clone().css({
-          'position': 'absolute',
-          'white-space': 'nowrap',
-          'width': 'auto',
-          'padding': 0,
-          'margin': 0
-        }).html(draggable.getAnswerText())
-          .appendTo($draggableElement.parent());
-        let width = $tmp.outerWidth();
+      //Find the initial natural width of the draggable.
+      const $tmp = $draggableElement.clone().css({
+        'position': 'absolute',
+        'white-space': 'nowrap',
+        'width': 'auto',
+        'padding': 0,
+        'margin': 0
+      }).html(draggable.getAnswerText())
+        .appendTo($draggableElement.parent());
+      let width = $tmp.outerWidth();
 
-        widestDragagble = width > widestDragagble ? width : widestDragagble;
+      widestDragagble = width > widestDragagble ? width : widestDragagble;
 
-        // Measure how big truncated draggable should be
-        if ($tmp.text().length >= 20) {
-          $tmp.html(draggable.getShortFormat());
-          width = $tmp.width();
-        }
-
-        if (width + staticPadding > widest) {
-          widest = width + staticPadding;
-        }
-        $tmp.remove();
-      });
-      // Set min size
-      if (widest < staticMinimumWidth) {
-        widest = staticMinimumWidth;
+      // Measure how big truncated draggable should be
+      if ($tmp.text().length >= 20) {
+        $tmp.html(draggable.getShortFormat());
+        width = $tmp.width();
       }
-      this.widestDraggable = widestDragagble;
-      this.widest = widest;
+
+      if (width + staticPadding > widest) {
+        widest = width + staticPadding;
+      }
+      $tmp.remove();
+    });
+    // Set min size
+    if (widest < staticMinimumWidth) {
+      widest = staticMinimumWidth;
+    }
+    this.widestDraggable = widestDragagble;
+    this.widest = widest;
+    if (this.shortenDraggableTexts) {
       //Adjust all droppable to widest size.
       this.droppables.forEach(function (droppable) {
         droppable.getDropzone().width(self.widest);
@@ -1072,7 +1081,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     const droppable = draggable.removeFromZone();
     const target = droppable ? droppable.getElement() : undefined;
     draggable.revertDraggableTo(this.$draggables);
-    
+
     this.setDraggableAriaLabel(draggable);
 
     this.trigger('revert', { element: draggable.getElement(), target: target });
@@ -1093,7 +1102,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     const self = this;
     // Do not drop text on an existing correctly filled drop zone!
     if (this.params.behaviour.keepCorrectAnswers && droppable.hasCorrectFeedback()) {
-      // TODO TRY TP set previous dropZone to -1
+      // TODO try to set previous dropZone to -1
       return;
     }
     self.answered = true;

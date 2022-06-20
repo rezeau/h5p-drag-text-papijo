@@ -272,6 +272,18 @@
   width:fit-content;
 }
 
+/* NO SHORTEN Wide Screen css : */
+.h5p-drag-text .h5p-drag-wide-screen-noshorten {
+  float: left;
+  padding-top: 0;
+  width: 75%;
+}
+
+.h5p-drag-text .h5p-drag-draggable-wide-screen-noshorten {
+  display: table;
+}
+
+
 .h5p-drag-text [aria-dropeffect].ui-droppable.ui-droppable-disabled.ui-state-disabled{
   opacity: 1;
 }
