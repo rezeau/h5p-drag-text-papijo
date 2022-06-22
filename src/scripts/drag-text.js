@@ -96,7 +96,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         shortenDraggableTexts: true,
         keepCorrectAnswers: false,
         transparentBackground: false,
-        noWideScreenLayout: false
+        noWideScreenLayout: false,
+        leftColumnWidth: 'auto'
       },
       showSolution : "Show solution",
       dropZoneIndex: "Drop Zone @index.",
@@ -454,6 +455,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       else {
         self.$draggables.detach().appendTo(self.$taskContainer);
         self.$wordContainer.addClass(DRAGGABLES_WIDE_SCREEN_NO_SHORTEN);
+        self.$wordContainer.css({'width': self.params.behaviour.leftColumnWidth});
         self.$draggables.addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN_NO_SHORTEN);
       }
     }
@@ -494,6 +496,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
           self.hideButton('show-solution');
           self.hideButton('try-again');
           self.hideButton('check-answer');
+        
+          self.$wordContainer.css({'width': 'auto'});
         }
 
         // Focus top of the task for natural navigation
@@ -767,7 +771,10 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     // Set feedback score
     this.setFeedback(scoreText, score, maxScore, this.params.scoreBarLabel);
-
+    // Reset wordContainer to whole width of screen when all blanks are filled.
+    if (score == maxScore) {
+      this.params.behaviour.leftColumnWidth = 'auto';
+    }
     return score === maxScore;
   };
 

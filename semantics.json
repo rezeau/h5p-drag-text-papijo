@@ -378,6 +378,47 @@
         "type": "boolean",
         "default": false,
         "optional": true
+      },
+      {
+        "name": "leftColumnWidth",
+        "label": "Left Column Width",
+        "description": "You can optionally set the width of the left column (i.e. the text containg blanks). If in doubt, leave the 'auto' setting.",
+        "importance": "low",
+        "type": "select",
+        "default": "auto",
+        "optional": true,
+        "options": [
+          {
+            "value": "auto",
+            "label": "auto"
+          },
+          {
+            "value": "33%",
+            "label": "33%"
+          },
+          {
+            "value": "50%",
+            "label": "50%"
+          },
+          {
+            "value": "75%",
+            "label": "75%"
+          }
+        ],
+        "widget": "showWhen",        
+        "showWhen": {
+          "type": "and",
+          "rules": [
+            {
+              "field": "shortenDraggableTexts",
+              "equals": false   
+            },
+            {
+              "field": "noWideScreenLayout",
+              "equals": false   
+            }
+          ]
+        }
       }
     ]
   },
