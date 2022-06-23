@@ -1068,14 +1068,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.revert = function (draggable) {
-    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone && !this.resetCorrectAnswers) {
-
-      const currDropzone = draggable.insideDropzone.$dropzone;
-      if (currDropzone.hasClass('h5p-drag-correct-feedback')
-          || currDropzone.hasClass('h5p-drag-correct-feedback-noshorten')
-          || currDropzone.hasClass('h5p-drag-correct-feedback-noshorten-transparent')) {
-        return;
-      }
+    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone && draggable.hasCorrectFeedback() && !this.resetCorrectAnswers) {
+      return;
     }
     const droppable = draggable.removeFromZone();
     const target = droppable ? droppable.getElement() : undefined;
