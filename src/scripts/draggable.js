@@ -105,9 +105,15 @@ H5P.TextDraggable = (function ($) {
   Draggable.prototype.toggleDroppedFeedback = function (isDropped) {
     if (isDropped) {
       this.$draggable.addClass(DRAGGABLE_DROPPED);
+      if (!self.shorten) {
+        this.$draggable.addClass('noshorten');
+      }
     }
     else {
       this.$draggable.removeClass(DRAGGABLE_DROPPED);
+      if (!self.shorten) {
+        this.$draggable.removeClass('noshorten');
+      }
     }
   };
 
@@ -176,10 +182,6 @@ H5P.TextDraggable = (function ($) {
     this.toggleDroppedFeedback(false);
     this.removeShortFormat();
     this.updateAriaDescription('');
-    // If not shorten, need to remove aria-grabbed-noshorten attribute from draggable when removed from its dropZone.
-    if (!this.shorten) {
-      this.$draggable.removeAttr('aria-grabbed-noshorten');
-    }
     this.insideDropzone = null;
 
     return dropZone;

@@ -246,11 +246,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       if (!this.shortenDraggableTexts) {
         if (droppable && droppable.hasDraggable()) {
           dropZone.setAttribute('aria-dropped', 'true');
-          draggable.setAttribute('aria-grabbed-noshorten', 'true');
         }
         else {
           dropZone.removeAttribute('aria-dropped');
-          draggable.removeAttribute('aria-grabbed-noshorten');
         }
       }
     }
@@ -273,8 +271,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       .filter(droppable => !droppable.hasDraggable())
       .map(droppable => droppable.getElement())
       .forEach(el => {
-        // papi jo
-        el.removeAttribute('aria-dropped', 'aria-grabbed-noshorten');
+        el.removeAttribute('aria-dropped');
         this.dropControls.removeElement(el);
       });
   };
@@ -318,8 +315,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @param {number} index
    */
   DragText.prototype.setDroppableLabel = function (dropZone, text, index) {
-    // JR neveer used
-    // const indexText = this.params.dropZoneIndex.replace('@index', index.toString());
     const correctFeedback = dropZone.classList.contains('h5p-drag-correct-feedback');
     const inCorrectFeedback = dropZone.classList.contains('h5p-drag-wrong-feedback');
     const checkButtonPressed = correctFeedback || inCorrectFeedback;
@@ -353,9 +348,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       }
 
       dropZone.setAttribute('aria-label', ariaLabel);
-      // JR
-      //dropZone.removeAttribute('aria-dropeffect');
-      //dropZone.setAttribute('aria-dropped', 'true');
     }
   };
 
@@ -455,6 +447,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       else {
         self.$draggables.detach().appendTo(self.$taskContainer);
         self.$wordContainer.addClass(DRAGGABLES_WIDE_SCREEN_NO_SHORTEN);
+        // Set the wordContainer width to the value set in parameters
         self.$wordContainer.css({'width': self.params.behaviour.leftColumnWidth});
         self.$draggables.addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN_NO_SHORTEN);
       }
@@ -496,7 +489,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
           self.hideButton('show-solution');
           self.hideButton('try-again');
           self.hideButton('check-answer');
-        
           self.$wordContainer.css({'width': 'auto'});
         }
 
@@ -543,7 +535,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         self.showButton('check-answer');
         self.enableDraggables();
         self.droppables.forEach(function (droppable) {
-          // papi jo
           if (droppable.hasCorrectFeedback()) {
             droppable.disableDropzoneAndContainedDraggable();
           }
@@ -772,7 +763,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     // Set feedback score
     this.setFeedback(scoreText, score, maxScore, this.params.scoreBarLabel);
     // Reset wordContainer to whole width of screen when all blanks are filled.
-    if (score == maxScore) {
+    if (score === maxScore) {
       this.params.behaviour.leftColumnWidth = 'auto';
     }
     return score === maxScore;
@@ -1078,6 +1069,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    */
   DragText.prototype.revert = function (draggable) {
     if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone && !this.resetCorrectAnswers) {
+
       const currDropzone = draggable.insideDropzone.$dropzone;
       if (currDropzone.hasClass('h5p-drag-correct-feedback')
           || currDropzone.hasClass('h5p-drag-correct-feedback-noshorten')
@@ -1220,9 +1212,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    */
   DragText.prototype.instantFeedbackEvaluation = function () {
     const self = this;
-    const allFilled = self.isAllAnswersFilled();
 
-    if (allFilled) {
+    if (self.isAllAnswersFilled()) {
       //Shows "retry" and "show solution" buttons.
       if (self.params.behaviour.enableSolutionsButton) {
         self.showButton('show-solution');

@@ -66,14 +66,6 @@ const cleanCharacter = curry(function (char, str) {
   return str;
 });
 
-// JR shuffleArray never used!
-/*
-const shuffleArray = function (array) {
-  array.sort(() => Math.random() - 0.5);
-  return array;
-};
-*/
-
 /**
  * Implements "Fisher-Yates Shuffle" algorithm for arrays
  *

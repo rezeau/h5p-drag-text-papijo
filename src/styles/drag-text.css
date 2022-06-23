@@ -70,18 +70,10 @@
   color: #b71c1c;
 }
 
-.h5p-drag-text .h5p-drag-correct-feedback-noshorten:before {
+.h5p-drag-text .h5p-drag-correct-feedback-noshorten:after {
   font-family: 'H5PFontAwesome4';
   content: "\f00c";
   color: #255c41;
-  margin-right: -0.6em;
-}
-
-.h5p-drag-text .h5p-drag-wrong-feedback-noshorten:before {
-  font-family: 'H5PFontAwesome4';
-  content: "\f00d";
-  color: #b71c1c;
-  margin-right: -0.6em;
 }
 
 /* Dropzone styling */
@@ -171,7 +163,7 @@
   -ms-user-select: none;
 }
 
-.h5p-drag-text [aria-grabbed-noshorten] {
+.h5p-drag-text .noshorten {
   width: fit-content;
   display: inline;
   white-space: break-spaces!important;
