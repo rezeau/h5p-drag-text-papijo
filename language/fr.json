@@ -161,7 +161,25 @@
         },
         {
           "label": "Liste des éléments à glisser-déposer en dessous du texte",
-          "description": "Si cette option est activée, les éléments à glisser-déposer seront affichés au-dessous du texte. Cette option n'est disponible que si l'option 'Raccourcir les textes un peu longs' est activée."
+          "description": "Si cette option est activée, les éléments à glisser-déposer seront affichés au-dessous du texte."
+        },
+        {
+          "label": "Largeur de la colonne de gauche",
+          "description": "Vous pouvez facultativement définir la largeur de la colonne de gauche (c'est-à-dire le texte contenant des blancs). En cas de doute, laissez le paramètre 'auto'.",
+          "options": [
+            {
+              "label": "auto"
+            },
+            {
+              "label": "33%"
+            },
+            {
+              "label": "50%"
+            },
+            {
+              "label": "75%"
+            }
+          ]
         }
       ]
     },

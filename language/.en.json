@@ -159,7 +159,25 @@
         },
         {
           "label": "Solutions below content",
-          "description": "If set, will force solution texts to be displayed below the content. Only available if the 'Shorten the longish draggable texts' option is enabled."
+          "description": "If set, will force solution texts to be displayed below the content."
+        },
+        {
+          "label": "Left Column Width",
+          "description": "You can optionally set the width of the left column (i.e. the text containg blanks). If in doubt, leave the 'auto' setting.",
+          "options": [
+            {
+              "label": "auto"
+            },
+            {
+              "label": "33%"
+            },
+            {
+              "label": "50%"
+            },
+            {
+              "label": "75%"
+            }
+          ]
         }
       ]
     },
