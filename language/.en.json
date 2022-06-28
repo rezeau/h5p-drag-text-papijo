@@ -150,6 +150,10 @@
           "description": "Uncheck this option if you want to keep the original lengths of draggable texts."
         },
         {
+          "label": "Sort the draggable texts in alphabetic order",
+          "description": "Check this option if you want to sort the draggable texts in alphabetic order (rather than randomized)."
+        },
+        {
           "label": "Keep correct answers",
           "description": "Check this option if you want to keep the draggable text elements dropped in the correct blanks after pressing 'Retry'."
         },

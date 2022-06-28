@@ -73,6 +73,7 @@ const cleanCharacter = curry(function (char, str) {
  *
  * @return {Array}
  */
+
 const shuffle = function (array) {
   let counter = array.length;
   // While there are elements in the array
@@ -87,7 +88,57 @@ const shuffle = function (array) {
     array[counter] = array[index];
     array[index] = temp;
   }
+  return array;
+};
 
+/**
+ * Sorts the array in ascending alphabetical order.
+ *
+ * @param {Array} array
+ *
+ * @return {Array}
+ */
+const alphasort = function (array) {
+
+  // Initialize and fill a "draggables" array.
+  let draggables = new Array(array.length).fill(null).map(()=> ({'index':0, 'text':'foo'}));
+  let i = 0;
+  let index;
+  let text;
+  // Fill the "draggables" array with index and text taken from the original draggables array.
+  array.forEach(function (draggable) {
+    index = draggable.getIndex();
+    text = draggable.getAnswerText();
+    draggables[i].index = index;
+    draggables[i].text = text;
+    i++;
+  });
+
+  // Alpha sort ascending draggables array by text.
+  draggables.sort((a, b) => {
+    let fa = a.text.toLowerCase(),
+      fb = b.text.toLowerCase();
+    if (fa < fb) {
+      return -1;
+    }
+    if (fa > fb) {
+      return 1;
+    }
+    return 0;
+  });
+
+  // Copy original draggable array elements to a temporary array
+  let temp = [];
+  let counter = 0;
+  while (counter < array.length ) {
+    temp.push(array[counter]);
+    counter++;
+  }
+
+  // Copy the sorted elements to the draggables array.
+  for (let j = 0; j < array.length; j++) {
+    array[j] = temp[draggables[j].index];
+  }
   return array;
 };
 
@@ -110,5 +161,6 @@ export default {
   startsWith: startsWith,
   endsWith: endsWith,
   shuffle: shuffle,
+  alphasort: alphasort,
   createElementWithTextPart: createElementWithTextPart
 };

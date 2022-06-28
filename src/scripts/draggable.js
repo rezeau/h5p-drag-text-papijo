@@ -19,8 +19,8 @@ H5P.TextDraggable = (function ($) {
     self.index = index;
     self.initialIndex = index;
     self.shortFormat = self.text;
-    if (shorten) {
-      self.shorten = shorten;
+    self.shorten = shorten;
+    if (self.shorten) {
       //Shortens the draggable string if inside a dropbox.
       if (self.shortFormat.length > 20 && !self.shortFormat.match(/\\\(.+\\\)|\\\[.+\\\]|\$\$.+\$\$/)) {
         self.shortFormat = self.shortFormat.slice(0, 17) + '&#8230'; // ellipsis character
@@ -105,15 +105,13 @@ H5P.TextDraggable = (function ($) {
   Draggable.prototype.toggleDroppedFeedback = function (isDropped) {
     if (isDropped) {
       this.$draggable.addClass(DRAGGABLE_DROPPED);
-      if (!self.shorten) {
+      if (!this.shorten) {
         this.$draggable.addClass('noshorten');
       }
     }
     else {
       this.$draggable.removeClass(DRAGGABLE_DROPPED);
-      if (!self.shorten) {
-        this.$draggable.removeClass('noshorten');
-      }
+      this.$draggable.removeClass('noshorten');
     }
   };
 

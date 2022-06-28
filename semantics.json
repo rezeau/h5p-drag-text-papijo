@@ -336,6 +336,15 @@
         "optional": true
       },
       {
+        "label": "Sort the draggable texts in alphabetic order",
+        "description": "Check this option if you want to sort the draggable texts in alphabetic order (rather than randomized).",
+        "importance": "low",
+        "name": "alphaSort",
+        "type": "boolean",
+        "default": false,
+        "optional": true
+      },
+      {
         "name": "keepCorrectAnswers",
         "type": "boolean",
         "label": "Keep correct answers",

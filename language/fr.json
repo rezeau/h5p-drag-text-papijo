@@ -152,6 +152,10 @@
           "description": "Décochez cette option si vous souhaitez conserver les longueurs originales des textes à glisser-déposer."
         },
         {
+          "label": "Trier les éléments de texte à faire glisser en ordre alphabétique.",
+          "description": "Cochez cette option si vous souhaitez trier les éléments de texte à faire glisser par ordre alphabétique (plutôt que de manière aléatoire)."
+        },
+        {
           "label": "Conserver les réponses correctes",
           "description": "Cochez cette option si vous voulez que les éléments de texte à glisser-déposer restent placés dans les bons emplacements après avoir appuyé sur 'Réessayer'."
         },

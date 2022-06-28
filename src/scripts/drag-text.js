@@ -94,6 +94,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         enableCheckButton: true,
         instantFeedback: false,
         shortenDraggableTexts: true,
+        alphaSort: false,
         keepCorrectAnswers: false,
         transparentBackground: false,
         noWideScreenLayout: false,
@@ -125,7 +126,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     // Keeps track of if Question has been answered
     this.answered = false;
-
     // Convert line breaks to HTML
     this.textFieldHtml = this.params.textField.replace(/(\r\n|\n|\r)/gm, "<br/>");
     this.distractorsHtml = this.params.distractors.replace(/(\r\n|\n|\r)/gm, "<br/>");
@@ -873,11 +873,16 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       if (distractor.trim() === '') {
         return; // Skip
       }
-
       distractor = lex(distractor);
       self.createDraggable(distractor.text);
     } );
     self.shuffleAndAddDraggables(self.$draggables);
+
+    // We need to reverse the alphaSort order just once.
+    if (this.params.behaviour.alphaSort) {
+      self.draggables.reverse();
+    }
+
     self.$draggables.appendTo(self.$taskContainer);
     self.$wordContainer.appendTo(self.$taskContainer);
     self.$taskContainer.appendTo($container);
@@ -1143,11 +1148,21 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * @returns {H5P.TextDraggable[]}
    */
   DragText.prototype.shuffleAndAddDraggables = function ($container) {
-    return Util.shuffle(this.draggables)
-      .map((draggable, index) => draggable.setIndex(index))
-      .map(draggable => this.addDraggableToContainer($container, draggable))
-      .map(draggable => this.setDraggableAriaLabel(draggable))
-      .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    if (!this.params.behaviour.alphaSort) {
+      return Util.shuffle(this.draggables)
+        .map((draggable, index) => draggable.setIndex(index))
+        .map(draggable => this.addDraggableToContainer($container, draggable))
+        .map(draggable => this.setDraggableAriaLabel(draggable))
+        .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    }
+    else {
+      return Util.alphasort(this.draggables)
+        .map((draggable, index) => draggable.setIndex(index))
+        .map(draggable => this.addDraggableToContainer($container, draggable))
+        .map(draggable => this.setDraggableAriaLabel(draggable))
+        .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    }
+
   };
 
   /**
@@ -1397,7 +1412,12 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Resets the position of all draggables shuffled.
    */
   DragText.prototype.resetDraggables = function () {
-    Util.shuffle(this.draggables).forEach(this.revert, this);
+    if (!this.params.behaviour.alphaSort) {
+      Util.shuffle(this.draggables).forEach(this.revert, this);
+    }
+    else {
+      this.draggables.forEach(this.revert, this);
+    }
   };
 
   /**
