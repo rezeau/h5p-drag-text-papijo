@@ -114,17 +114,9 @@ const alphasort = function (array) {
     i++;
   });
 
-  // Alpha sort ascending draggables array by text.
-  draggables.sort((a, b) => {
-    let fa = a.text.toLowerCase(),
-      fb = b.text.toLowerCase();
-    if (fa < fb) {
-      return -1;
-    }
-    if (fa > fb) {
-      return 1;
-    }
-    return 0;
+  // Alpha sort ascending draggables array by text with potential accents using localeCompare().
+  draggables.sort(function (a, b) {
+    return a.text.localeCompare(b.text, { sensitivity: 'accent' });
   });
 
   // Copy original draggable array elements to a temporary array

@@ -27,8 +27,12 @@
         }
     },
     {
+      "label": "Supprimer les sauts de ligne supplémentaires après les paragraphes importés.",
+      "description": "Le texte importé depuis la source d'un éditeur WYSIWYG peut contenir des balises de paragraphe < p > ou des balises de sauts de ligne < br >, qui seront automatiquement supprimées. Si vous souhaitez également supprimer d'éventuels sauts de ligne après ces paragraphes, cochez cette option."
+    },
+    {
       "label": "Distracteurs",
-      "placeholder": "*Reykjavík* *Helsinki*",
+      "placeholder": "*Paris* *Marseille*",
       "description": "Indiquez les réponses optionnelles supplémentaires qui sont fausses en tant que distracteurs. Utilisez le même schéma d'astérisque (*) que pour le texte."
     },
     {

@@ -98,7 +98,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         keepCorrectAnswers: false,
         transparentBackground: false,
         noWideScreenLayout: false,
-        leftColumnWidth: 'auto'
+        leftColumnWidth: 'auto',
+        removeExtraLineBreaks: true
       },
       showSolution : "Show solution",
       dropZoneIndex: "Drop Zone @index.",
@@ -127,7 +128,16 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     // Keeps track of if Question has been answered
     this.answered = false;
     // Convert line breaks to HTML
-    this.textFieldHtml = this.params.textField.replace(/(\r\n|\n|\r)/gm, "<br/>");
+    // Allow some HTML tags in text. AUGUST 2022.
+    // If text was copied-pasted from another WYSIWYGET editor we must clean potential paragraph tags which would ruin the display.
+    let findParagraphs = /(&lt;p.*?&gt;|&lt;\/p&gt;|&lt;br \/&gt;)/g;
+    if (this.params.removeExtraLineBreaks) {
+      findParagraphs = /(&lt;p.*?&gt;|&lt;\/p&gt;\n|&lt;br \/&gt;)/g;
+    }
+    this.params.textField = this.params.textField.replace(findParagraphs, '');
+    
+    // Make HTML tags available.
+    this.textFieldHtml = this.params.textField.replace(/(\r\n|\n|\r)/gm, "<br/>").replace(/&lt;/g, '\<').replace(/&gt;/g, '\>').replace(/&quot;/g, '"');
     this.distractorsHtml = this.params.distractors.replace(/(\r\n|\n|\r)/gm, "<br/>");
     // introduction field id
     this.introductionId = 'h5p-drag-text-' + contentId + '-introduction';

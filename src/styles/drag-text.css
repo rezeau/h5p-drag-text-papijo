@@ -294,6 +294,8 @@
 
 .h5p-drag-text .h5p-question-introduction {
   outline: none;
+  font-size: initial;
+  line-height: initial;
 }
 
 .h5p-drag-text .h5p-drag-dropzone-container.has-tip,

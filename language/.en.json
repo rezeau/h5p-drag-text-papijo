@@ -26,6 +26,10 @@
       }
     },
     {
+      "label": "Remove extra line breaks after imported paragraphs.",
+      "description": "Text imported from the Source of a WYSIWYG editor may contain paragraph tags < p > or break tags < br >, which will be automatically removed. If you also want to remove potential line breaks after those paragraphs, check this option."
+    },
+    {
       "label": "Distractors",
       "placeholder": "*Reykjavík* *Helsinki*",
       "description": "Enter optional extra solutions that are wrong as distractors. Use the same asterisk (*) scheme as for the text."
