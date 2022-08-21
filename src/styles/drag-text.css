@@ -76,6 +76,13 @@
   color: #255c41;
 }
 
+.h5p-drag-text .h5p-drag-wrong-feedback-noshorten:after {
+  font-family: 'H5PFontAwesome4';
+  content: "\f00d";
+  color: #b71c1c;
+}
+
+
 /* Dropzone styling */
 .h5p-drag-text .h5p-drag-dropzone-container {
   position: relative;
