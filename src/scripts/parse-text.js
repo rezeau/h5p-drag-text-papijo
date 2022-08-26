@@ -35,9 +35,14 @@ const lex = solutionText => {
   let text = Util.cleanCharacter('*', solutionText);
 
   if (tip) {
+    const DUMMYCHARACTER = '\u200B'; // zero-width space character
     text = text.replace(tip, '');
     tip = tip[0].replace(':', '');
     tip = tip.replace(/\s+$/, '');
+    // If tip contains a reference to an image and no text, it needs some character, so we add an invisible one.
+    if ((tip.substr(0, 4) === '<img')) {
+      tip = tip.replace('<img', DUMMYCHARACTER + '​<img');
+    }
   }
   if (correctFeedback) {
     text = text.replace(correctFeedback, '');
