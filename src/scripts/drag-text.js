@@ -127,18 +127,18 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     // Keeps track of if Question has been answered
     this.answered = false;
-    // Convert line breaks to HTML
-    // Allow some HTML tags in text. AUGUST 2022.
     // If text was copied-pasted from another WYSIWYGET editor we must clean potential paragraph tags which would ruin the display.
-    let findParagraphs = /(&lt;p.*?&gt;|&lt;\/p&gt;|&lt;br \/&gt;)/g;
     if (this.params.removeExtraLineBreaks) {
-      findParagraphs = /(&lt;p.*?&gt;|&lt;\/p&gt;\n|&lt;br \/&gt;)/g;
+      this.params.textField = this.params.textField.replace(/(\r\n|\n|\r)/gm, "");
     }
-    this.params.textField = this.params.textField.replace(findParagraphs, '');
-    
-    // Make HTML tags available.
-    this.textFieldHtml = this.params.textField.replace(/(\r\n|\n|\r)/gm, "<br/>").replace(/&lt;/g, '\<').replace(/&gt;/g, '\>').replace(/&quot;/g, '"');
+    else {
+      this.params.textField = this.params.textField.replace(/(\r\n|\n|\r)/gm, "<br />");
+    }
+    // Allow some HTML tags in text. AUGUST 2022.
+    this.params.textField = this.params.textField.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+    this.textFieldHtml = this.params.textField;
     this.distractorsHtml = this.params.distractors.replace(/(\r\n|\n|\r)/gm, "<br/>");
+    this.distractorsHtml = this.params.distractors.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
     // introduction field id
     this.introductionId = 'h5p-drag-text-' + contentId + '-introduction';
     this.shortenDraggableTexts = this.params.behaviour.shortenDraggableTexts;
@@ -845,6 +845,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     const ESCAPED_COLON_REPLACEMENT = '\u250D'; //BOX DRAWINGS DOWN LIGHT AND RIGHT HEAVY unicode character
     const ASTERISK = '*';
     const COLON = ':';
+    const DUMMYCHARACTER = '\u200B'; // zero-width space character
     self.textFieldHtml = self.textFieldHtml.replaceAll('\\*', ESCAPED_ASTERISK_REPLACEMENT)
       .replaceAll('\\:', ESCAPED_COLON_REPLACEMENT);
     // parse text
@@ -857,7 +858,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
             .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
           // Deal with potential escaped asterisks & escaped colons within tip.
           if (solution.tip) {
-            solution.tip = solution.tip.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+            // If tip contains image and no text, add an invisible space to make blur happy.
+            solution.tip = DUMMYCHARACTER + solution.tip.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
               .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
           }
           if (solution.correctFeedback) {
