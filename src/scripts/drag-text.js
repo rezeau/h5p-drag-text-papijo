@@ -127,15 +127,21 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     // Keeps track of if Question has been answered
     this.answered = false;
-    // If text was copied-pasted from another WYSIWYGET editor we must clean potential paragraph tags which would ruin the display.
+    // If text was copied-pasted from another WYSIWYG editor we may need to clean potential line breaks which would ruin the display.
     if (this.params.removeExtraLineBreaks) {
       this.params.textField = this.params.textField.replace(/(\r\n|\n|\r)/gm, "");
     }
     else {
       this.params.textField = this.params.textField.replace(/(\r\n|\n|\r)/gm, "<br />");
     }
+
     // Allow some HTML tags in text. AUGUST 2022.
     this.params.textField = this.params.textField.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+
+    // Remove potentially existing paragraph marks which might conflict with tips.
+    this.params.textField = this.params.textField.replace(/<\/p>/g, '');
+    this.params.textField = this.params.textField.replace(/<p>/g, '<p></p>');
+
     this.textFieldHtml = this.params.textField;
     this.distractorsHtml = this.params.distractors.replace(/(\r\n|\n|\r)/gm, "<br/>");
     this.distractorsHtml = this.params.distractors.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
