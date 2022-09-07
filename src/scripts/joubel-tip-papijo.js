@@ -19,9 +19,10 @@ H5P.JoubelTip = (function ($) {
 
     // Keep track of the popup that appears when you click the Tip button
     let speechBubble;
-    // Check if tipHtml contains (at least) one image.
+    // Check if tipHtml contains one or more images.
     let imgLen;
-    const regex = /(.?><img\s+)src="(.*?)"|width="(.*?)"|height="(.*?)">/gi;
+    const regex = /(.?><img\s+)src="(.*?)"|width="(.*?)"|(width: ?(\d*))(.*?)>/gm;
+    const reg = /^\d+$/;
     let m;
     while ((m = regex.exec(tipHtml)) !== null) {
       // This is necessary to avoid infinite loops with zero-width matches
@@ -29,9 +30,9 @@ H5P.JoubelTip = (function ($) {
         regex.lastIndex++;
       }
       // The result can be accessed through the `m`-variable.
-      m.forEach((match, groupIndex) => {
-        if (groupIndex === 3) {
-          imgLen = match;
+      m.forEach((matchIt) => {
+        if (matchIt && matchIt.match(reg)) {
+          imgLen = Number(matchIt);
         }
       });
     }
@@ -44,7 +45,6 @@ H5P.JoubelTip = (function ($) {
 
     let tipTextLen = getWidthOfText(tipText, 'Sans-Serif', '16px');
     if (imgLen !== undefined) {
-      imgLen = Number(imgLen);
       tipTextLen = Math.max(imgLen, tipTextLen);
     }
     tipTextLen += 25; // To compensate for tooltip margins.
