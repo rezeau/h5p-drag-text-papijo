@@ -202,9 +202,12 @@ H5P.TextDroppable = (function ($) {
       }
       else {
         if (self.$tip) {
-          self.$tip.attr('style', 'display: none;');
           if (background === TRANSPARENT) {
+            self.$tip.attr('style', 'display: none;');
             this.$dropzone.attr('style', 'margin-right: -1.25em;');
+          }
+          else {
+            this.$dropzone.attr('style', 'padding-right: 0.6em;');
           }
         }
         this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).addClass(CORRECT_FEEDBACK_NO_SHORTEN + background);
