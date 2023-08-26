@@ -27,7 +27,7 @@ const parseText = text => text.split(/(\*.*?\*)/).filter(str => str.length > 0);
  */
 const lex = solutionText => {
   let tip = solutionText.match(/(:([^\\*]+))/g);
-
+  let removableBlock = solutionText.match(/(_([^\\*]+)_)/g);
   let correctFeedback = solutionText.match(/(\\\+([^\\*:]+))/g);
   let incorrectFeedback = solutionText.match(/(\\\-([^\\*:]+))/g);
 
@@ -55,9 +55,14 @@ const lex = solutionText => {
     incorrectFeedback = incorrectFeedback.replace(/\s+$/, '');
   }
 
-  text = text.replace(/\s+$/, ''); // remove trailing spaces and tabs
+  if (removableBlock) {
+    text = text.replace(removableBlock, '');
+    removableBlock = removableBlock[0].replace('\\-', '');
+    removableBlock = removableBlock.replace(/_/gm,'');
+  }
 
-  return { tip, correctFeedback, incorrectFeedback, text };
+  text = text.replace(/\s+$/, ''); // remove trailing spaces and tabs
+  return { tip, correctFeedback, incorrectFeedback, removableBlock, text };
 };
 
 export { parseText, lex };

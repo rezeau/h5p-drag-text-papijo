@@ -559,6 +559,11 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
           }
         });
       }
+      self.droppables.forEach(function (droppable) {
+          if (droppable.removableBlock && !droppable.hasCorrectFeedback()) {
+            droppable.showRemovableBlock();
+          }
+      });
       self.hideAllSolutions();
 
       self.stopWatch.reset();
@@ -877,7 +882,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
               .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
           }
           self.createDraggable(solution.text);
-          self.createDroppable(solution.text, solution.tip, solution.correctFeedback, solution.incorrectFeedback);
+          self.createDroppable(solution.text, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock);
         }
         else {
           // is normal text
@@ -1025,7 +1030,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    *
    * @returns {H5P.TextDroppable}
    */
-  DragText.prototype.createDroppable = function (answer, tip, correctFeedback, incorrectFeedback) {
+  DragText.prototype.createDroppable = function (answer, tip, correctFeedback, incorrectFeedback, removableBlock) {
     const self = this;
 
     const draggableIndex = this.draggables.length;
@@ -1058,7 +1063,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         }
       });
 
-    const droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, $dropzone, $dropzoneContainer, draggableIndex, self.params);
+    const droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, removableBlock, $dropzone, $dropzoneContainer, draggableIndex, self.params);
     droppable.appendDroppableTo(self.$wordContainer);
 
     self.droppables.push(droppable);
@@ -1156,6 +1161,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     // Resize seems to set focus to the iframe
     droppable.getElement().focus();
+    if (droppable.removableBlock) {
+      droppable.hideRemovableBlock();
+    }
   };
 
   /**

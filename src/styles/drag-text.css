@@ -313,3 +313,16 @@
 .h5p-drag-text .noMargins {
   color:blue;
 }
+
+.h5p-drag-text .removableblock {
+  margin-top: -4px;
+  padding-left: 0.825em;
+}
+
+.h5p-drag-text .hide {
+  display: none;
+}
+
+.h5p-drag-text .autowidth {
+  width: auto;
+}

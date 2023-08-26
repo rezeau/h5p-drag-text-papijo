@@ -25,12 +25,13 @@ H5P.TextDroppable = (function ($) {
    * @param {number} index.
    * @param {Object} params Behavior settings
    */
-  function Droppable(text, tip, correctFeedback, incorrectFeedback, dropzone, dropzoneContainer, index, params) {
+  function Droppable(text, tip, correctFeedback, incorrectFeedback, removableBlock, dropzone, dropzoneContainer, index, params) {
     const self = this;
     self.text = text;
     self.tip = tip;
     self.correctFeedback = correctFeedback;
     self.incorrectFeedback = incorrectFeedback;
+    self.removableBlock = removableBlock;
     self.index = index;
     self.params = params;
     /**
@@ -38,6 +39,9 @@ H5P.TextDroppable = (function ($) {
      */
     self.containedDraggable = null;
     self.$dropzone = $(dropzone);
+    if (self.removableBlock) {
+      self.$dropzone.addClass('autowidth');
+    }
     self.$dropzoneContainer = $(dropzoneContainer);
 
     if (self.tip) {
@@ -52,6 +56,14 @@ H5P.TextDroppable = (function ($) {
       self.$dropzone.focus(() => self.$tip.attr('tabindex', '0'));
       self.$dropzone.blur(() => self.removeTipTabIndexIfNoFocus());
       self.$tip.blur(() => self.removeTipTabIndexIfNoFocus());
+    }
+
+    if (self.removableBlock) {
+      self.$removableBlock = $('<div/>', {
+        html: self.removableBlock,
+        'class': 'removableblock'
+      });
+      self.$dropzone.prepend(self.$removableBlock);
     }
 
     self.$incorrectText = $('<div/>', {
@@ -207,7 +219,7 @@ H5P.TextDroppable = (function ($) {
             this.$dropzone.attr('style', 'margin-right: -1.25em;');
           }
           else {
-            this.$dropzone.attr('style', 'padding-right: 0.6em;');
+            //this.$dropzone.attr('style', 'padding-right: 0.6em;');
           }
         }
         this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).addClass(CORRECT_FEEDBACK_NO_SHORTEN + background);
@@ -341,6 +353,24 @@ H5P.TextDroppable = (function ($) {
     const self = this;
     if (self.tip) {
       self.$tip.attr('style', 'display: initial;');
+    }
+  };
+
+  /**
+   * Hides removableBlock when draggable element is dropped on dropzone
+   */
+  Droppable.prototype.hideRemovableBlock = function () {
+    if (this.$removableBlock) {
+      this.$removableBlock.addClass('hide');
+    }
+  };
+
+  /**
+   * Displays removableBlock to reset things for a Retry session.
+   */
+  Droppable.prototype.showRemovableBlock = function () {
+    if (this.$removableBlock) {
+      this.$removableBlock.removeClass('hide');
     }
   };
 
