@@ -174,7 +174,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     this.on('start', this.addAllDroppablesToControls, this);
     this.on('revert', this.removeControlsFromEmptyDropZones, this);
     this.on('stop', event => {
-
       if (!event.data.target) {
         this.removeControlsFromDropZonesIfAllEmpty();
       }
@@ -214,7 +213,8 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     }, this);
 
     this.on ('drop', this.updateDroppableElement, this);
-    this.on ('revert', this.updateDroppableElement, this);
+    this.on('revert', this.updateDroppableElement, this);
+
     this.on ('start', function (event) {
       this.dragControls.insertElementAt(event.data.element, 0);
     }, this);
@@ -256,18 +256,46 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     const dropZone = event.data.target;
     const draggable = event.data.element;
     const droppable = this.getDroppableByElement(dropZone);
+    if (droppable && droppable.removableBlock) {
+      droppable.showRemovableBlock();
+    }
 
     if (dropZone) {
       this.setDroppableLabel(dropZone, draggable.textContent, droppable.getIndex());
       if (!this.shortenDraggableTexts) {
+        if (droppable.removableBlock) {
+          droppable.showRemovableBlock();
+        }
         if (droppable && droppable.hasDraggable()) {
           dropZone.setAttribute('aria-dropped', 'true');
         }
         else {
           dropZone.removeAttribute('aria-dropped');
+          if (droppable.removableBlock) {
+            droppable.showRemovableBlock();
+          }
         }
       }
     }
+    this.setAriaLabelForEmptyDropZones ();
+  };
+
+  /**
+   * Sets aria label to empty in dropzones without draggables
+   */
+  DragText.prototype.setAriaLabelForEmptyDropZones = function () {
+    let i = 0;
+    let ariaLabel;
+    let el;
+    this.droppables
+      .forEach(droppable => {
+        i++;
+        el = droppable.getElement();
+        if (!droppable.hasDraggable()) {
+          ariaLabel = `${this.params.empty.replace('@index', i.toString())}`;
+          el.setAttribute('aria-label', ariaLabel);
+        }
+      });
   };
 
   /**
@@ -334,37 +362,35 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     const correctFeedback = dropZone.classList.contains('h5p-drag-correct-feedback');
     const inCorrectFeedback = dropZone.classList.contains('h5p-drag-wrong-feedback');
     const checkButtonPressed = correctFeedback || inCorrectFeedback;
-    const hasChildren = (dropZone.childNodes.length > 0);
-
-    if (dropZone) {
-      let ariaLabel;
-
-      if (checkButtonPressed) {
-        const droppable = this.getDroppableByElement(dropZone);
-        let resultString = '';
-        if (correctFeedback) {
-          resultString = droppable.correctFeedback ? droppable.correctFeedback : this.params.correctText;
-        }
-        else {
-          resultString = droppable.incorrectFeedback ? droppable.incorrectFeedback : this.params.incorrectText;
-        }
-        ariaLabel = `${this.params.contains.replace('@index', index.toString()).replace('@draggable', text)} ${resultString}.`;
-
-        if (droppable && droppable.containedDraggable) {
-          droppable.containedDraggable.updateAriaDescription(
-            correctFeedback ? this.params.correctText : this.params.incorrectText
-          );
-        }
-      }
-      else if (hasChildren) {
-        ariaLabel = `${this.params.contains.replace('@index', index.toString()).replace('@draggable', text)}`;
+    let hasChildren = (dropZone.childNodes.length > 0 );
+    let ariaLabel;
+    if (dropZone.childNodes.length === 1 && dropZone.childNodes[0].attributes[0].value === 'removableblock') {
+      hasChildren = false;
+    }
+    if (checkButtonPressed) {
+      const droppable = this.getDroppableByElement(dropZone);
+      let resultString = '';
+      if (correctFeedback) {
+        resultString = droppable.correctFeedback ? droppable.correctFeedback : this.params.correctText;
       }
       else {
-        ariaLabel = `${this.params.empty.replace('@index', index.toString())}`;
+        resultString = droppable.incorrectFeedback ? droppable.incorrectFeedback : this.params.incorrectText;
       }
+      ariaLabel = `${this.params.contains.replace('@index', index.toString()).replace('@draggable', text)} ${resultString}.`;
 
-      dropZone.setAttribute('aria-label', ariaLabel);
+      if (droppable && droppable.containedDraggable) {
+        droppable.containedDraggable.updateAriaDescription(
+          correctFeedback ? this.params.correctText : this.params.incorrectText
+        );
+      }
     }
+    else if (hasChildren) {
+      ariaLabel = `${this.params.contains.replace('@index', index.toString()).replace('@draggable', text)}`;
+    }
+    else {
+      ariaLabel = `${this.params.empty.replace('@index', index.toString())}`;
+    }
+    dropZone.setAttribute('aria-label', ariaLabel);
   };
 
   /**
@@ -560,9 +586,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         });
       }
       self.droppables.forEach(function (droppable) {
-          if (droppable.removableBlock && !droppable.hasCorrectFeedback()) {
-            droppable.showRemovableBlock();
-          }
+        if (droppable.removableBlock && !droppable.hasCorrectFeedback()) {
+          droppable.showRemovableBlock();
+        }
       });
       self.hideAllSolutions();
 

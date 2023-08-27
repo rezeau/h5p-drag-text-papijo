@@ -29,7 +29,7 @@ const lex = solutionText => {
   let tip = solutionText.match(/(:([^\\*]+))/g);
   let removableBlock = solutionText.match(/(_([^\\*]+)_)/g);
   let correctFeedback = solutionText.match(/(\\\+([^\\*:]+))/g);
-  let incorrectFeedback = solutionText.match(/(\\\-([^\\*:]+))/g);
+  let incorrectFeedback = solutionText.match(/(\\-([^\\*:]+))/g);
 
   // Strip the tokens
   let text = Util.cleanCharacter('*', solutionText);
@@ -58,7 +58,7 @@ const lex = solutionText => {
   if (removableBlock) {
     text = text.replace(removableBlock, '');
     removableBlock = removableBlock[0].replace('\\-', '');
-    removableBlock = removableBlock.replace(/_/gm,'');
+    removableBlock = removableBlock.replace(/_/gm, '');
   }
 
   text = text.replace(/\s+$/, ''); // remove trailing spaces and tabs

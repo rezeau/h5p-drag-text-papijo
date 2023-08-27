@@ -180,6 +180,7 @@ H5P.TextDroppable = (function ($) {
   Droppable.prototype.removeDraggable = function () {
     if (this.containedDraggable !== null) {
       this.containedDraggable = null;
+      this.showRemovableBlock();
     }
   };
 
