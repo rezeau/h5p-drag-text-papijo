@@ -18,7 +18,7 @@ H5P.TextDroppable = (function ($) {
    * Private class for keeping track of droppable zones.
    * @private
    *
-   * @param {String} text Correct text string for this drop box.
+   * @param {String} text Correct text string array for this drop box.
    * @param {undefined/String} tip Tip for this container, optional.
    * @param {jQuery} dropzone Dropzone object.
    * @param {jQuery} dropzoneContainer Container Container for the dropzone.
@@ -98,9 +98,10 @@ H5P.TextDroppable = (function ($) {
    * Displays the solution next to the drop box if it is not correct.
    */
   Droppable.prototype.showSolution = function () {
-    const correct = (this.containedDraggable !== null) && (this.containedDraggable.getAnswerText() === this.text);
+    const correct = (this.containedDraggable !== null) && this.text.includes(this.containedDraggable.getAnswerText());
     if (!correct) {
-      this.$showSolution.html(this.text);
+      const solutiontxt = this.text.join(' | ');
+      this.$showSolution.html(solutiontxt);
     }
 
     this.$showSolution.prepend(correct ? this.$correctText : this.$incorrectText);
@@ -193,7 +194,7 @@ H5P.TextDroppable = (function ($) {
     if (this.containedDraggable === null) {
       return false;
     }
-    return this.containedDraggable.getAnswerText() === this.text;
+    return this.text.includes(this.containedDraggable.getAnswerText());
   };
 
   /**
