@@ -26,8 +26,8 @@ const parseText = text => text.split(/(\*.*?\*)/).filter(str => str.length > 0);
  * @returns {Solution}
  */
 const lex = solutionText => {
-  let tip = solutionText.match(/(:([^\\*]+))/g);
-  let removableBlock = solutionText.match(/(_([^\\*]+)_)/g);
+  // On SEPTEMBER 01 2023 changed single colon to double colon to avoid unexpected colon problems.
+  let tip = solutionText.match(/(::([^\\*]+))/g);
   let correctFeedback = solutionText.match(/(\\\+([^\\*:]+))/g);
   let incorrectFeedback = solutionText.match(/(\\-([^\\*:]+))/g);
 
@@ -37,13 +37,14 @@ const lex = solutionText => {
   if (tip) {
     const DUMMYCHARACTER = '\u200B'; // zero-width space character
     text = text.replace(tip, '');
-    tip = tip[0].replace(':', '');
+    tip = tip[0].replace('::', '');
     tip = tip.replace(/\s+$/, '');
     // If tip contains a reference to an image and no text, it needs some character, so we add an invisible one.
     if ((tip.substr(0, 4) === '<img')) {
       tip = tip.replace('<img', DUMMYCHARACTER + '​<img');
     }
   }
+  let removableBlock = text.match(/(_([^\\*]+)_)/g);
   if (correctFeedback) {
     text = text.replace(correctFeedback, '');
     correctFeedback = correctFeedback[0].replace('\\+', '');

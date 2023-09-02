@@ -22,7 +22,7 @@
       "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula. Maths: *2\\*3* = 6 and *12\\:3* = 4",
       "description": "",
       "important": {
-        "description": "<ul><li>Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks can be added within droppable words/phrases by escaping them (with a backslash), e.g. \"6 = *2\\*3*\" =&gt; \"2*3\".</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>Colons can be added within droppable words/phrases by escaping them (with a backslash), e.g. \"6 = *12\\:3*\" =&gt; \"12:3\".</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback.</li></ul>"
+        "description": "<ul><li>Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks and colons can be added within droppable words/phrases by escaping them (with a backslash). See example #3 below.</li><li>You may add a textual tip, using a DOUBLE colon (::) in front of the tip. See examples #1 and #4 below.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback. See example #2 below.</li><li>You may provide alternative correct answers by using slashes as separators. See example #5 below.</li><li>You may also add a removable distractor block of text, between underscores. See example #4 below.</li><li>You may use inline formatting such as &lt;em&gt;&lt;/em&gt;. See example #5 below.</li></ul>"
       }
     },
     {
@@ -151,7 +151,7 @@
         },
         {
           "label": "Shorten the longish draggable texts",
-          "description": "Uncheck this option if you want to keep the original lengths of draggable texts."
+          "description": "Do NOT check this option if you want to keep the original lengths of draggable texts."
         },
         {
           "label": "Sort the draggable texts in alphabetic order",

@@ -907,8 +907,13 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
             solution.incorrectFeedback = solution.incorrectFeedback.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
               .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
           }
-          self.createDraggable(solution.text);
-          self.createDroppable(solution.text, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock);
+          // Accept multiple correct answers inside pairs of asterisks.
+          // Split by slash _not preceded by the < character_ in case some solution.text is formatted with html tags.
+          const solutions = solution.text.split(/(?<!<)\//);
+          solutions.forEach ((solution) => {
+            self.createDraggable(solution);
+          });
+          self.createDroppable(solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock);
         }
         else {
           // is normal text
@@ -923,7 +928,11 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         return; // Skip
       }
       distractor = lex(distractor);
-      self.createDraggable(distractor.text);
+      // Accept multiple distractors inside a pair of asterisks.
+      const distractors = distractor.text.split(/(?<!<)\//);
+      distractors.forEach ((distractor) => {
+        self.createDraggable(distractor);
+      });
     } );
     self.shuffleAndAddDraggables(self.$draggables);
 
