@@ -1,55 +1,60 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const isProd = (process.env.NODE_ENV === 'production');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const extractCss = new ExtractTextPlugin({
-  filename: "h5p-drag-text.css"
-});
+module.exports = (env, argv) => {
+  const mode = argv.mode;
+  const isProd = (mode === 'production');
+  const libraryName = process.env.npm_package_name;
 
-const config = {
-  entry: "./src/entries/dist.js",
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: "h5p-drag-text.js"
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        use: 'babel-loader'
-      },
-      {
-        test: /\.css$/,
-        use: extractCss.extract({
+  return {
+    mode: mode,
+    context: path.resolve(__dirname, 'src/entries'),
+    entry: "./dist.js",
+    devtool: (isProd) ? undefined : 'inline-source-map',
+    output: {
+      path: path.join(__dirname, 'dist'),
+      filename: `${libraryName}.js`
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          use: 'babel-loader'
+        },
+        {
+          test: /\.css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader'
+          ]
+        },
+        {
+          test: /\.(svg)$/,
+          include: path.join(__dirname, 'src/images'),
           use: [
             {
-              loader: "css-loader"
+              loader: 'url-loader',
+              options: {
+                limit: 10000
+              }
             }
           ]
-        })
-
-      },
-      {
-        test: /\.(svg)$/,
-        include: path.join(__dirname, 'src/images'),
-        loader: 'url-loader?limit=10000'
-      } // inline base64 URLs for <=10k images, direct URLs for the rest
-    ]
-  },
-
-  plugins: [
-    extractCss,
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-      }
-    })
-  ]
+        } // inline base64 URLs for <=10k images, direct URLs for the rest
+      ]
+    },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: `${libraryName}.css`
+      }),
+      new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify(mode)
+        }
+      })
+    ],
+    stats: {
+      colors: true
+    }
+  };
 };
-
-if(!isProd) {
-  config.devtool = 'inline-source-map';
-}
-
-module.exports = config;

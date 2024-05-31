@@ -1,12 +1,12 @@
 {
   "name": "h5p-drag-text-papijo",
-  "version": "1.0.0",
+  "version": "1.0.18",
   "private": true,
   "description": "Drag the Words allows content designers to create textual expressions with missing pieces of text. The end user drags a missing piece of text to its correct place, to form a complete expression.",
   "scripts": {
     "test": "ava",
-    "build": "cross-env NODE_ENV='production' webpack -p",
-    "watch": "webpack --watch"
+    "build": "webpack --mode=production",
+    "watch": "webpack --watch --mode=development"
   },
   "repository": {
     "type": "git",
@@ -16,38 +16,35 @@
   "license": "MIT",
   "homepage": "https://github.com/rezeau/h5p-drag-text-papijo",
   "devDependencies": {
-    "ava": "^2.2.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^6.3.2",
-    "babel-plugin-transform-object-assign": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-latest": "^6.22.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "browser-env": "^2.0.30",
-    "cross-env": "^4.0.0",
-    "css-loader": "^3.0.0",
-    "extract-text-webpack-plugin": "^2.1.0",
+    "@ava/babel": "^2.0.0",
+    "@babel/cli": "^7.18.6",
+    "@babel/core": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.18.6",
+    "@babel/plugin-transform-object-assign": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@babel/register": "7.21.0",
+    "ava": "^5.2.0",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.1",
     "h5p-lib-controls": "0.0.15",
-    "inject-loader": "^3.0.0",
-    "raw-loader": "^0.5.1",
-    "require-extension-hooks": "^0.2.0",
-    "require-extension-hooks-babel": "^0.1.0",
-    "style-loader": "^0.13.2",
+    "mini-css-extract-plugin": "^2.6.1",
+    "raw-loader": "^4.0.2",
+    "require-extension-hooks": "^0.3.3",
+    "require-extension-hooks-babel": "^1.0.0",
+    "style-loader": "^3.3.1",
     "timer-machine": "^1.1.0",
-    "url-loader": "^2.0.1",
-    "webpack": "^2.2.1"
+    "url-loader": "^4.1.1",
+    "webpack": "^5.81.0",
+    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack-cli": "^5.0.2"
   },
   "ava": {
-    "babel": {
-      "presets": [
-        "@ava/stage-4",
-        "stage-3"
-      ]
-    },
     "require": [
-      "babel-polyfill",
+      "@babel/register",
       "./tests/helpers/setup.js"
     ]
+  },
+  "dependencies": {
+    "core-js": "^3.37.1"
   }
 }
