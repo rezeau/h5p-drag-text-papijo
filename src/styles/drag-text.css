@@ -159,6 +159,7 @@
   padding: 0.1em 0.6em;
   margin: 0.3em;
   text-align: left;
+  vertical-align: middle;
   display: inline-block;
   border: 0.1em solid #c6c6c6;
   overflow: hidden;
