@@ -317,6 +317,15 @@ H5P.TextDroppable = (function ($) {
    */
   Droppable.prototype.enableDropzone = function () {
     this.$dropzone.droppable({ disabled: false});
+    
+  /**
+   * Disable dropzone.
+   */
+  Droppable.prototype.disableDropzone = function () {
+    this.$dropzone.droppable({ disabled: true });
+  };
+
+
   };
 
   /**
