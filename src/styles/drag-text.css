@@ -94,7 +94,8 @@
 .h5p-drag-text [aria-dropped] {
   position:relative;
   top: -0.1em;
-  width: 8em;
+  //width: 8em;
+  width: 1em;
   height: 1.25em;
   background-color: #cee0f4;
   border-radius: 0.25em;
@@ -159,7 +160,7 @@
   padding: 0.1em 0.6em;
   margin: 0.3em;
   text-align: left;
-  vertical-align: middle;
+  //vertical-align: middle;
   display: inline-block;
   border: 0.1em solid #c6c6c6;
   overflow: hidden;

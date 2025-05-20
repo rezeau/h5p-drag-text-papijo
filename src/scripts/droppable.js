@@ -211,10 +211,12 @@ H5P.TextDroppable = (function ($) {
     }
 
     if (this.isCorrect()) {
+      /*
       if (this.params.behaviour.shortenDraggableTexts) {
         this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK);
       }
       else {
+          */
         if (self.$tip) {
           if (background === TRANSPARENT) {
             self.$tip.attr('style', 'display: none;');
@@ -225,7 +227,7 @@ H5P.TextDroppable = (function ($) {
           }
         }
         this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN).addClass(CORRECT_FEEDBACK_NO_SHORTEN + background);
-      }
+      //}
 
       //Draggable feedback
       this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).addClass(DRAGGABLE_FEEDBACK_CORRECT);
@@ -236,15 +238,17 @@ H5P.TextDroppable = (function ($) {
     }
     else {
       //Draggable is wrong
+      /*
       if (this.params.behaviour.shortenDraggableTexts) {
         this.$dropzone.removeClass(CORRECT_FEEDBACK).addClass(WRONG_FEEDBACK);
       }
       else {
+          */
         if (self.$tip && background === TRANSPARENT) {
           this.$dropzone.attr('style', 'margin-right: -0.25em;');
         }
         this.$dropzone.removeClass(CORRECT_FEEDBACK_NO_SHORTEN).addClass(WRONG_FEEDBACK_NO_SHORTEN + background);
-      }
+      //}
 
       //Draggable feedback
       if (this.containedDraggable !== null) {
@@ -262,12 +266,14 @@ H5P.TextDroppable = (function ($) {
     if (this.params.behaviour.transparentBackground) {
       background = TRANSPARENT;
     }
+    /*
     if (this.params.behaviour.shortenDraggableTexts) {
       this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK);
     }
     else {
+        */
       this.$dropzone.removeClass(WRONG_FEEDBACK_NO_SHORTEN + background).removeClass(CORRECT_FEEDBACK_NO_SHORTEN + background);
-    }
+    //}
 
     //Draggable feedback
     if (this.containedDraggable !== null) {

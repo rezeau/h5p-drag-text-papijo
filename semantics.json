@@ -338,10 +338,10 @@
         "optional": true
       },
       {
-        "label": "Shorten the longish draggable texts",
-        "description": "Do NOT check this option if you want to keep the original lengths of draggable texts.",
+        "label": "Display short drop zones",
+        "description": "Check this option if you want to display short drop zones (useful when using small screens e.g. phone).",
         "importance": "low",
-        "name": "shortenDraggableTexts",
+        "name": "shortDropZones",
         "type": "boolean",
         "default": false,
         "optional": true
@@ -378,17 +378,7 @@
         "importance": "low",
         "name": "transparentBackground",
         "type": "boolean",
-        "default": false,
-        "optional": true,
-        "widget": "showWhen",
-        "showWhen": {
-          "rules": [
-            {
-              "field": "shortenDraggableTexts",
-              "equals": false
-            }
-          ]
-        }
+        "default": false
       },
       {
         "name": "noWideScreenLayout",
@@ -425,17 +415,12 @@
             "label": "75%"
           }
         ],
-        "widget": "showWhen",        
+        "widget": "showWhen",
         "showWhen": {
-          "type": "and",
           "rules": [
             {
-              "field": "shortenDraggableTexts",
-              "equals": false   
-            },
-            {
               "field": "noWideScreenLayout",
-              "equals": false   
+              "equals": false
             }
           ]
         }

@@ -55,6 +55,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   const DRAGGABLES_CONTAINER = "h5p-drag-draggables-container";
 
   //Special Sub-containers:
+  
   const DRAGGABLES_WIDE_SCREEN = 'h5p-drag-wide-screen';
   const DRAGGABLE_ELEMENT_WIDE_SCREEN = 'h5p-drag-draggable-wide-screen';
   const DRAGGABLES_WIDE_SCREEN_NO_SHORTEN = 'h5p-drag-wide-screen-noshorten';
@@ -93,7 +94,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         enableSolutionsButton: true,
         enableCheckButton: true,
         instantFeedback: false,
-        shortenDraggableTexts: true,
+        shortDropZones: false,
         alphaSort: false,
         keepCorrectAnswers: false,
         transparentBackground: false,
@@ -147,10 +148,13 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     this.distractorsHtml = this.params.distractors.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
     // introduction field id
     this.introductionId = 'h5p-drag-text-' + contentId + '-introduction';
+    this.shortDropZones = this.params.behaviour.shortDropZones;
+    /*
     this.shortenDraggableTexts = this.params.behaviour.shortenDraggableTexts;
     if (this.shortenDraggableTexts) {
       this.params.behaviour.transparentBackground = false;
     }
+    */
     /**
      * @type {HTMLElement} selectedElement
      */
@@ -262,7 +266,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     if (dropZone) {
       this.setDroppableLabel(dropZone, draggable.textContent, droppable.getIndex());
-      if (!this.shortenDraggableTexts) {
+      //if (!this.shortenDraggableTexts) {
         if (droppable.removableBlock) {
           droppable.showRemovableBlock();
         }
@@ -275,7 +279,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
             droppable.showRemovableBlock();
           }
         }
-      }
+      //}
     }
     this.setAriaLabelForEmptyDropZones ();
   };
@@ -471,7 +475,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     const self = this;
     self.addDropzoneWidth();
     //Find ratio of width to em, and make sure it is less than the predefined ratio, make sure widest draggable is less than a third of parent width.
-    if (!self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23) && (self.widestDraggable <= (self.$inner.width() / 3))) {
+    
+    if (!self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23) /*&& (self.widestDraggable <= (self.$inner.width() / 3))*/) {
+      /*
       if (this.shortenDraggableTexts) {
       // Adds a class that floats the draggables to the right.
         self.$draggables.addClass(DRAGGABLES_WIDE_SCREEN);
@@ -487,12 +493,13 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         self.$wordContainer.css({'margin-right': self.$draggables.width()});
       }
       else {
+          */
         self.$draggables.detach().appendTo(self.$taskContainer);
         self.$wordContainer.addClass(DRAGGABLES_WIDE_SCREEN_NO_SHORTEN);
         // Set the wordContainer width to the value set in parameters
         self.$wordContainer.css({'width': self.params.behaviour.leftColumnWidth});
         self.$draggables.addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN_NO_SHORTEN);
-      }
+      //}
     }
     else {
       // Remove the specific wide screen settings.
@@ -861,7 +868,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   DragText.prototype.addTaskTo = function ($container) {
     const self = this;
     self.widest = 0;
-    self.widestDraggable = 0;
+    //self.widestDraggable = 0;
     self.droppables = [];
     self.draggables = [];
 
@@ -962,6 +969,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
    * Matches the width of all dropzones to the widest draggable, and sets widest class variable.
    */
   DragText.prototype.addDropzoneWidth = function () {
+    /*
     const self = this;
     let widest = 0;
     let widestDragagble = 0;
@@ -1003,12 +1011,21 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     }
     this.widestDraggable = widestDragagble;
     this.widest = widest;
+    /*
     if (this.shortenDraggableTexts) {
       //Adjust all droppable to widest size.
       this.droppables.forEach(function (droppable) {
         droppable.getDropzone().width(self.widest);
       });
     }
+    else {
+        */
+        if (!this.shortDropZones) {
+            this.droppables.forEach(function (droppable) {
+                droppable.getDropzone().width('6em');
+            });
+        }
+    //}
   };
 
   /**
@@ -1047,7 +1064,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       'class': 'h5p-hidden-read'
     }));
 
-    const draggable = new Draggable(answer, $draggable, self.draggables.length, this.shortenDraggableTexts);
+    const draggable = new Draggable(answer, $draggable, self.draggables.length/*, this.shortenDraggableTexts*/);
     draggable.on('addedToZone', function () {
       self.triggerXAPI('interacted');
     });
