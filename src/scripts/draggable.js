@@ -9,7 +9,7 @@ H5P.TextDraggable = (function ($) {
    * @param {jQuery} draggable Draggable object.
    * @param {number} index
    */
-  function Draggable(text, draggable, index, shorten) {
+  function Draggable(text, draggable, index) {
     H5P.EventDispatcher.call(this);
     const self = this;
     self.text = text;
@@ -19,13 +19,6 @@ H5P.TextDraggable = (function ($) {
     self.index = index;
     self.initialIndex = index;
     self.shortFormat = self.text;
-    self.shorten = shorten;
-    if (self.shorten) {
-      //Shortens the draggable string if inside a dropbox.
-      if (self.shortFormat.length > 20 && !self.shortFormat.match(/\\\(.+\\\)|\\\[.+\\\]|\$\$.+\$\$/)) {
-        self.shortFormat = self.shortFormat.slice(0, 17) + '&#8230'; // ellipsis character
-      }
-    }
   }
 
   Draggable.prototype = Object.create(H5P.EventDispatcher.prototype);
@@ -105,13 +98,9 @@ H5P.TextDraggable = (function ($) {
   Draggable.prototype.toggleDroppedFeedback = function (isDropped) {
     if (isDropped) {
       this.$draggable.addClass(DRAGGABLE_DROPPED);
-      if (!this.shorten) {
-        this.$draggable.addClass('noshorten');
-      }
     }
     else {
       this.$draggable.removeClass(DRAGGABLE_DROPPED);
-      this.$draggable.removeClass('noshorten');
     }
   };
 

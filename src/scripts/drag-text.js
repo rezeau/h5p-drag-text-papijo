@@ -58,8 +58,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   
   const DRAGGABLES_WIDE_SCREEN = 'h5p-drag-wide-screen';
   const DRAGGABLE_ELEMENT_WIDE_SCREEN = 'h5p-drag-draggable-wide-screen';
-  const DRAGGABLES_WIDE_SCREEN_NO_SHORTEN = 'h5p-drag-wide-screen-noshorten';
-  const DRAGGABLE_ELEMENT_WIDE_SCREEN_NO_SHORTEN = 'h5p-drag-draggable-wide-screen-noshorten';
 
   /**
    * Initialize module.
@@ -149,12 +147,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     // introduction field id
     this.introductionId = 'h5p-drag-text-' + contentId + '-introduction';
     this.shortDropZones = this.params.behaviour.shortDropZones;
-    /*
-    this.shortenDraggableTexts = this.params.behaviour.shortenDraggableTexts;
-    if (this.shortenDraggableTexts) {
-      this.params.behaviour.transparentBackground = false;
-    }
-    */
     /**
      * @type {HTMLElement} selectedElement
      */
@@ -266,7 +258,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
 
     if (dropZone) {
       this.setDroppableLabel(dropZone, draggable.textContent, droppable.getIndex());
-      //if (!this.shortenDraggableTexts) {
         if (droppable.removableBlock) {
           droppable.showRemovableBlock();
         }
@@ -279,7 +270,6 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
             droppable.showRemovableBlock();
           }
         }
-      //}
     }
     this.setAriaLabelForEmptyDropZones ();
   };
@@ -474,32 +464,13 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   DragText.prototype.changeLayoutToFitWidth = function () {
     const self = this;
     self.addDropzoneWidth();
-    //Find ratio of width to em, and make sure it is less than the predefined ratio, make sure widest draggable is less than a third of parent width.
     
-    if (!self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23) /*&& (self.widestDraggable <= (self.$inner.width() / 3))*/) {
-      /*
-      if (this.shortenDraggableTexts) {
-      // Adds a class that floats the draggables to the right.
-        self.$draggables.addClass(DRAGGABLES_WIDE_SCREEN);
-
-        // Detach and reappend the wordContainer so it will fill up the remaining space left by draggables.
-        self.$wordContainer.detach().appendTo(self.$taskContainer);
-
-        // Set all draggables to be blocks
-        self.draggables.forEach(function (draggable) {
-          draggable.getDraggableElement().addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN);
-        });
-        // Set margin so the wordContainer does not expand when there are no more draggables left.
-        self.$wordContainer.css({'margin-right': self.$draggables.width()});
-      }
-      else {
-          */
+    if (!self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23)) {
         self.$draggables.detach().appendTo(self.$taskContainer);
-        self.$wordContainer.addClass(DRAGGABLES_WIDE_SCREEN_NO_SHORTEN);
+        self.$wordContainer.addClass(DRAGGABLES_WIDE_SCREEN);
         // Set the wordContainer width to the value set in parameters
         self.$wordContainer.css({'width': self.params.behaviour.leftColumnWidth});
-        self.$draggables.addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN_NO_SHORTEN);
-      //}
+        self.$draggables.addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN);
     }
     else {
       // Remove the specific wide screen settings.
@@ -966,66 +937,14 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   };
 
   /**
-   * Matches the width of all dropzones to the widest draggable, and sets widest class variable.
+   * Sets dropzone width to either short 1em or default 8em
    */
   DragText.prototype.addDropzoneWidth = function () {
-    /*
-    const self = this;
-    let widest = 0;
-    let widestDragagble = 0;
-    const fontSize = parseInt(this.$inner.css('font-size'), 10);
-    const staticMinimumWidth = 3 * fontSize;
-    const staticPadding = fontSize; // Needed to make room for feedback icons
-
-    //Find widest draggable
-    this.draggables.forEach(function (draggable) {
-      const $draggableElement = draggable.getDraggableElement();
-
-      //Find the initial natural width of the draggable.
-      const $tmp = $draggableElement.clone().css({
-        'position': 'absolute',
-        'white-space': 'nowrap',
-        'width': 'auto',
-        'padding': 0,
-        'margin': 0
-      }).html(draggable.getAnswerText())
-        .appendTo($draggableElement.parent());
-      let width = $tmp.outerWidth();
-
-      widestDragagble = width > widestDragagble ? width : widestDragagble;
-
-      // Measure how big truncated draggable should be
-      if ($tmp.text().length >= 20) {
-        $tmp.html(draggable.getShortFormat());
-        width = $tmp.width();
-      }
-
-      if (width + staticPadding > widest) {
-        widest = width + staticPadding;
-      }
-      $tmp.remove();
-    });
-    // Set min size
-    if (widest < staticMinimumWidth) {
-      widest = staticMinimumWidth;
-    }
-    this.widestDraggable = widestDragagble;
-    this.widest = widest;
-    /*
-    if (this.shortenDraggableTexts) {
-      //Adjust all droppable to widest size.
-      this.droppables.forEach(function (droppable) {
-        droppable.getDropzone().width(self.widest);
-      });
-    }
-    else {
-        */
         if (!this.shortDropZones) {
             this.droppables.forEach(function (droppable) {
-                droppable.getDropzone().width('6em');
+                droppable.getDropzone().width('8em');
             });
         }
-    //}
   };
 
   /**
@@ -1064,7 +983,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       'class': 'h5p-hidden-read'
     }));
 
-    const draggable = new Draggable(answer, $draggable, self.draggables.length/*, this.shortenDraggableTexts*/);
+    const draggable = new Draggable(answer, $draggable, self.draggables.length);
     draggable.on('addedToZone', function () {
       self.triggerXAPI('interacted');
     });
@@ -1102,7 +1021,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         over: (event) => {
           self.droppables.forEach(droppable => {
             if (droppable.getElement() !== event.target) {
-              droppable.disableDropzone();
+              //droppable.disableDropzone();
             }
           });
         },

@@ -54,6 +54,7 @@
 }
 
 /* Feedback for dropzones */
+/*
 .h5p-drag-text .h5p-drag-correct-feedback:before {
   position: absolute;
   right: 0.5em;
@@ -69,14 +70,14 @@
   content: "\f00d";
   color: #b71c1c;
 }
-
-.h5p-drag-text .h5p-drag-correct-feedback-noshorten:after {
+*/
+.h5p-drag-text .h5p-drag-correct-feedback:after {
   font-family: 'H5PFontAwesome4';
   content: "\f00c";
   color: #255c41;
 }
 
-.h5p-drag-text .h5p-drag-wrong-feedback-noshorten:after {
+.h5p-drag-text .h5p-drag-wrong-feedback:after {
   font-family: 'H5PFontAwesome4';
   content: "\f00d";
   color: #b71c1c;
@@ -94,7 +95,6 @@
 .h5p-drag-text [aria-dropped] {
   position:relative;
   top: -0.1em;
-  //width: 8em;
   width: 1em;
   height: 1.25em;
   background-color: #cee0f4;
@@ -107,28 +107,23 @@
 
 .h5p-drag-text [aria-dropped] {
   display: inline;
-  vertical-align: baseline;
   padding-right: 0;
 }
 
-.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback,
-.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-noshorten {
+.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback {
   background: #9dd8bb;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback,
-.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-noshorten {
+.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback {
   background: #f7d0d0;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
 .h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-transparent,
-.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-transparent,
-.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-noshorten-transparent,
-.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-noshorten-transparent {
+.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-transparent {
   background: transparent;
   margin: -0.875em;
   position: initial;
@@ -160,7 +155,6 @@
   padding: 0.1em 0.6em;
   margin: 0.3em;
   text-align: left;
-  //vertical-align: middle;
   display: inline-block;
   border: 0.1em solid #c6c6c6;
   overflow: hidden;
@@ -172,7 +166,7 @@
   -ms-user-select: none;
 }
 
-.h5p-drag-text .noshorten {
+.h5p-drag-text {
   width: fit-content;
   display: inline;
   white-space: break-spaces!important;
@@ -189,7 +183,8 @@
 
 
 .h5p-drag-text [aria-grabbed].h5p-drag-dropped {
-  width: 100%;
+  //width: 100%;
+  display: inline;
   margin: -0.1em 0 0 0;
   padding: 0.1em 0.825em;
   white-space: nowrap;
@@ -273,13 +268,13 @@
   width:fit-content;
 }
 
-/* NO SHORTEN Wide Screen css : */
-.h5p-drag-text .h5p-drag-wide-screen-noshorten {
+/* Wide Screen css : */
+.h5p-drag-text .h5p-drag-wide-screen {
   float: left;
   padding-top: 0;
 }
 
-.h5p-drag-text .h5p-drag-draggable-wide-screen-noshorten {
+.h5p-drag-text .h5p-drag-draggable-wide-screen {
   display: table;
 }
 
