@@ -321,6 +321,23 @@
         "default": true
       },
       {
+        "label": "Require all gaps to be filled in  before the \"Show Solution\" can be displayed",
+        "importance": "low",
+        "name": "showSolutionsRequiresInput",
+        "type": "boolean",
+        "default": true,
+        "optional": true,
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "enableSolutionsButton",
+              "equals": true
+            }
+          ]
+        }
+      },
+      {
         "name": "enableCheckButton",
         "type": "boolean",
         "label": "Enable \"Check\" button",

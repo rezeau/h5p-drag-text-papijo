@@ -145,6 +145,9 @@
           "label": "Enable \"Show Solution\" button"
         },
         {
+          "label": "Require all gaps to be filled in  before the \"Show Solution\" can be displayed"
+        },
+        {
           "label": "Enable \"Check\" button"
         },
         {

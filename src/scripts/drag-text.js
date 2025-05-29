@@ -91,6 +91,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       behaviour: {
         enableRetry: true,
         enableSolutionsButton: true,
+        showSolutionsRequiresInput: true,
         enableCheckButton: true,
         instantFeedback: false,
         shortDropZones: false,
@@ -499,12 +500,14 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       self.addButton('check-answer', self.params.checkAnswer, function () {
         self.answered = true;
         self.removeAllElementsFromDragControl();
-
         if (!self.showEvaluation()) {
           if (self.params.behaviour.enableRetry) {
             self.showButton('try-again');
           }
-          if (self.params.behaviour.enableSolutionsButton) {
+          if (self.params.behaviour.enableSolutionsButton && (
+              !self.params.behaviour.showSolutionsRequiresInput ||
+              (self.params.behaviour.showSolutionsRequiresInput && self.isAllAnswersFilled())
+              )) {
             self.showButton('show-solution');
           }
           self.hideButton('check-answer');
