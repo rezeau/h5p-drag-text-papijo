@@ -50,6 +50,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   //CSS Main Containers:
   const INNER_CONTAINER = "h5p-drag-inner";
   const TASK_CONTAINER = "h5p-drag-task";
+  const TASK_CONTAINER_FLEX = "h5p-drag-task-flex";
   const WORDS_CONTAINER = "h5p-drag-droppable-words";
   const DROPZONE_CONTAINER = "h5p-drag-dropzone-container";
   const DRAGGABLES_CONTAINER = "h5p-drag-draggables-container";
@@ -123,7 +124,9 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     if (this.contentData !== undefined && this.contentData.previousState !== undefined && this.contentData.previousState.length !== undefined) {
       this.previousState = this.contentData.previousState;
     }
-
+    if (this.params.behaviour.leftColumnWidth === 'auto') {
+        this.params.behaviour.leftColumnWidth = '50%';
+    }
     // Keeps track of if Question has been answered
     this.answered = false;
     // If text was copied-pasted from another WYSIWYG editor we may need to clean potential line breaks which would ruin the display.
@@ -468,9 +471,11 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     if (!self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23)) {
         self.$draggables.detach().appendTo(self.$taskContainer);
         self.$wordContainer.addClass(DRAGGABLES_WIDE_SCREEN);
-        // Set the wordContainer width to the value set in parameters
+        let usedPercentStr = self.params.behaviour.leftColumnWidth;
+        let usedPercent = parseFloat(usedPercentStr);
+        let remainingPercent = 100 - usedPercent + "%";
         self.$wordContainer.css({'width': self.params.behaviour.leftColumnWidth});
-        self.$draggables.addClass(DRAGGABLE_ELEMENT_WIDE_SCREEN);
+        self.$draggables.css({'width': remainingPercent});
     }
     else {
       // Remove the specific wide screen settings.
@@ -509,7 +514,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
           self.hideButton('show-solution');
           self.hideButton('try-again');
           self.hideButton('check-answer');
-          self.$wordContainer.css({'width': 'auto'});
+          self.$wordContainer.css({'width': 'fit-content'});
         }
 
         // Focus top of the task for natural navigation
@@ -723,22 +728,25 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
   DragText.prototype.showExplanation = function () {
     const self = this;
     let explanations = [];
-
-    this.droppables.forEach(droppable => {
+    /* join(" | ") is used in case there are alternative correct answers */
+    this.droppables.forEach((droppable, index) => {
+      const dropZoneLabel = this.params.dropZoneIndex.replace('@index', index + 1) + '</br>';
       const draggable = droppable.containedDraggable;
-
       if (droppable && draggable) {
         if (droppable.isCorrect() && droppable.correctFeedback) {
+          // Remove tags and get plain text for each
+          const cleanDraggableTexts = droppable.text.map(str => str.replace(/<[^>]*>/g, ''));
           explanations.push({
-            correct: draggable.text,
+            correct: dropZoneLabel + cleanDraggableTexts.join(" | "),
             text: droppable.correctFeedback
           });
         }
 
         if (!droppable.isCorrect() && droppable.incorrectFeedback) {
+          // Remove tags and get plain text for each
+          const cleanDraggableText = draggable.text.replace(/<[^>]*>/g, '');
           explanations.push({
-            correct: droppable.text,
-            wrong: draggable.text,
+            wrong: dropZoneLabel + cleanDraggableText,
             text: droppable.incorrectFeedback
           });
         }
@@ -842,15 +850,22 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
     //self.widestDraggable = 0;
     self.droppables = [];
     self.draggables = [];
-
+    let taskclass = TASK_CONTAINER;
+    if (!self.params.behaviour.noWideScreenLayout) {
+        taskclass = TASK_CONTAINER_FLEX;
+    }
     self.$taskContainer = $('<div/>', {
-      'class': TASK_CONTAINER
+      'class': taskclass
     });
 
     self.$draggables = $('<div/>', {
       'class': DRAGGABLES_CONTAINER
     });
-
+    if (!self.params.behaviour.noWideScreenLayout) {
+        self.$separator = $('<div/>', {
+          'class': 'separator'
+        });
+    }
     self.$wordContainer = $('<div/>', {'class': WORDS_CONTAINER});
     /*
        * Temporarily replace escaped asterisks & colons with a replacement character,
@@ -919,8 +934,11 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
       self.draggables.reverse();
     }
 
-    self.$draggables.appendTo(self.$taskContainer);
+    self.$draggables.appendTo(self.$taskContainer);    
     self.$wordContainer.appendTo(self.$taskContainer);
+    if (!self.params.behaviour.noWideScreenLayout) {
+        self.$separator.appendTo(self.$taskContainer);
+    }
     self.$taskContainer.appendTo($container);
     self.addDropzoneWidth();
   };

@@ -101,7 +101,11 @@ H5P.TextDroppable = (function ($) {
       const solutiontxt = this.text.join(' | ');
       this.$showSolution.html(solutiontxt);
     }
-
+    // No need to display tips when showing solutions. Makes screen less cluttered.
+    const self = this;
+    if (self.$tip) {
+        self.$tip.attr('style', 'display: none;');
+    }
     this.$showSolution.prepend(correct ? this.$correctText : this.$incorrectText);
     this.$showSolution.toggleClass('incorrect', !correct);
     this.$showSolution.show();
@@ -209,9 +213,8 @@ H5P.TextDroppable = (function ($) {
     }
     if (this.isCorrect()) {
         if (self.$tip) {
-          if (background === TRANSPARENT) {
-            // todo set position not base?
-            self.$tip.attr('style', 'display: none;');
+          self.$tip.attr('style', 'display: none;');
+          if (background === TRANSPARENT) {            
             this.$dropzone.attr('style', 'margin-right: -1.25em;');
           }
           else {
@@ -229,9 +232,14 @@ H5P.TextDroppable = (function ($) {
     }
     else {
       //Draggable is wrong
-      if (self.$tip && background === TRANSPARENT) {
-        this.$dropzone.attr('style', 'margin-right: -0.25em;');
-      }
+        if (self.$tip) {
+             if (background === TRANSPARENT) {
+              this.$dropzone.attr('style', 'margin-right: 0em;');
+          }
+          else {
+              this.$dropzone.attr('style', 'margin-right: 0.6em;');
+          }
+        }
       this.$dropzone.removeClass(CORRECT_FEEDBACK).addClass(WRONG_FEEDBACK + background);
 
       //Draggable feedback

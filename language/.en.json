@@ -22,7 +22,7 @@
       "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula. Maths: *2\\*3* = 6 and *12\\:3* = 4",
       "description": "",
       "important": {
-        "description": "<ul><li>Tutorial and Examples: <a href=\"http://www.rezeau.org/drupal/\" target=\"_blank\" rel=\"noopener\">Papi Jo's Drupal test site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks and colons can be added within droppable words/phrases by escaping them (with a backslash). See example #3 below.</li><li>You may add a textual tip, using a DOUBLE colon (::) in front of the tip. See examples #1 and #4 below.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback. See example #2 below.</li><li>You may provide alternative correct answers by using slashes as separators. See example #5 below.</li><li>You may also add a removable distractor block of text, between underscores. See example #4 below.</li><li>You may use inline formatting such as &lt;em&gt;&lt;/em&gt;. See example #5 below.</li></ul>"
+        "description": "<ul><li>Tutorial and Examples: <a href=\"https://www.rezeau.org/moodle/course/view.php?id=12&lang=en\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks and colons can be added within droppable words/phrases by escaping them (with a backslash). See example #3 below.</li><li>You may add a textual tip, using a DOUBLE colon (::) in front of the tip. See examples #1 and #4 below.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback. See example #2 below.</li><li>You may provide alternative correct answers by using slashes as separators. See example #5 below.</li><li>You may also add a removable distractor block of text, between underscores. See example #4 below.</li><li>You may use inline formatting such as &lt;em&gt;&lt;/em&gt;. See example #5 below.</li></ul>"
       }
     },
     {
@@ -51,6 +51,7 @@
               {
                 "label": "Score Range"
               },
+              {},
               {
                 "label": "Feedback for defined score range",
                 "placeholder": "Fill in the feedback"
@@ -150,8 +151,8 @@
           "label": "Instant feedback"
         },
         {
-          "label": "Shorten the longish draggable texts",
-          "description": "Do NOT check this option if you want to keep the original lengths of draggable texts."
+          "label": "Display short drop zones",
+          "description": "Check this option if you want to display short drop zones (useful when using small screens e.g. phone)."
         },
         {
           "label": "Sort the draggable texts in alphabetic order",
@@ -163,19 +164,16 @@
         },
         {
           "label": "Display the correct and wrong feedback backgrounds transparent",
-          "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background (and a check icon) upon checking the answers. Useful when the draggable elements are parts of words. Only available if the 'Shorten the longish draggable texts' option is disabled."
+          "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background (and a check icon) upon checking the answers. Useful when the draggable elements are parts of words."
         },
         {
-          "label": "Solutions below content",
-          "description": "If set, will force solution texts to be displayed below the content."
+          "label": "Display the draggable words below the gapped text",
+          "description": "Check this option to display the draggable words below the gapped text. Leave un-checked if you prefer to display 2 columns"
         },
         {
           "label": "Left Column Width",
-          "description": "You can optionally set the width of the left column (i.e. the text containg blanks). If in doubt, leave the 'auto' setting.",
+          "description": "If you have chosen to display the gapped text and the draggable words in 2 columns, you can select the width of the left column (i.e. the gapped text.",
           "options": [
-            {
-              "label": "auto"
-            },
             {
               "label": "33%"
             },

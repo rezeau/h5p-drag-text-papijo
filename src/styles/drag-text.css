@@ -53,24 +53,6 @@
   margin-left:4px;
 }
 
-/* Feedback for dropzones */
-/*
-.h5p-drag-text .h5p-drag-correct-feedback:before {
-  position: absolute;
-  right: 0.5em;
-  font-family: 'H5PFontAwesome4';
-  content: "\f00c";
-  color: #255c41;
-}
-
-.h5p-drag-text .h5p-drag-wrong-feedback:before {
-  position: absolute;
-  right: 0.5em;
-  font-family: 'H5PFontAwesome4';
-  content: "\f00d";
-  color: #b71c1c;
-}
-*/
 .h5p-drag-text .h5p-drag-correct-feedback:after {
   font-family: 'H5PFontAwesome4';
   content: "\f00c";
@@ -127,6 +109,8 @@
   background: transparent;
   margin: -0.875em;
   position: initial;
+  vertical-align: baseline;
+  font-weight: bold;
 }
 
 .h5p-drag-text [aria-dropeffect]:before {
@@ -181,9 +165,7 @@
   background: #edd6e9;
   }
 
-
 .h5p-drag-text [aria-grabbed].h5p-drag-dropped {
-  //width: 100%;
   display: inline;
   margin: -0.1em 0 0 0;
   padding: 0.1em 0.825em;
@@ -245,6 +227,7 @@
 
 .h5p-drag-text .h5p-drag-droppable-words {
   line-height: 1.75;
+  padding: 16px;
 }
 
 .h5p-drag-text [aria-grabbed='true'] {
@@ -254,18 +237,12 @@
 .h5p-drag-text .h5p-drag-task {
   width: 100%;
   position: relative;
-  display: inline-block;
 }
 
-/* Wide Screen css : */
-.h5p-drag-text .h5p-drag-wide-screen {
-  float: right;
-  padding-top: 0;
-}
-
-.h5p-drag-text .h5p-drag-draggable-wide-screen {
-  display: block;
-  width:fit-content;
+.h5p-drag-text .h5p-drag-task-flex {
+  width: 100%;
+  position: relative;
+  display: flex;
 }
 
 /* Wide Screen css : */
@@ -276,8 +253,8 @@
 
 .h5p-drag-text .h5p-drag-draggable-wide-screen {
   display: table;
+  padding: 16px;
 }
-
 
 .h5p-drag-text [aria-dropeffect].ui-droppable.ui-droppable-disabled.ui-state-disabled{
   opacity: 1;
@@ -321,7 +298,17 @@
 }
 
 .h5p-drag-text .autowidth {
-  width: auto;
+  width: auto!important;
   background-color: #faebd7;
 }
 
+.h5p-drag-text .separator {
+  width: 2px;
+  background-color: black;
+  margin: 0 10px;
+}
+
+.h5p-drag-text .h5p-question-explanation-wrong {
+  color: #b61c1e;
+  text-decoration: none!important;
+}

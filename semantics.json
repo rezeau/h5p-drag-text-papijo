@@ -77,7 +77,7 @@
     "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula. Maths: *2\\*3* = 6 and *12\\:3* = 4",
     "description": "",
     "important": {
-      "description": "<ul><li>Tutorial and Examples: <a href=\"http://www.h5p.rezeau.org\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks and colons can be added within droppable words/phrases by escaping them (with a backslash). See example #3 below.</li><li>You may add a textual tip, using a DOUBLE colon (::) in front of the tip. See examples #1 and #4 below.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback. See example #2 below.</li><li>You may provide alternative correct answers by using slashes as separators. See example #5 below.</li><li>You may also add a removable distractor block of text, between underscores. See example #4 below.</li><li>You may use inline formatting such as &lt;em&gt;&lt;/em&gt;. See example #5 below.</li></ul>",
+      "description": "<ul><li>Tutorial and Examples: <a href=\"https://www.rezeau.org/moodle/course/view.php?id=12&lang=en\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks and colons can be added within droppable words/phrases by escaping them (with a backslash). See example #3 below.</li><li>You may add a textual tip, using a DOUBLE colon (::) in front of the tip. See examples #1 and #4 below.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback. See example #2 below.</li><li>You may provide alternative correct answers by using slashes as separators. See example #5 below.</li><li>You may also add a removable distractor block of text, between underscores. See example #4 below.</li><li>You may use inline formatting such as &lt;em&gt;&lt;/em&gt;. See example #5 below.</li></ul>",
       "example": "1.- H5P content may be edited using a *browser::What type of program is Chrome?*. </br>2.- H5P content is *interactive\\+Correct! \\-Incorrect, try again!* </br>3.- Maths: *2\\*3* = 6 and *12\\:3* = 4<br />4.- This morning I met my friend John and I said *_Pleased to meet you_Hi, John/Hey John, nice to see you again!::Use a less formal expression* to him.</br>5.- The dog chased *the <em>black</em> cat/the bird/the postman*"
     }
   },
@@ -374,7 +374,7 @@
       },
       {
         "label": "Display the correct and wrong feedback backgrounds transparent",
-        "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background (and a check icon) upon checking the answers. Useful when the draggable elements are parts of words. Only available if the 'Shorten the longish draggable texts' option is disabled.",
+        "description": "Check this option if you want to display the correct and incorrect draggable texts without a color background (and a check icon) upon checking the answers. Useful when the draggable elements are parts of words.",
         "importance": "low",
         "name": "transparentBackground",
         "type": "boolean",
@@ -382,8 +382,8 @@
       },
       {
         "name": "noWideScreenLayout",
-        "label": "Solutions below content",
-        "description": "If set, will force solution texts to be displayed below the content.",
+        "label": "Display the draggable words below the gapped text",
+        "description": "Check this option to display the draggable words below the gapped text. Leave un-checked if you prefer to display 2 columns",
         "importance": "low",
         "type": "boolean",
         "default": false,
@@ -392,16 +392,12 @@
       {
         "name": "leftColumnWidth",
         "label": "Left Column Width",
-        "description": "You can optionally set the width of the left column (i.e. the text containg blanks). If in doubt, leave the 'auto' setting.",
+        "description": "If you have chosen to display the gapped text and the draggable words in 2 columns, you can select the width of the left column (i.e. the gapped text.",
         "importance": "low",
         "type": "select",
-        "default": "auto",
+        "default": "50%",
         "optional": true,
         "options": [
-          {
-            "value": "auto",
-            "label": "auto"
-          },
           {
             "value": "33%",
             "label": "33%"
