@@ -314,6 +314,14 @@
         "default": true
       },
       {
+        "label": "Instant feedback",
+        "importance": "low",
+        "name": "instantFeedback",
+        "type": "boolean",
+        "default": false,
+        "optional": true
+      },
+      {
         "label": "Enable \"Show Solution\" button",
         "importance": "low",
         "name": "enableSolutionsButton",
@@ -329,10 +337,15 @@
         "optional": true,
         "widget": "showWhen",
         "showWhen": {
+          "type": "and",
           "rules": [
             {
               "field": "enableSolutionsButton",
               "equals": true
+            },
+            {
+              "field": "instantFeedback",
+              "equals": false
             }
           ]
         }
@@ -344,14 +357,6 @@
         "widget": "none",
         "importance": "low",
         "default": true,
-        "optional": true
-      },
-      {
-        "label": "Instant feedback",
-        "importance": "low",
-        "name": "instantFeedback",
-        "type": "boolean",
-        "default": false,
         "optional": true
       },
       {

@@ -143,16 +143,16 @@
           "label": "Activer le bouton \"Recommencer\""
         },
         {
-          "label": "Exiger que toutes les zones soient remplies avant que le message « Voir la solution » puisse s'afficher."
+          "label": "Correction instantanée"
         },
         {
           "label": "Activer le bouton \"Voir la solution\""
         },
         {
-          "label": "Activer le bouton \"Vérifier\""
+          "label": "Exiger que toutes les zones soient remplies avant que le message « Voir la solution » puisse s'afficher."
         },
         {
-          "label": "Correction instantanée"
+          "label": "Activer le bouton \"Vérifier\""
         },
         {
           "label": "Afficher des zones de dépôt courtes",

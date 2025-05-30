@@ -142,6 +142,9 @@
           "label": "Enable \"Retry\""
         },
         {
+          "label": "Instant feedback"
+        },
+        {
           "label": "Enable \"Show Solution\" button"
         },
         {
@@ -149,9 +152,6 @@
         },
         {
           "label": "Enable \"Check\" button"
-        },
-        {
-          "label": "Instant feedback"
         },
         {
           "label": "Display short drop zones",
