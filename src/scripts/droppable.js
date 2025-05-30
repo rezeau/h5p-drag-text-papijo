@@ -103,7 +103,7 @@ H5P.TextDroppable = (function ($) {
     }
     // No need to display tips when showing solutions. Makes screen less cluttered.
     const self = this;
-    if (self.$tip) {
+    if (self.$tip && !this.params.behaviour.alwaysDisplayTips) {
         self.$tip.attr('style', 'display: none;');
     }
     this.$showSolution.prepend(correct ? this.$correctText : this.$incorrectText);
@@ -213,13 +213,10 @@ H5P.TextDroppable = (function ($) {
     }
     if (this.isCorrect()) {
         if (self.$tip) {
-          self.$tip.attr('style', 'display: none;');
-          if (background === TRANSPARENT) {            
-            this.$dropzone.attr('style', 'margin-right: -1.25em;');
+          if (!this.params.behaviour.alwaysDisplayTips) {
+            self.$tip.attr('style', 'display: none;');
           }
-          else {
-            this.$dropzone.attr('style', 'padding-right: 0.6em;');
-          }
+          this.$dropzone.attr('style', 'padding-right: 0.6em;');
         }
         this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK + background);
 

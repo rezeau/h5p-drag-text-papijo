@@ -369,6 +369,15 @@
         "optional": true
       },
       {
+        "label": "Always display the tips",
+        "description": "Uncheck this option if you want to hide the tips when correct answers are given for gaps.",
+        "importance": "low",
+        "name": "alwaysDisplayTips",
+        "type": "boolean",
+        "default": true,
+        "optional": true
+      },
+      {
         "label": "Sort the draggable texts in alphabetic order",
         "description": "Check this option if you want to sort the draggable texts in alphabetic order (rather than randomized).",
         "importance": "low",

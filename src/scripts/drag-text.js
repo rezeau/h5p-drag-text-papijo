@@ -95,6 +95,7 @@ H5P.DragText = (function ($, Question, ConfirmationDialog) {
         enableCheckButton: true,
         instantFeedback: false,
         shortDropZones: false,
+        alwaysDisplayTips: true,
         alphaSort: false,
         keepCorrectAnswers: false,
         transparentBackground: false,

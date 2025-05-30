@@ -158,6 +158,10 @@
           "description": "Check this option if you want to display short drop zones (useful when using small screens e.g. phone)."
         },
         {
+          "label": "Always display the tips",
+          "description": "Uncheck this option if you want to hide the tips when correct answers are given for gaps."
+        },
+        {
           "label": "Sort the draggable texts in alphabetic order",
           "description": "Check this option if you want to sort the draggable texts in alphabetic order (rather than randomized)."
         },
