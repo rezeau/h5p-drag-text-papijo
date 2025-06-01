@@ -45,12 +45,11 @@
 
 /* Tooltip styling */
 .h5p-drag-text .joubel-tip-container {
-  top: -1.1em;
-  right: -0.6em;
-  position: absolute;
+  top: -0.6em;
+  position: relative;
   z-index: 4;
   font-size: 0.9em;
-  margin-left:4px;
+  right: 0.8em;
 }
 
 .h5p-drag-text .h5p-drag-correct-feedback:after {
@@ -169,7 +168,6 @@
   display: inline;
   margin: -0.1em 0 0 0;
   padding: 0.1em 0.825em;
-  white-space: nowrap;
   color: #1a4473;
   border: 0.1em solid #a9c3d0;
   background: #cee0f4;
@@ -281,7 +279,7 @@
 
 .h5p-drag-text .h5p-drag-dropzone-container.has-tip,
 .h5p-drag-text .h5p-drag-show-solution-container.has-tip {
-  margin-right: 0.25em;
+  margin-right: -1em;
 }
 
 .h5p-drag-text .noMargins {
