@@ -1,50 +1,50 @@
 /* The main containers for the module, specific to this module. */
-.h5p-drag-text {
+.h5p-drag-text-papijo {
   position: relative;
   background: rgba(255, 255, 255, 0.9);
   overflow: hidden;
 }
 
-.h5p-drag-text .hidden {
+.h5p-drag-text-papijo .hidden {
   display: none;
 }
 
-.h5p-drag-text .h5p-drag-inner p {
+.h5p-drag-text-papijo .h5p-drag-inner p {
   font-size: 1em;
   font-weight: normal;
   padding: 0;
   margin: 0 0 1em;
 }
 
-.h5p-drag-text button.h5p-drag-button:before {
+.h5p-drag-text-papijo button.h5p-drag-button:before {
   font-family: 'H5PFontAwesome4';
   padding-right: 0.5em;
 }
 
 /* Button icons */
-.h5p-drag-text .h5p-drag-check-button:before {
+.h5p-drag-text-papijo .h5p-drag-check-button:before {
   content: "\f058";
 }
-.h5p-drag-text .h5p-drag-retry-button:before {
+.h5p-drag-text-papijo .h5p-drag-retry-button:before {
   content: "\f021";
 }
-.h5p-drag-text .h5p-drag-show-solution-button:before {
+.h5p-drag-text-papijo .h5p-drag-show-solution-button:before {
   content: "\f06e";
 }
 
 /* Buttons starting state: */
-.h5p-drag-text .h5p-drag-check-button {
+.h5p-drag-text-papijo .h5p-drag-check-button {
   display: inline-block;
 }
-.h5p-drag-text .h5p-drag-retry-button {
+.h5p-drag-text-papijo .h5p-drag-retry-button {
   display: none;
 }
-.h5p-drag-text .h5p-drag-show-solution-button {
+.h5p-drag-text-papijo .h5p-drag-show-solution-button {
   display: none;
 }
 
 /* Tooltip styling */
-.h5p-drag-text .joubel-tip-container {
+.h5p-drag-text-papijo .joubel-tip-container {
   top: -0.6em;
   position: relative;
   z-index: 4;
@@ -52,13 +52,13 @@
   right: 0.8em;
 }
 
-.h5p-drag-text .h5p-drag-correct-feedback:after {
+.h5p-drag-text-papijo .h5p-drag-correct-feedback:after {
   font-family: 'H5PFontAwesome4';
   content: "\f00c";
   color: #255c41;
 }
 
-.h5p-drag-text .h5p-drag-wrong-feedback:after {
+.h5p-drag-text-papijo .h5p-drag-wrong-feedback:after {
   font-family: 'H5PFontAwesome4';
   content: "\f00d";
   color: #b71c1c;
@@ -66,14 +66,14 @@
 
 
 /* Dropzone styling */
-.h5p-drag-text .h5p-drag-dropzone-container {
+.h5p-drag-text-papijo .h5p-drag-dropzone-container {
   position: relative;
   display: inline;
   padding-right: 0.1em;
 }
 
-.h5p-drag-text [aria-dropeffect],
-.h5p-drag-text [aria-dropped] {
+.h5p-drag-text-papijo [aria-dropeffect],
+.h5p-drag-text-papijo [aria-dropped] {
   position:relative;
   top: -0.1em;
   width: 1em;
@@ -86,25 +86,25 @@
   padding: 0.1em 1.65em 0.1em 0;
 }
 
-.h5p-drag-text [aria-dropped] {
+.h5p-drag-text-papijo [aria-dropped] {
   display: inline;
   padding-right: 0;
 }
 
-.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback {
+.h5p-drag-text-papijo [aria-dropeffect].h5p-drag-correct-feedback {
   background: #9dd8bb;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback {
+.h5p-drag-text-papijo [aria-dropeffect].h5p-drag-wrong-feedback {
   background: #f7d0d0;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-.h5p-drag-text [aria-dropeffect].h5p-drag-correct-feedback-transparent,
-.h5p-drag-text [aria-dropeffect].h5p-drag-wrong-feedback-transparent {
+.h5p-drag-text-papijo [aria-dropeffect].h5p-drag-correct-feedback-transparent,
+.h5p-drag-text-papijo [aria-dropeffect].h5p-drag-wrong-feedback-transparent {
   background: transparent;
   margin: -0.875em;
   position: initial;
@@ -112,26 +112,26 @@
   font-weight: bold;
 }
 
-.h5p-drag-text [aria-dropeffect]:before {
+.h5p-drag-text-papijo [aria-dropeffect]:before {
   line-height: 1.25;
 }
 
 /* Draggable styling */
-.h5p-drag-text .h5p-drag-draggables-container {
+.h5p-drag-text-papijo .h5p-drag-draggables-container {
   position: relative;
   padding-top: 0.5em;
   display: inline-block;
 }
 
-.h5p-drag-text .h5p-drag-draggables-container.hide {
+.h5p-drag-text-papijo .h5p-drag-draggables-container.hide {
   display: none;
 }
 
-.h5p-drag-text .ui-droppable-hover {
+.h5p-drag-text-papijo .ui-droppable-hover {
   background-color: #80b4ed;
 }
 
-.h5p-drag-text [aria-grabbed] {
+.h5p-drag-text-papijo [aria-grabbed] {
   line-height: 1.25;
   cursor: pointer;
   border-radius: 0.25em;
@@ -149,22 +149,22 @@
   -ms-user-select: none;
 }
 
-.h5p-drag-text {
+.h5p-drag-text-papijo {
   width: fit-content;
   display: inline;
   white-space: break-spaces!important;
 }
 
-.h5p-drag-text [aria-grabbed='true'],
-.h5p-drag-text [aria-grabbed].h5p-drag-dropped:not(.ui-state-disabled):hover,
-.h5p-drag-text [aria-grabbed]:not(.ui-state-disabled):hover,
-.h5p-drag-text [aria-grabbed]:not(.ui-draggable-disabled):hover {
+.h5p-drag-text-papijo [aria-grabbed='true'],
+.h5p-drag-text-papijo [aria-grabbed].h5p-drag-dropped:not(.ui-state-disabled):hover,
+.h5p-drag-text-papijo [aria-grabbed]:not(.ui-state-disabled):hover,
+.h5p-drag-text-papijo [aria-grabbed]:not(.ui-draggable-disabled):hover {
   border: 0.1em solid rgb(212,190,216);
   color: #663366;
   background: #edd6e9;
   }
 
-.h5p-drag-text [aria-grabbed].h5p-drag-dropped {
+.h5p-drag-text-papijo [aria-grabbed].h5p-drag-dropped {
   display: inline;
   margin: -0.1em 0 0 0;
   padding: 0.1em 0.825em;
@@ -173,18 +173,18 @@
   background: #cee0f4;
 }
 
-.h5p-drag-text [aria-grabbed='true'] {
+.h5p-drag-text-papijo [aria-grabbed='true'] {
   opacity: 0.5;
   box-shadow: 0 0 0.8em rgba(0,0,0,0.5);
 }
 
-.h5p-drag-text [aria-grabbed].ui-state-disabled {
+.h5p-drag-text-papijo [aria-grabbed].ui-state-disabled {
   opacity: 1;
   cursor: default;
 }
 
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-correct,
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong {
+.h5p-drag-text-papijo .h5p-drag-dropped.h5p-drag-draggable-correct,
+.h5p-drag-text-papijo .h5p-drag-dropped.h5p-drag-draggable-wrong {
   color: #255c41;
   border: none;
   box-shadow: none;
@@ -192,28 +192,28 @@
   background: none;
   cursor: default;
 }
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong {
+.h5p-drag-text-papijo .h5p-drag-dropped.h5p-drag-draggable-wrong {
   color: #b71c1c;
 }
 
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-correct:hover,
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong:hover {
+.h5p-drag-text-papijo .h5p-drag-dropped.h5p-drag-draggable-correct:hover,
+.h5p-drag-text-papijo .h5p-drag-dropped.h5p-drag-draggable-wrong:hover {
   color: #255c41!important;
   background: none!important;
   border:0!important;
 }
 
-.h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong:hover {
+.h5p-drag-text-papijo .h5p-drag-dropped.h5p-drag-draggable-wrong:hover {
   color: #b71c1c!important;
 }
 
 /* Show solution container */
-.h5p-drag-text .h5p-drag-show-solution-container {
+.h5p-drag-text-papijo .h5p-drag-show-solution-container {
   position: relative;
   display: inline;
 }
 
-.h5p-drag-text .h5p-drag-show-solution-container.incorrect {
+.h5p-drag-text-papijo .h5p-drag-show-solution-container.incorrect {
   color: #255c41;
   font-weight: bold;
   border: 1px #255c41 dashed;
@@ -223,47 +223,47 @@
   margin-left: 0.5em;
 }
 
-.h5p-drag-text .h5p-drag-droppable-words {
+.h5p-drag-text-papijo .h5p-drag-droppable-words {
   line-height: 1.75;
   padding: 16px;
 }
 
-.h5p-drag-text [aria-grabbed='true'] {
+.h5p-drag-text-papijo [aria-grabbed='true'] {
   z-index: 2;
 }
 
-.h5p-drag-text .h5p-drag-task {
+.h5p-drag-text-papijo .h5p-drag-task {
   width: 100%;
   position: relative;
 }
 
-.h5p-drag-text .h5p-drag-task-flex {
+.h5p-drag-text-papijo .h5p-drag-task-flex {
   width: 100%;
   position: relative;
   display: flex;
 }
 
 /* Wide Screen css : */
-.h5p-drag-text .h5p-drag-wide-screen {
+.h5p-drag-text-papijo .h5p-drag-wide-screen {
   float: left;
   padding-top: 0;
 }
 
-.h5p-drag-text .h5p-drag-draggable-wide-screen {
+.h5p-drag-text-papijo .h5p-drag-draggable-wide-screen {
   display: table;
   padding: 16px;
 }
 
-.h5p-drag-text [aria-dropeffect].ui-droppable.ui-droppable-disabled.ui-state-disabled{
+.h5p-drag-text-papijo [aria-dropeffect].ui-droppable.ui-droppable-disabled.ui-state-disabled{
   opacity: 1;
 }
 
 /* Use ellipsis for long draggables */
-.h5p-drag-text [aria-grabbed].h5p-drag-dropped.truncate {
+.h5p-drag-text-papijo [aria-grabbed].h5p-drag-dropped.truncate {
   text-overflow: ellipsis;
 }
 
-.h5p-drag-text .correct-answer {
+.h5p-drag-text-papijo .correct-answer {
   width: 1px;
   height: 1px;
   overflow: hidden;
@@ -271,42 +271,42 @@
   color: transparent;
 }
 
-.h5p-drag-text .h5p-question-introduction {
+.h5p-drag-text-papijo .h5p-question-introduction {
   outline: none;
   font-size: initial;
   line-height: initial;
 }
 
-.h5p-drag-text .h5p-drag-dropzone-container.has-tip,
-.h5p-drag-text .h5p-drag-show-solution-container.has-tip {
+.h5p-drag-text-papijo .h5p-drag-dropzone-container.has-tip,
+.h5p-drag-text-papijo .h5p-drag-show-solution-container.has-tip {
   margin-right: -1em;
 }
 
-.h5p-drag-text .noMargins {
+.h5p-drag-text-papijo .noMargins {
   color:blue;
 }
 
-.h5p-drag-text .removableblock {
+.h5p-drag-text-papijo .removableblock {
   margin-top: -4px;
   padding-left: 0.825em;
 }
 
-.h5p-drag-text .hide {
+.h5p-drag-text-papijo .hide {
   display: none;
 }
 
-.h5p-drag-text .autowidth {
+.h5p-drag-text-papijo .autowidth {
   width: auto!important;
   background-color: #faebd7;
 }
 
-.h5p-drag-text .separator {
+.h5p-drag-text-papijo .separator {
   width: 2px;
   background-color: black;
   margin: 0 10px;
 }
 
-.h5p-drag-text .h5p-question-explanation-wrong {
+.h5p-drag-text-papijo .h5p-question-explanation-wrong {
   color: #b61c1e;
   text-decoration: none!important;
 }

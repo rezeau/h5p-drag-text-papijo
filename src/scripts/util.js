@@ -7,7 +7,6 @@
  */
 const curry = function (fn) {
   const arity = fn.length;
-
   return function f1() {
     const args = Array.prototype.slice.call(arguments, 0);
     if (args.length >= arity) {

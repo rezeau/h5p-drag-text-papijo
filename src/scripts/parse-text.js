@@ -11,7 +11,6 @@ import Util from './util';
  */
 
 const parseText = text => text.split(/(\*.*?\*)/).filter(str => str.length > 0);
-
 /**
  * @typedef {object} Solution
  * @param {string} tip
