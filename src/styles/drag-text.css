@@ -277,9 +277,13 @@
   line-height: initial;
 }
 
-.h5p-drag-text-papijo .h5p-drag-dropzone-container.has-tip,
-.h5p-drag-text-papijo .h5p-drag-show-solution-container.has-tip {
+.h5p-drag-text-papijo .h5p-drag-dropzone-container.has-tip {
   margin-right: -1em;
+}
+
+.h5p-drag-text-papijo .h5p-drag-show-solution-container.has-tip.incorrect {
+  margin-right: 1em;
+  margin-left: -0.4em;
 }
 
 .h5p-drag-text-papijo .noMargins {
