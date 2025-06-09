@@ -149,12 +149,6 @@
   -ms-user-select: none;
 }
 
-.h5p-drag-text-papijo {
-  width: fit-content;
-  display: inline;
-  white-space: break-spaces!important;
-}
-
 .h5p-drag-text-papijo [aria-grabbed='true'],
 .h5p-drag-text-papijo [aria-grabbed].h5p-drag-dropped:not(.ui-state-disabled):hover,
 .h5p-drag-text-papijo [aria-grabbed]:not(.ui-state-disabled):hover,

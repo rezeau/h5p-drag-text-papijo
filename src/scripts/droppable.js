@@ -215,8 +215,10 @@ H5P.TextDroppable = (function ($) {
         if (self.$tip) {
           if (!this.params.behaviour.alwaysDisplayTips) {
             self.$tip.attr('style', 'display: none;');
+            self.$dropzoneContainer.removeClass('has-tip');
+          } else {
+            this.$dropzone.attr('style', 'padding-right: 0.6em;');
           }
-          this.$dropzone.attr('style', 'padding-right: 0.6em;');
         }
         this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK + background);
 
