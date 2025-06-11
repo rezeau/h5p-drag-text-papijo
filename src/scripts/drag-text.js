@@ -906,9 +906,10 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
           }
           // Accept multiple correct answers inside pairs of asterisks.
           // Split by slash _not preceded by the < character_ in case some solution.text is formatted with html tags.
-          const solutions = solution.text.split(/(?<!<)\//);
-          solutions.forEach ((solution) => {
-            self.createDraggable(solution);
+          const solutions = solution.text.split(/(?<![<\\])\//);
+          solutions.forEach((solution, index) => {
+            solutions[index] = solution.replace(/\\\//g, "/");
+            self.createDraggable(solutions[index]);
           });
           self.createDroppable(solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock);
         }
@@ -978,7 +979,6 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    */
   DragTextpapijo.prototype.createDraggable = function (answer) {
     const self = this;
-
     //Make the draggable
     const $draggable = $('<div/>', {
       html: `<span>${answer}</span>`,
