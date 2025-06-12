@@ -95,7 +95,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
         enableCheckButton: true,
         instantFeedback: false,
         shortDropZones: false,
-        alwaysDisplayTips: true,
+        hideTips: true,
         alphaSort: false,
         keepCorrectAnswers: false,
         transparentBackground: false,

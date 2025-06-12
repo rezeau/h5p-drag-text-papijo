@@ -159,8 +159,8 @@
           "description": "Cochez cette option si vous souhaitez afficher des zones de dépôt courtes (utile lors de l'utilisation de petits écrans, par exemple un téléphone)."
         },
         {
-          "label": "Toujours afficher les indices",
-          "description": "Décochez cette option si vous souhaitez masquer les indices lorsque des réponses correctes sont données pour les lacunes."
+          "label": "Cacher les indices pour les réponses correctes",
+          "description": "Cochez cette option si vous souhaitez masquer les indices lorsque des réponses correctes sont données pour les lacunes."
         },
         {
           "label": "Trier les éléments de texte à faire glisser en ordre alphabétique.",

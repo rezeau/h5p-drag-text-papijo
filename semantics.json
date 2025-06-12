@@ -369,12 +369,12 @@
         "optional": true
       },
       {
-        "label": "Always display the tips",
-        "description": "Uncheck this option if you want to hide the tips when correct answers are given for gaps.",
+        "label": "Hide the tips for correct answers",
+        "description": "Check this option if you want to hide the tips when correct answers are given for gaps.",
         "importance": "low",
-        "name": "alwaysDisplayTips",
+        "name": "hideTips",
         "type": "boolean",
-        "default": true,
+        "default": false,
         "optional": true
       },
       {
