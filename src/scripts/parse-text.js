@@ -9,8 +9,8 @@ import Util from './util';
  *
  * @return {string[]}
  */
-
 const parseText = text => text.split(/(\*.*?\*)/).filter(str => str.length > 0);
+
 /**
  * @typedef {object} Solution
  * @param {string} tip
@@ -25,44 +25,33 @@ const parseText = text => text.split(/(\*.*?\*)/).filter(str => str.length > 0);
  * @returns {Solution}
  */
 const lex = solutionText => {
-  // On SEPTEMBER 01 2023 changed single colon to double colon to avoid unexpected colon problems.
-  let tip = solutionText.match(/(::([^\\*]+))/g);
+
+  let tip = solutionText.match(/(:([^\\*]+))/g);
   let correctFeedback = solutionText.match(/(\\\+([^\\*:]+))/g);
-  let incorrectFeedback = solutionText.match(/(\\-([^\\*:]+))/g);
+  let incorrectFeedback = solutionText.match(/(\\\-([^\\*:]+))/g);
 
   // Strip the tokens
   let text = Util.cleanCharacter('*', solutionText);
 
   if (tip) {
-    const DUMMYCHARACTER = '\u200B'; // zero-width space character
     text = text.replace(tip, '');
-    tip = tip[0].replace('::', '');
+    tip = tip[0].replace(':','');
     tip = tip.replace(/\s+$/, '');
-    // If tip contains a reference to an image and no text, it needs some character, so we add an invisible one.
-    if ((tip.substr(0, 4) === '<img')) {
-      tip = tip.replace('<img', DUMMYCHARACTER + '​<img');
-    }
   }
-  let removableBlock = text.match(/(_([^\\*]+)_)/g);
   if (correctFeedback) {
     text = text.replace(correctFeedback, '');
-    correctFeedback = correctFeedback[0].replace('\\+', '');
+    correctFeedback = correctFeedback[0].replace('\\+','');
     correctFeedback = correctFeedback.replace(/\s+$/, '');
   }
   if (incorrectFeedback) {
     text = text.replace(incorrectFeedback, '');
-    incorrectFeedback = incorrectFeedback[0].replace('\\-', '');
+    incorrectFeedback = incorrectFeedback[0].replace('\\-','');
     incorrectFeedback = incorrectFeedback.replace(/\s+$/, '');
   }
 
-  if (removableBlock) {
-    text = text.replace(removableBlock, '');
-    removableBlock = removableBlock[0].replace('\\-', '');
-    removableBlock = removableBlock.replace(/_/gm, '');
-  }
-
   text = text.replace(/\s+$/, ''); // remove trailing spaces and tabs
-  return { tip, correctFeedback, incorrectFeedback, removableBlock, text };
+
+  return { tip, correctFeedback, incorrectFeedback, text };
 };
 
 export { parseText, lex };

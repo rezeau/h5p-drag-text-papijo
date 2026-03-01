@@ -5,16 +5,17 @@
  *
  * @return {function}
  */
-const curry = function (fn) {
-  const arity = fn.length;
+var curry =function(fn) {
+  var arity = fn.length;
+
   return function f1() {
-    const args = Array.prototype.slice.call(arguments, 0);
+    var args = Array.prototype.slice.call(arguments, 0);
     if (args.length >= arity) {
       return fn.apply(null, args);
     }
     else {
       return function f2() {
-        const args2 = Array.prototype.slice.call(arguments, 0);
+        var args2 = Array.prototype.slice.call(arguments, 0);
         return f1.apply(null, args.concat(args2));
       };
     }
@@ -29,8 +30,8 @@ const curry = function (fn) {
  *
  * @return {boolean}
  */
-const startsWith = function (symbol, str) {
-  return str.substr(0, 1) === symbol;
+var startsWith = function(symbol, str) {
+  return str.substr(0,1) === symbol;
 };
 
 /**
@@ -41,7 +42,7 @@ const startsWith = function (symbol, str) {
  *
  * @return {boolean}
  */
-const endsWith = function (symbol, str) {
+var endsWith = function(symbol, str) {
   return str.substr(-1) === symbol;
 };
 
@@ -53,12 +54,12 @@ const endsWith = function (symbol, str) {
  *
  * @return {string}
  */
-const cleanCharacter = curry(function (char, str) {
-  if (startsWith(char, str)) {
+var cleanCharacter = curry(function(char, str) {
+  if(startsWith(char, str)) {
     str = str.slice(1);
   }
 
-  if (endsWith(char, str)) {
+  if(endsWith(char, str)) {
     str = str.slice(0, -1);
   }
 
@@ -72,64 +73,23 @@ const cleanCharacter = curry(function (char, str) {
  *
  * @return {Array}
  */
+var shuffle = function (array) {
+  var counter = array.length;
 
-const shuffle = function (array) {
-  let counter = array.length;
   // While there are elements in the array
   while (counter > 0) {
     // Pick a random index
-    const index = Math.floor(Math.random() * counter);
+    var index = Math.floor(Math.random() * counter);
+
     // Decrease counter by 1
     counter--;
 
     // And swap the last element with it
-    const temp = array[counter];
+    var temp = array[counter];
     array[counter] = array[index];
     array[index] = temp;
   }
-  return array;
-};
 
-/**
- * Sorts the array in ascending alphabetical order.
- *
- * @param {Array} array
- *
- * @return {Array}
- */
-const alphasort = function (array) {
-
-  // Initialize and fill a "draggables" array.
-  let draggables = new Array(array.length).fill(null).map(()=> ({'index':0, 'text':'foo'}));
-  let i = 0;
-  let index;
-  let text;
-  // Fill the "draggables" array with index and text taken from the original draggables array.
-  array.forEach(function (draggable) {
-    index = draggable.getIndex();
-    text = draggable.getAnswerText();
-    draggables[i].index = index;
-    draggables[i].text = text;
-    i++;
-  });
-
-  // Alpha sort ascending draggables array by text with potential accents using localeCompare().
-  draggables.sort(function (a, b) {
-    return a.text.localeCompare(b.text, { sensitivity: 'accent' });
-  });
-
-  // Copy original draggable array elements to a temporary array
-  let temp = [];
-  let counter = 0;
-  while (counter < array.length ) {
-    temp.push(array[counter]);
-    counter++;
-  }
-
-  // Copy the sorted elements to the draggables array.
-  for (let j = 0; j < array.length; j++) {
-    array[j] = temp[draggables[j].index];
-  }
   return array;
 };
 
@@ -140,8 +100,8 @@ const alphasort = function (array) {
  *
  * @return {HTMLElement}
  */
-const createElementWithTextPart = function (text) {
-  const el = document.createElement('span');
+var createElementWithTextPart = function(text) {
+  var el = document.createElement('span');
   el.innerHTML = text;
   return  el;
 };
@@ -152,6 +112,5 @@ export default {
   startsWith: startsWith,
   endsWith: endsWith,
   shuffle: shuffle,
-  alphasort: alphasort,
   createElementWithTextPart: createElementWithTextPart
 };

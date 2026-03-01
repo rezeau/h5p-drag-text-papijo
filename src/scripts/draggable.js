@@ -1,6 +1,10 @@
+
+// Helper to stop propagating events
+const stopPropagation = event => event.stopPropagation();
+
 H5P.TextDraggable = (function ($) {
   //CSS Draggable feedback:
-  const DRAGGABLE_DROPPED = 'h5p-drag-dropped';
+  var DRAGGABLE_DROPPED = 'h5p-drag-dropped';
   /**
    * Private class for keeping track of draggable text.
    *
@@ -11,14 +15,24 @@ H5P.TextDraggable = (function ($) {
    */
   function Draggable(text, draggable, index) {
     H5P.EventDispatcher.call(this);
-    const self = this;
+    var self = this;
     self.text = text;
     self.insideDropzone = null;
     self.$draggable = $(draggable);
     self.$ariaLabel = self.$draggable.find('.h5p-hidden-read');
     self.index = index;
     self.initialIndex = index;
+
     self.shortFormat = self.text;
+    //Shortens the draggable string if inside a dropbox.
+    if (self.shortFormat.length > 20 && !self.shortFormat.match(/\\\(.+\\\)|\\\[.+\\\]|\$\$.+\$\$/)) {
+      self.shortFormat = self.shortFormat.slice(0, 17) + '...';
+    }
+
+    // jQuery UI workaround
+    self.$draggable.on('touchstart', stopPropagation);
+    self.$draggable.on('touchmove', stopPropagation);
+    self.$draggable.on('touchend', stopPropagation);
   }
 
   Draggable.prototype = Object.create(H5P.EventDispatcher.prototype);
@@ -70,7 +84,11 @@ H5P.TextDraggable = (function ($) {
    * @param {jQuery} $container Container the draggable will append to.
    */
   Draggable.prototype.appendDraggableTo = function ($container) {
+    const canHasFocus = this.$draggable[0] === document.activeElement;
     this.$draggable.detach().css({left: 0, top: 0}).appendTo($container);
+    if (canHasFocus) {
+      this.$draggable.focus();
+    }
   };
 
   /**
@@ -80,8 +98,9 @@ H5P.TextDraggable = (function ($) {
    */
   Draggable.prototype.revertDraggableTo = function ($container) {
     // get the relative distance between draggable and container.
-    const offLeft = this.$draggable.offset().left - $container.offset().left;
-    const offTop = this.$draggable.offset().top - $container.offset().top;
+    var offLeft = this.$draggable.offset().left - $container.offset().left;
+    var offTop = this.$draggable.offset().top - $container.offset().top;
+
     // Prepend draggable to new container, but keep the offset,
     // then animate to new container's top:0, left:0
     this.$draggable.detach()
@@ -98,8 +117,7 @@ H5P.TextDraggable = (function ($) {
   Draggable.prototype.toggleDroppedFeedback = function (isDropped) {
     if (isDropped) {
       this.$draggable.addClass(DRAGGABLE_DROPPED);
-    }
-    else {
+    } else {
       this.$draggable.removeClass(DRAGGABLE_DROPPED);
     }
   };
@@ -160,7 +178,7 @@ H5P.TextDraggable = (function ($) {
    * @returns {Droppable}
    */
   Draggable.prototype.removeFromZone = function () {
-    const dropZone = this.insideDropzone;
+    var dropZone = this.insideDropzone;
 
     if (this.insideDropzone !== null) {
       this.insideDropzone.removeFeedback();
@@ -202,7 +220,11 @@ H5P.TextDraggable = (function ($) {
    * Sets short format of draggable when inside a dropbox.
    */
   Draggable.prototype.setShortFormat = function () {
-    this.$draggable.html(this.shortFormat);
+    this.$draggable.find('span').html(this.shortFormat);
+
+    if (this.shortFormat !== this.text) {
+      H5P.Tooltip(this.$draggable[0], { text: this.text });
+    }
   };
 
   /**
@@ -218,7 +240,9 @@ H5P.TextDraggable = (function ($) {
    * Removes the short format of draggable when it is outside a dropbox.
    */
   Draggable.prototype.removeShortFormat = function () {
-    this.$draggable.html(this.text);
+    this.$draggable.find('span').html(this.text);
+
+    this.$draggable.find('.h5p-tooltip').remove();
   };
 
   /**
@@ -237,15 +261,6 @@ H5P.TextDraggable = (function ($) {
    */
   Draggable.prototype.isInsideDropZone = function () {
     return !!this.insideDropzone;
-  };
-
-  /**
-   * Returns true if dropzone hasCorrectFeedback
-   *
-   * @returns {boolean}
-   */
-  Draggable.prototype.hasCorrectFeedback = function () {
-    return this.insideDropzone.hasCorrectFeedback();
   };
 
   return Draggable;
