@@ -23,12 +23,6 @@ H5P.TextDraggable = (function ($) {
     self.index = index;
     self.initialIndex = index;
 
-    self.shortFormat = self.text;
-    //Shortens the draggable string if inside a dropbox.
-    if (self.shortFormat.length > 20 && !self.shortFormat.match(/\\\(.+\\\)|\\\[.+\\\]|\$\$.+\$\$/)) {
-      self.shortFormat = self.shortFormat.slice(0, 17) + '...';
-    }
-
     // jQuery UI workaround
     self.$draggable.on('touchstart', stopPropagation);
     self.$draggable.on('touchmove', stopPropagation);
@@ -185,7 +179,6 @@ H5P.TextDraggable = (function ($) {
       this.insideDropzone.removeDraggable();
     }
     this.toggleDroppedFeedback(false);
-    this.removeShortFormat();
     this.updateAriaDescription('');
     this.insideDropzone = null;
 
@@ -198,12 +191,12 @@ H5P.TextDraggable = (function ($) {
    * @param {Droppable} droppable The droppable this draggable will be added to.
    */
   Draggable.prototype.addToZone = function (droppable) {
+    console.log('Draggable.prototype.addToZone');
     if (this.insideDropzone !== null) {
       this.insideDropzone.removeDraggable();
     }
     this.toggleDroppedFeedback(true);
     this.insideDropzone = droppable;
-    this.setShortFormat();
     this.trigger('addedToZone');
   };
 
@@ -214,35 +207,6 @@ H5P.TextDraggable = (function ($) {
    */
   Draggable.prototype.getAnswerText = function () {
     return this.text;
-  };
-
-  /**
-   * Sets short format of draggable when inside a dropbox.
-   */
-  Draggable.prototype.setShortFormat = function () {
-    this.$draggable.find('span').html(this.shortFormat);
-
-    if (this.shortFormat !== this.text) {
-      H5P.Tooltip(this.$draggable[0], { text: this.text });
-    }
-  };
-
-  /**
-   * Get short format of draggable when inside a dropbox.
-   *
-   * @returns {String|*}
-   */
-  Draggable.prototype.getShortFormat = function () {
-    return this.shortFormat;
-  };
-
-  /**
-   * Removes the short format of draggable when it is outside a dropbox.
-   */
-  Draggable.prototype.removeShortFormat = function () {
-    this.$draggable.find('span').html(this.text);
-
-    this.$draggable.find('.h5p-tooltip').remove();
   };
 
   /**

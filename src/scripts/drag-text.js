@@ -46,14 +46,15 @@ import Mouse from 'h5p-lib-controls/src/scripts/ui/mouse';
  */
 H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
   //CSS Main Containers:
-  var INNER_CONTAINER = "h5p-drag-inner";
-  var TASK_CONTAINER = "h5p-drag-task";
-  var WORDS_CONTAINER = "h5p-drag-droppable-words";
-  var DROPZONE_CONTAINER = "h5p-drag-dropzone-container";
-  var DRAGGABLES_CONTAINER = "h5p-drag-draggables-container";
+  const INNER_CONTAINER = "h5p-drag-inner";
+  const TASK_CONTAINER = "h5p-drag-task";
+  const WORDS_CONTAINER = "h5p-drag-droppable-words";
+  const DROPZONE_CONTAINER = "h5p-drag-dropzone-container";
+  const DRAGGABLES_CONTAINER = "h5p-drag-draggables-container";
 
   //Special Sub-containers:
-  var DRAGGABLES_WIDE_SCREEN = 'h5p-drag-wide-screen';
+  const DRAGGABLES_WIDE_SCREEN = 'h5p-drag-wide-screen';
+  const DRAGGABLE_ELEMENT_WIDE_SCREEN = 'h5p-drag-draggable-wide-screen';
 
   /**
    * Initialize module.
@@ -131,7 +132,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
 
     // introduction field id
     this.introductionId = 'h5p-drag-text-' + contentId + '-introduction';
-
+    this.shortDropZones = this.params.behaviour.shortDropZones;
     /**
      * @type {HTMLElement} selectedElement
      */
@@ -328,6 +329,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
             correctFeedback ? this.params.correctText : this.params.incorrectText
           );
         }
+        
       }
       else if (hasChildren) {
         ariaLabel = `${this.params.contains.replace('@index', index.toString()).replace('@draggable', text)}`;
@@ -336,7 +338,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
         ariaLabel = `${this.params.empty.replace('@index', index.toString())}`;
       }
 
-      dropZone.setAttribute('aria-label', ariaLabel);
+      dropZone.setAttribute('aria-label', ariaLabel);      
     }
   };
 
@@ -416,6 +418,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
   /**
   * Adds the draggables on the right side of the screen if widescreen is detected.
   */
+  /*
   DragText.prototype.changeLayoutToFitWidth = function () {
     var self = this;
     self.addDropzoneWidth();
@@ -425,6 +428,30 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       self.$taskContainer.addClass(DRAGGABLES_WIDE_SCREEN);
     } else {
       self.$taskContainer.removeClass(DRAGGABLES_WIDE_SCREEN);
+    }
+  };
+*/
+DragText.prototype.changeLayoutToFitWidth = function () {
+    const self = this;
+    self.addDropzoneWidth();
+    
+    if (!self.params.behaviour.noWideScreenLayout && (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23)) {
+        self.$draggables.detach().appendTo(self.$taskContainer);
+        self.$wordContainer.addClass(DRAGGABLES_WIDE_SCREEN);
+        let usedPercentStr = self.params.behaviour.leftColumnWidth;
+        let usedPercent = parseFloat(usedPercentStr);
+        let remainingPercent = 100 - usedPercent + "%";
+        self.$wordContainer.css({'width': self.params.behaviour.leftColumnWidth});
+        self.$draggables.css({'width': remainingPercent});
+    }
+    else {
+      // Remove the specific wide screen settings.
+      self.$wordContainer.css({'margin-right': 0});
+      self.$draggables.removeClass(DRAGGABLES_WIDE_SCREEN);
+      self.$draggables.detach().appendTo(self.$taskContainer);
+      self.draggables.forEach(function (draggable) {
+        draggable.getDraggableElement().removeClass(DRAGGABLE_ELEMENT_WIDE_SCREEN);
+      });
     }
   };
 
@@ -870,7 +897,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
   /**
    * Matches the width of all dropzones to the widest draggable, and sets widest class variable.
    */
-   
+   /*
   DragText.prototype.addDropzoneWidth = function () {
     var self = this;
     var widest = 0;
@@ -926,7 +953,17 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       droppable.getDropzone().width(self.widest);
     });
   };
-
+*/
+/**
+   * Sets dropzone width to either short 1em or default 8em
+   */
+  
+  DragText.prototype.addDropzoneWidth = function () {
+    const width = this.shortDropZones ? '1em' : '8em';
+    this.droppables.forEach(function (droppable) {
+        droppable.getDropzone().width(width);
+      });
+    };
   /**
    * Makes a drag n drop from the specified text.
    *
@@ -1109,6 +1146,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    */
   DragText.prototype.drop = function (draggable, droppable) {
     var self = this;
+    console.log('prototype.drop');
     // Do not drop text on an existing correctly filled drop zone!
     if (this.params.behaviour.keepCorrectAnswers && droppable.hasCorrectFeedback()) {
       // TODO try to set previous dropZone to -1
@@ -1132,7 +1170,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       draggable.revertDraggableTo(droppable.$dropzoneContainer);
     }
 
-    droppable.setDraggable(draggable);
+    droppable.setDraggable(draggable);    
     draggable.appendDraggableTo(droppable.getDropzone());
 
     if (self.params.behaviour.instantFeedback) {
@@ -1148,8 +1186,12 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       element: draggable.getElement(),
       target: droppable.getElement()
     });
-
+    
     this.trigger('resize');
+    
+    // Resize dropzone width to fit dropped droppagle.
+    droppable.getDropzone().width('fit-content');  
+    
   };
 
   /**

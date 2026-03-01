@@ -36,6 +36,7 @@ H5P.TextDroppable = (function ($) {
      */
     self.containedDraggable = null;
     self.$dropzone = $(dropzone);
+    
     self.$dropzoneContainer = $(dropzoneContainer);
 
     if (self.tip) {
@@ -170,9 +171,9 @@ H5P.TextDroppable = (function ($) {
     //Draggable is correct
     if (this.isCorrect()) {
       this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK);
-
       //Draggable feedback
       this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).addClass(DRAGGABLE_FEEDBACK_CORRECT);
+      this.$dropzone.addClass('autowidth');
     }
     else if (this.containedDraggable === null) {
       //Does not contain a draggable
@@ -181,12 +182,15 @@ H5P.TextDroppable = (function ($) {
     else {
       //Draggable is wrong
       this.$dropzone.removeClass(CORRECT_FEEDBACK).addClass(WRONG_FEEDBACK);
-
+      
       //Draggable feedback
       if (this.containedDraggable !== null) {
         this.containedDraggable.getDraggableElement().addClass(DRAGGABLE_FEEDBACK_WRONG).removeClass(DRAGGABLE_FEEDBACK_CORRECT);
+        this.$dropzone.addClass('autowidth');
       }
     }
+    
+    
   };
 
   /**
@@ -198,6 +202,7 @@ H5P.TextDroppable = (function ($) {
     //Draggable feedback
     if (this.containedDraggable !== null) {
       this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).removeClass(DRAGGABLE_FEEDBACK_CORRECT);
+      this.$dropzone.removeClass('autowidth');
     }
   };
 
