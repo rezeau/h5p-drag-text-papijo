@@ -797,7 +797,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
   DragText.prototype.addTaskTo = function ($container) {
     var self = this;
     self.widest = 0;
-    self.widestDraggable = 0;
+    ///self.widestDraggable = 0;
     self.droppables = [];
     self.draggables = [];
 
@@ -842,6 +842,12 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     });
 
     self.shuffleAndAddDraggables(self.$draggables);
+    
+    // We need to reverse the alphaSort order just once.
+    if (this.params.behaviour.alphaSort) {
+      self.draggables.reverse();
+    }
+
     $('<div>', { class: 'h5p-drag-droppable-words-container' })
       .append(self.$wordContainer)
       .appendTo(self.$taskContainer);
@@ -864,6 +870,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
   /**
    * Matches the width of all dropzones to the widest draggable, and sets widest class variable.
    */
+   
   DragText.prototype.addDropzoneWidth = function () {
     var self = this;
     var widest = 0;
@@ -1153,11 +1160,20 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * @returns {H5P.TextDraggable[]}
    */
   DragText.prototype.shuffleAndAddDraggables = function ($container) {
-    return Util.shuffle(this.draggables)
-      .map((draggable, index) => draggable.setIndex(index))
-      .map(draggable => this.addDraggableToContainer($container, draggable))
-      .map(draggable => this.setDraggableAriaLabel(draggable))
-      .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    if (!this.params.behaviour.alphaSort) {
+      return Util.shuffle(this.draggables)
+        .map((draggable, index) => draggable.setIndex(index))
+        .map(draggable => this.addDraggableToContainer($container, draggable))
+        .map(draggable => this.setDraggableAriaLabel(draggable))
+        .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    }
+    else {
+      return Util.alphasort(this.draggables)
+        .map((draggable, index) => draggable.setIndex(index))
+        .map(draggable => this.addDraggableToContainer($container, draggable))
+        .map(draggable => this.setDraggableAriaLabel(draggable))
+        .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    }
   };
 
   /**
