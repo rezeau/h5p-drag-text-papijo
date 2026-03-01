@@ -482,7 +482,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       styleType: 'secondary',
       icon: 'show-results',
     });
-
+/*
     //Retry button
     self.addButton('try-again', self.params.tryAgain, function () {
       self.resetTask();
@@ -493,6 +493,47 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     {
       styleType: 'secondary',
       icon: 'retry',
+    });
+  */
+  //Retry button
+    self.addButton('try-again', self.params.tryAgain, function () {
+      // Reset and shuffle draggables if Question is answered
+      if (self.answered) {
+        // move draggables to original container
+        self.resetDraggables();
+      }
+
+      self.answered = false;
+      self.hideEvaluation();
+      self.hideExplanation();
+      self.hideButton('try-again');
+      self.hideButton('show-solution');
+      if (self.params.behaviour.instantFeedback) {
+        self.enableAllDropzonesAndDraggables();
+      }
+      else {
+        self.showButton('check-answer');
+        self.enableDraggables();
+        self.droppables.forEach(function (droppable) {
+          if (droppable.hasCorrectFeedback()) {
+            droppable.disableDropzoneAndContainedDraggable();
+          }
+          else {
+           ///droppable.displayTip();
+          }
+        });
+      }
+      self.droppables.forEach(function (droppable) {
+        if (droppable.removableBlock && !droppable.hasCorrectFeedback()) {
+          droppable.showRemovableBlock();
+        }
+      });
+      self.hideAllSolutions();
+
+      self.stopWatch.reset();
+      self.read(self.params.taskDescription);
+    }, self.initShowTryAgainButton || false, {
+      'aria-label': self.params.a11yRetry,
     });
   };
 
@@ -1037,6 +1078,9 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.revert = function (draggable) {
+    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone && draggable.hasCorrectFeedback() && !this.resetCorrectAnswers) {
+      return;
+    }
     var droppable = draggable.removeFromZone();
     var target = droppable ? droppable.getElement() : undefined;
     draggable.revertDraggableTo(this.$draggables);
@@ -1058,6 +1102,11 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    */
   DragText.prototype.drop = function (draggable, droppable) {
     var self = this;
+    // Do not drop text on an existing correctly filled drop zone!
+    if (this.params.behaviour.keepCorrectAnswers && droppable.hasCorrectFeedback()) {
+      // TODO try to set previous dropZone to -1
+      return;
+    }
     self.answered = true;
 
     draggable.removeFromZone();
@@ -1331,6 +1380,8 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     var self = this;
     // Reset task answer
     self.answered = false;
+    // If keepCorrectAnswers option is enabled, allow resetting dropZones
+    this.resetCorrectAnswers = true;
     //Reset draggables parameters and position
     self.resetDraggables();
     //Hides solution text and re-enable draggables
