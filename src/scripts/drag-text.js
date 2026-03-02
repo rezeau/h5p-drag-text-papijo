@@ -546,7 +546,7 @@ DragText.prototype.changeLayoutToFitWidth = function () {
             droppable.disableDropzoneAndContainedDraggable();
           }
           else {
-           ///droppable.displayTip();
+           /// todo droppable.displayTip();
           }
         });
       }
@@ -1146,7 +1146,6 @@ DragText.prototype.changeLayoutToFitWidth = function () {
    */
   DragText.prototype.drop = function (draggable, droppable) {
     var self = this;
-    console.log('prototype.drop');
     // Do not drop text on an existing correctly filled drop zone!
     if (this.params.behaviour.keepCorrectAnswers && droppable.hasCorrectFeedback()) {
       // TODO try to set previous dropZone to -1
