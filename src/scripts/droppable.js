@@ -34,7 +34,7 @@ H5P.TextDroppable = (function ($) {
     self.incorrectFeedback = incorrectFeedback;
     self.index = index;
     self.params = params;
-    ///console.log('params = ' + params);
+    console.log('text = ' + text);
     ///console.log(JSON.stringify(params, null, 4));
 
     /**
