@@ -1,4 +1,3 @@
-
 // Helper to stop propagating events
 const stopPropagation = event => event.stopPropagation();
 

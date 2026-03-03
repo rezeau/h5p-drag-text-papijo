@@ -925,66 +925,6 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     return Util.startsWith('*', part) && Util.endsWith('*', part);
   };
 
-  /**
-   * Matches the width of all dropzones to the widest draggable, and sets widest class variable.
-   */
-   /*
-  DragTextpapijo.prototype.addDropzoneWidth = function () {
-    var self = this;
-    var widest = 0;
-    var widestDragagble = 0;
-    var fontSize = parseInt(this.$inner.css('font-size'), 10);
-    var staticMinimumWidth = 3 * fontSize;
-
-    //Find widest draggable
-    this.draggables.forEach(function (draggable) {
-      var $draggableElement = draggable.getDraggableElement();
-
-      //Find the initial natural width of the draggable.
-      var $tmp = $draggableElement.clone().css({
-        'position': 'absolute',
-        'white-space': 'nowrap',
-        'width': 'auto',
-        'padding': 0,
-        'margin': 0
-      }).html(draggable.getAnswerText())
-        .appendTo($draggableElement.parent());
-      var width = $tmp.outerWidth();
-
-      widestDragagble = width > widestDragagble ? width : widestDragagble;
-
-      // Measure how big truncated draggable should be
-      if ($tmp.text().length >= 20) {
-        $tmp.html(draggable.getShortFormat());
-        width = $tmp.width();
-      }
-
-      // Include the width of the handle if not there
-      if ($draggableElement.hasClass('ui-draggable-disabled')) {
-        width += 16;
-      }
-
-      if (width > widest) {
-        widest = width;
-      }
-      $tmp.remove();
-    });
-
-    // Make room for feedback icons
-    widest += 16;
-
-    // Set min size
-    if (widest < staticMinimumWidth) {
-      widest = staticMinimumWidth;
-    }
-    this.widestDraggable = widestDragagble;
-    this.widest = widest;
-    //Adjust all droppable to widest size.
-    this.droppables.forEach(function (droppable) {
-      droppable.getDropzone().width(self.widest);
-    });
-  };
-*/
 /**
    * Sets dropzone width to either short 1em or default 8em
    */
@@ -1059,9 +999,8 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
    */
   DragTextpapijo.prototype.createDroppable = function (answer, tip, correctFeedback, incorrectFeedback) {
     var self = this;
-
     var draggableIndex = this.draggables.length;
-
+    
     //Make the dropzone
     var $dropzoneContainer = $('<div/>', {
       'class': DROPZONE_CONTAINER
@@ -1076,13 +1015,19 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     }).appendTo($dropzoneContainer)
       .droppable({
         tolerance: 'touch',
-        over: () => {
+        /// replace new hovered system with papijo to work with multiple correct answers
+        /*
+        over: (event) => {
           this.hoveredDroppables.push(draggableIndex - 1);
           this.hoveredDroppables.sort((a, b) => b - a);
 
           const hoveredIndex = this.getHoveredDroppableIndex();
+          
           self.droppables.forEach((droppable, index) => {
-            droppable.toggleHovered(index === hoveredIndex);
+            if (droppable.getElement() !== event.target) {
+              droppable.toggleHovered(index === hoveredIndex);
+              droppable.disableDropzone();
+            };
           });
         },
         out: () => {
@@ -1091,6 +1036,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
 
           self.droppables.forEach((droppable, index) => {
             droppable.toggleHovered(index === hoveredIndex);
+            droppable.enableDropzone();
           });
         },
         drop: function (event, ui) {
@@ -1106,7 +1052,29 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
           self.hoveredDroppables = [];
           self.droppables.forEach(droppable => {
             droppable.toggleHovered(false);
+            droppable.enableDropzone();
           });
+*/
+          over: (event) => {
+          self.droppables.forEach(droppable => {
+            if (droppable.getElement() !== event.target) {
+              //droppable.disableDropzone();
+            }
+          });
+        },
+        out: () => {
+          self.droppables.forEach(droppable => {
+            droppable.enableDropzone();
+          });
+        },
+        drop: function (event, ui) {
+          const draggable = self.getDraggableByElement(ui.draggable[0]);
+          const droppable = self.getDroppableByElement(event.target);
+
+            self.droppables.forEach(droppable => {
+                droppable.enableDropzone();
+            });
+
 
           /**
            * Note that drop will run for all initialized DragTextpapijo dropzones globally. Even other
