@@ -1379,7 +1379,12 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * Resets the position of all draggables shuffled.
    */
   DragText.prototype.resetDraggables = function () {
-    Util.shuffle(this.draggables).forEach(this.revert, this);
+    if (!this.params.behaviour.alphaSort) {
+      Util.shuffle(this.draggables).forEach(this.revert, this);
+    }
+    else {
+      this.draggables.forEach(this.revert, this);
+    }
   };
 
   /**
