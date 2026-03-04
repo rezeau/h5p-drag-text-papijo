@@ -695,22 +695,25 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
   DragTextpapijo.prototype.showExplanation = function () {
     const self = this;
     let explanations = [];
-
-    this.droppables.forEach(droppable => {
+    /* join(" | ") is used in case there are alternative correct answers */
+    this.droppables.forEach((droppable, index) => {
+      const dropZoneLabel = this.params.dropZoneIndex.replace('@index', index + 1) + '</br>';
       const draggable = droppable.containedDraggable;
-
       if (droppable && draggable) {
         if (droppable.isCorrect() && droppable.correctFeedback) {
+          // Remove tags and get plain text for each
+          const cleanDraggableTexts = droppable.text.map(str => str.replace(/<[^>]*>/g, ''));
           explanations.push({
-            correct: draggable.text,
+            correct: dropZoneLabel + cleanDraggableTexts.join(" | "),
             text: droppable.correctFeedback
           });
         }
 
         if (!droppable.isCorrect() && droppable.incorrectFeedback) {
+          // Remove tags and get plain text for each
+          const cleanDraggableText = draggable.text.replace(/<[^>]*>/g, '');
           explanations.push({
-            correct: droppable.text,
-            wrong: draggable.text,
+            wrong: dropZoneLabel + cleanDraggableText,
             text: droppable.incorrectFeedback
           });
         }
@@ -872,18 +875,16 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
 
     // Add distractors
     parseText(self.distractorsHtml).forEach(function (distractor) {
-      if (
-        distractor.trim() === '' ||
-        distractor.substring(0, 1) !== '*' ||
-        distractor.substring(distractor.length - 1, distractor.length) !== '*'
-      ) {
-        return; // Skip. Not a valid distractor.
+      if (distractor.trim() === '') {
+        return; // Skip
       }
-
       distractor = lex(distractor);
-      self.createDraggable(distractor.text);
-    });
-
+      // Accept multiple distractors inside a pair of asterisks.
+      const distractors = distractor.text.split(/(?<!<)\//);
+      distractors.forEach ((distractor) => {
+        self.createDraggable(distractor);
+      });
+    } );
     self.shuffleAndAddDraggables(self.$draggables);
     
     // We need to reverse the alphaSort order just once.
