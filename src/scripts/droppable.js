@@ -1,16 +1,19 @@
 H5P.TextDroppable = (function ($) {
   //CSS Main Containers:
   //Special Sub-containers:
-  var SHOW_SOLUTION_CONTAINER = "h5p-drag-show-solution-container";
+  const SHOW_SOLUTION_CONTAINER = "h5p-drag-show-solution-container";
 
   //CSS Dropzone feedback:
-  var CORRECT_FEEDBACK = 'h5p-drag-correct-feedback';
-  var WRONG_FEEDBACK = 'h5p-drag-wrong-feedback';
-  const TRANSPARENT = '-transparent';
-  
+  const CORRECT_FEEDBACK = 'h5p-drag-correct-feedback';
+  const WRONG_FEEDBACK = 'h5p-drag-wrong-feedback';
+
   //CSS Draggable feedback:
-  var DRAGGABLE_FEEDBACK_CORRECT = 'h5p-drag-draggable-correct';
-  var DRAGGABLE_FEEDBACK_WRONG = 'h5p-drag-draggable-wrong';
+  const DRAGGABLE_FEEDBACK_CORRECT = 'h5p-drag-draggable-correct';
+  const DRAGGABLE_FEEDBACK_WRONG = 'h5p-drag-draggable-wrong';
+
+  // variables used if this.params.behaviour.transparentBackground
+  let transparent = ' ';
+  let transparentbackground = ' ';
 
   /**
    * Private class for keeping track of droppable zones.
@@ -36,6 +39,7 @@ H5P.TextDroppable = (function ($) {
      */
     self.containedDraggable = null;
     self.$dropzone = $(dropzone);
+    
     self.$dropzoneContainer = $(dropzoneContainer);
 
     if (self.tip) {
@@ -167,24 +171,31 @@ H5P.TextDroppable = (function ($) {
    * Sets CSS styling feedback for this drop box.
    */
   Droppable.prototype.addFeedback = function () {
-    //Draggable is correct
+    const self = this;
+    // Draggable is correct
+    // Option for displaying transparentBackground    
+    if (this.params.behaviour.transparentBackground) {
+      transparent = ' transparent';
+      transparentbackground = ' transparent-background';
+    }
     if (this.isCorrect()) {
-      this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK);
-
+      this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK + transparentbackground);
       //Draggable feedback
-      this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).addClass(DRAGGABLE_FEEDBACK_CORRECT);
+      this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).addClass(DRAGGABLE_FEEDBACK_CORRECT + transparent);
+      this.$dropzone.addClass('autowidth');
     }
     else if (this.containedDraggable === null) {
       //Does not contain a draggable
-      this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK);
+      this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK + transparentbackground);
     }
     else {
       //Draggable is wrong
-      this.$dropzone.removeClass(CORRECT_FEEDBACK).addClass(WRONG_FEEDBACK);
-
+      this.$dropzone.removeClass(CORRECT_FEEDBACK + transparentbackground).addClass(WRONG_FEEDBACK);
+      
       //Draggable feedback
       if (this.containedDraggable !== null) {
-        this.containedDraggable.getDraggableElement().addClass(DRAGGABLE_FEEDBACK_WRONG).removeClass(DRAGGABLE_FEEDBACK_CORRECT);
+        this.containedDraggable.getDraggableElement().addClass(DRAGGABLE_FEEDBACK_WRONG).removeClass(DRAGGABLE_FEEDBACK_CORRECT + transparent);
+        this.$dropzone.addClass('autowidth');
       }
     }
   };
@@ -193,11 +204,12 @@ H5P.TextDroppable = (function ($) {
    * Removes all CSS styling feedback for this drop  *  * box.
    */
   Droppable.prototype.removeFeedback = function () {
-    this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK);
+    this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK + transparentbackground);
 
     //Draggable feedback
     if (this.containedDraggable !== null) {
-      this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).removeClass(DRAGGABLE_FEEDBACK_CORRECT);
+      this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).removeClass(DRAGGABLE_FEEDBACK_CORRECT + transparent);
+      this.$dropzone.removeClass('autowidth');
     }
   };
 
@@ -207,14 +219,17 @@ H5P.TextDroppable = (function ($) {
   Droppable.prototype.hasFeedback = function () {
     return this.$dropzone.hasClass(WRONG_FEEDBACK) || this.$dropzone.hasClass(CORRECT_FEEDBACK);
   };
-/**
+
+  /**
    * Returns true if the dropzone has visible correct feedback (if option Keep Answers)
    */
   Droppable.prototype.hasCorrectFeedback = function () {
-    console.log('hasCorrectFeedback');
-    return this.$dropzone.hasClass(CORRECT_FEEDBACK) || this.$dropzone.hasClass(CORRECT_FEEDBACK)
-       || this.$dropzone.hasClass(CORRECT_FEEDBACK + TRANSPARENT);
+    return this.$dropzone.hasClass(CORRECT_FEEDBACK)
+      || this.$dropzone.hasClass(CORRECT_FEEDBACK + transparentbackground)
+      || this.$dropzone.hasClass(DRAGGABLE_FEEDBACK_CORRECT)
+      || this.$dropzone.hasClass(DRAGGABLE_FEEDBACK_CORRECT + transparent);
   };
+
 
   /**
    * Sets short format of draggable when inside a dropbox.
