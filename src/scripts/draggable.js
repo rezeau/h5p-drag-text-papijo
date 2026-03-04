@@ -24,11 +24,7 @@ H5P.TextDraggable = (function ($) {
     self.initialIndex = index;
 
     self.shortFormat = self.text;
-    //Shortens the draggable string if inside a dropbox.
-    if (self.shortFormat.length > 20 && !self.shortFormat.match(/\\\(.+\\\)|\\\[.+\\\]|\$\$.+\$\$/)) {
-      self.shortFormat = self.shortFormat.slice(0, 17) + '...';
-    }
-
+    
     // jQuery UI workaround
     self.$draggable.on('touchstart', stopPropagation);
     self.$draggable.on('touchmove', stopPropagation);
