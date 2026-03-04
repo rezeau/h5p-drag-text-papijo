@@ -820,21 +820,55 @@ DragText.prototype.changeLayoutToFitWidth = function () {
 
     self.$wordContainer = $('<div/>', {'class': WORDS_CONTAINER + ' h5p-theme-lines'});
 
+ /*
+       * Temporarily replace escaped asterisks & colons with a replacement character,
+       * so they don't tamper with the detection of words/phrases to be dragged
+       */
+    const ESCAPED_ASTERISK_REPLACEMENT = '\u250C'; // BOX DRAWINGS LIGHT DOWN AND RIGHT unicode character
+    const ESCAPED_COLON_REPLACEMENT = '\u250D'; //BOX DRAWINGS DOWN LIGHT AND RIGHT HEAVY unicode character
+    const ASTERISK = '*';
+    const COLON = ':';
+    const DUMMYCHARACTER = '\u200B'; // zero-width space character
+    self.textFieldHtml = self.textFieldHtml.replaceAll('\\*', ESCAPED_ASTERISK_REPLACEMENT)
+      .replaceAll('\\:', ESCAPED_COLON_REPLACEMENT);
     // parse text
     parseText(self.textFieldHtml)
-      .forEach(function(part) {
-        if(self.isAnswerPart(part)) {
+      .forEach(function (part) {
+        if (self.isAnswerPart(part)) {
           // is draggable/droppable
           const solution = lex(part);
-          self.createDraggable(solution.text);
-          self.createDroppable(solution.text, solution.tip, solution.correctFeedback, solution.incorrectFeedback);
+          solution.text = solution.text.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+            .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+          // Deal with potential escaped asterisks & escaped colons within tip.
+          if (solution.tip) {
+            // If tip contains image and no text, add an invisible space to make blur happy.
+            solution.tip = DUMMYCHARACTER + solution.tip.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+              .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+          }
+          if (solution.correctFeedback) {
+            solution.correctFeedback = solution.correctFeedback.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+              .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+          }
+          if (solution.incorrectFeedback) {
+            solution.incorrectFeedback = solution.incorrectFeedback.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+              .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+          }
+          // Accept multiple correct answers inside pairs of asterisks.
+          // Split by slash _not preceded by the < character_ in case some solution.text is formatted with html tags.
+          const solutions = solution.text.split(/(?<![<\\])\//);
+          solutions.forEach((solution, index) => {
+            solutions[index] = solution.replace(/\\\//g, "/");
+            self.createDraggable(solutions[index]);
+          });
+          self.createDroppable(solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock);
         }
         else {
           // is normal text
-          var el = Util.createElementWithTextPart(part);
+          const el = Util.createElementWithTextPart(part);
           self.$wordContainer.append(el);
         }
       });
+
 
     // Add distractors
     parseText(self.distractorsHtml).forEach(function (distractor) {

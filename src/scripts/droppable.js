@@ -164,7 +164,7 @@ H5P.TextDroppable = (function ($) {
     if (this.containedDraggable === null) {
       return false;
     }
-    return this.containedDraggable.getAnswerText() === this.text;
+    return this.text.includes(this.containedDraggable.getAnswerText());
   };
 
   /**
