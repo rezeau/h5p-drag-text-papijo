@@ -801,6 +801,12 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     });
 
     self.shuffleAndAddDraggables(self.$draggables);
+
+    // We need to reverse the alphaSort order just once.
+    if (this.params.behaviour.alphaSort) {
+      self.draggables.reverse();
+    }
+
     $('<div>', { class: 'h5p-drag-droppable-words-container' })
       .append(self.$wordContainer)
       .appendTo(self.$taskContainer);
@@ -1037,6 +1043,10 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.revert = function (draggable) {
+    if (this.params.behaviour.keepCorrectAnswers && draggable.insideDropzone && draggable.hasCorrectFeedback() && !this.resetCorrectAnswers) {
+      console.log('return');
+      return;
+    }
     var droppable = draggable.removeFromZone();
     var target = droppable ? droppable.getElement() : undefined;
     draggable.revertDraggableTo(this.$draggables);
@@ -1057,6 +1067,11 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * @fires Question#resize
    */
   DragText.prototype.drop = function (draggable, droppable) {
+     // Do not drop text on an existing correctly filled drop zone!
+    if (this.params.behaviour.keepCorrectAnswers && droppable.hasCorrectFeedback()) {
+      // TODO try to set previous dropZone to -1
+      return;
+    }
     var self = this;
     self.answered = true;
 
@@ -1104,11 +1119,20 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * @returns {H5P.TextDraggable[]}
    */
   DragText.prototype.shuffleAndAddDraggables = function ($container) {
-    return Util.shuffle(this.draggables)
-      .map((draggable, index) => draggable.setIndex(index))
-      .map(draggable => this.addDraggableToContainer($container, draggable))
-      .map(draggable => this.setDraggableAriaLabel(draggable))
-      .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    if (!this.params.behaviour.alphaSort) {
+      return Util.shuffle(this.draggables)
+        .map((draggable, index) => draggable.setIndex(index))
+        .map(draggable => this.addDraggableToContainer($container, draggable))
+        .map(draggable => this.setDraggableAriaLabel(draggable))
+        .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    }
+    else {
+      return Util.alphasort(this.draggables)
+        .map((draggable, index) => draggable.setIndex(index))
+        .map(draggable => this.addDraggableToContainer($container, draggable))
+        .map(draggable => this.setDraggableAriaLabel(draggable))
+        .map(draggable => this.addDraggableToControls(this.dragControls, draggable));
+    }
   };
 
   /**
@@ -1331,6 +1355,8 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     var self = this;
     // Reset task answer
     self.answered = false;
+    // If keepCorrectAnswers option is enabled, allow resetting dropZones
+    this.resetCorrectAnswers = false;
     //Reset draggables parameters and position
     self.resetDraggables();
     //Hides solution text and re-enable draggables

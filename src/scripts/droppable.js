@@ -6,7 +6,8 @@ H5P.TextDroppable = (function ($) {
   //CSS Dropzone feedback:
   var CORRECT_FEEDBACK = 'h5p-drag-correct-feedback';
   var WRONG_FEEDBACK = 'h5p-drag-wrong-feedback';
-
+  const TRANSPARENT = '-transparent';
+  
   //CSS Draggable feedback:
   var DRAGGABLE_FEEDBACK_CORRECT = 'h5p-drag-draggable-correct';
   var DRAGGABLE_FEEDBACK_WRONG = 'h5p-drag-draggable-wrong';
@@ -205,6 +206,14 @@ H5P.TextDroppable = (function ($) {
    */
   Droppable.prototype.hasFeedback = function () {
     return this.$dropzone.hasClass(WRONG_FEEDBACK) || this.$dropzone.hasClass(CORRECT_FEEDBACK);
+  };
+/**
+   * Returns true if the dropzone has visible correct feedback (if option Keep Answers)
+   */
+  Droppable.prototype.hasCorrectFeedback = function () {
+    console.log('hasCorrectFeedback');
+    return this.$dropzone.hasClass(CORRECT_FEEDBACK) || this.$dropzone.hasClass(CORRECT_FEEDBACK)
+       || this.$dropzone.hasClass(CORRECT_FEEDBACK + TRANSPARENT);
   };
 
   /**

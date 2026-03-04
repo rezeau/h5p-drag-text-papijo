@@ -262,7 +262,14 @@ H5P.TextDraggable = (function ($) {
   Draggable.prototype.isInsideDropZone = function () {
     return !!this.insideDropzone;
   };
-
+ /**
+   * Returns true if dropzone hasCorrectFeedback
+   *
+   * @returns {boolean}
+   */
+  Draggable.prototype.hasCorrectFeedback = function () {
+    return this.insideDropzone.hasCorrectFeedback();
+  };
   return Draggable;
 })(H5P.jQuery);
 
