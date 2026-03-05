@@ -26,27 +26,45 @@ H5P.TextDroppable = (function ($) {
    * @param {number} index.
    * @param {Object} params Behavior settings
    */
-  function Droppable(text, tip, correctFeedback, incorrectFeedback, dropzone, dropzoneContainer, index, params) {
+  function Droppable(text, tip, correctFeedback, incorrectFeedback,removableBlock, dropzone, dropzoneContainer, index, params) {
     var self = this;
     self.text = text;
     self.tip = tip;
     self.correctFeedback = correctFeedback;
     self.incorrectFeedback = incorrectFeedback;
+    self.removableBlock = removableBlock;
     self.index = index;
     self.params = params;
     /**
      * @type {H5P.TextDraggable}
      */
     self.containedDraggable = null;
-    self.$dropzone = $(dropzone);
-    
+    self.$dropzone = $(dropzone);    
+    if (self.removableBlock) {
+      self.$dropzone.addClass('autowidth');
+    }
     self.$dropzoneContainer = $(dropzoneContainer);
 
     if (self.tip) {
       self.$tip = H5P.JoubelUI.createTip(self.tip, {
-        tipLabel: self.params.tipLabel
+        tipLabel: self.params.tipLabel,
+        tabcontrol: true
       });
+      self.$dropzoneContainer.addClass('has-tip');
       self.$dropzoneContainer.append(self.$tip);
+
+      // toggle tabindex on tip, based on dropzone focus
+      self.$dropzone.focus(() => self.$tip.attr('tabindex', '0'));
+      self.$dropzone.blur(() => self.removeTipTabIndexIfNoFocus());
+      self.$tip.blur(() => self.removeTipTabIndexIfNoFocus());
+    }
+    
+    if (self.removableBlock) {
+      self.$removableBlock = $('<div/>', {
+        html: self.removableBlock,
+        'class': 'removableblock'
+      });
+      self.$dropzone.prepend(self.$removableBlock);
     }
 
     self.$incorrectText = $('<div/>', {
@@ -63,12 +81,21 @@ H5P.TextDroppable = (function ($) {
       'class': SHOW_SOLUTION_CONTAINER
     }).hide();
   }
+Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
+    const self = this;
+
+    setTimeout(() => {
+      if (!self.$dropzone.is (':focus') && !self.$tip.is (':focus')) {
+        self.$tip.attr('tabindex', '-1');
+      }
+    }, 0);
+  };
 
   /**
    * Displays the solution next to the drop box if it is not correct.
    */
   Droppable.prototype.showSolution = function () {
-    const correct = (this.containedDraggable !== null) && (this.containedDraggable.getAnswerText() === this.text);
+    const correct = (this.containedDraggable !== null) && this.text.includes(this.containedDraggable.getAnswerText());
     if (!correct) {
       this.$showSolution.html(this.text.join('|'));
     }
@@ -152,6 +179,7 @@ H5P.TextDroppable = (function ($) {
   Droppable.prototype.removeDraggable = function () {
     if (this.containedDraggable !== null) {
       this.containedDraggable = null;
+      this.showRemovableBlock();
     }
   };
 
@@ -291,6 +319,25 @@ H5P.TextDroppable = (function ($) {
    */
   Droppable.prototype.getIndex = function () {
     return this.index;
+  };
+
+  /**
+   * Hides removableBlock when draggable element is dropped on dropzone
+   */
+  Droppable.prototype.hideRemovableBlock = function () {
+    if (this.$removableBlock) {
+      this.$removableBlock.addClass('hide');
+    }
+  };
+
+
+  /**
+   * Displays removableBlock to reset things for a Retry session.
+   */
+  Droppable.prototype.showRemovableBlock = function () {
+    if (this.$removableBlock) {
+      this.$removableBlock.removeClass('hide');
+    }
   };
 
   return Droppable;

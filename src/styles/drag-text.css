@@ -112,7 +112,7 @@
   flex-wrap: wrap;
 }
 
-.h5p-drag-text .h5p-drag-draggables-container.hide {
+.h5p-drag-text .hide {
   display: none;
 }
 

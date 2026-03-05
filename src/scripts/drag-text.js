@@ -238,9 +238,24 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     const dropZone = event.data.target;
     const draggable = event.data.element;
     const droppable = this.getDroppableByElement(dropZone);
+    if (droppable && droppable.removableBlock) {
+      droppable.showRemovableBlock();
+    }
 
     if (dropZone) {
       this.setDroppableLabel(dropZone, draggable.textContent, droppable.getIndex());
+        if (droppable.removableBlock) {
+          droppable.showRemovableBlock();
+        }
+        if (droppable && droppable.hasDraggable()) {
+          dropZone.setAttribute('aria-dropped', 'true');
+        }
+        else {
+          dropZone.removeAttribute('aria-dropped');
+          if (droppable.removableBlock) {
+            droppable.showRemovableBlock();
+          }
+        }
     }
   };
 
@@ -308,9 +323,12 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     const correctFeedback = dropZone.classList.contains('h5p-drag-correct-feedback');
     const inCorrectFeedback = dropZone.classList.contains('h5p-drag-wrong-feedback');
     const checkButtonPressed = correctFeedback || inCorrectFeedback;
-    const hasChildren = (dropZone.childNodes.length > 0);
+    let hasChildren = (dropZone.childNodes.length > 0);
 
     if (dropZone) {
+      if (dropZone.childNodes.length === 1 && dropZone.childNodes[0].attributes[0].value === 'removableblock') {
+      hasChildren = false;
+    }
       let ariaLabel;
 
       if (checkButtonPressed) {
@@ -528,6 +546,9 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
         self.droppables.forEach(function (droppable) {
           if (droppable.hasCorrectFeedback()) {
             droppable.disableDropzoneAndContainedDraggable();
+          }
+          if (droppable.removableBlock && !droppable.hasCorrectFeedback()) {
+            droppable.showRemovableBlock();
           }
           else {
            ///droppable.displayTip();
@@ -863,6 +884,8 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
             solutions[index] = solution.replace(/\\\//g, "/");
             self.createDraggable(solutions[index]);
           });
+          
+          
           self.createDroppable(solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock);
         }
         else {
@@ -989,7 +1012,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
    *
    * @returns {H5P.TextDroppable}
    */
-  DragTextpapijo.prototype.createDroppable = function (answer, tip, correctFeedback, incorrectFeedback) {
+  DragTextpapijo.prototype.createDroppable = function (answer, tip, correctFeedback, incorrectFeedback, removableBlock) {
     var self = this;
 
     var draggableIndex = this.draggables.length;
@@ -1051,8 +1074,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
           self.drop(draggable, droppable);
         }
       });
-
-    var droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, $dropzone, $dropzoneContainer, draggableIndex, self.params);
+    var droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, removableBlock, $dropzone, $dropzoneContainer, draggableIndex, self.params);
     droppable.appendDroppableTo(self.$wordContainer);
 
     self.droppables.push(droppable);
@@ -1153,6 +1175,10 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     
     // Resize dropzone width to fit dropped droppagle.
     droppable.getDropzone().width('fit-content');  
+    droppable.getElement().focus();
+    if (droppable.removableBlock) {
+      droppable.hideRemovableBlock();
+    }
     
   };
 
