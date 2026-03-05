@@ -70,7 +70,7 @@ H5P.TextDroppable = (function ($) {
   Droppable.prototype.showSolution = function () {
     const correct = (this.containedDraggable !== null) && (this.containedDraggable.getAnswerText() === this.text);
     if (!correct) {
-      this.$showSolution.html(this.text);
+      this.$showSolution.html(this.text.join('|'));
     }
 
     this.$showSolution.prepend(correct ? this.$correctText : this.$incorrectText);

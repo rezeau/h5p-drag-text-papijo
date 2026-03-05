@@ -44,7 +44,7 @@ import Mouse from 'h5p-lib-controls/src/scripts/ui/mouse';
  * Drag Text module
  * @external {jQuery} $ H5P.jQuery
  */
-H5P.DragTextpapijopapijo = (function ($, Question, ConfirmationDialog) {
+H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
   //CSS Main Containers:
   const INNER_CONTAINER = "h5p-drag-inner";
   const TASK_CONTAINER = "h5p-drag-task";
@@ -59,7 +59,7 @@ H5P.DragTextpapijopapijo = (function ($, Question, ConfirmationDialog) {
   /**
    * Initialize module.
    *
-   * @class H5P.DragTextpapijopapijo
+   * @class H5P.DragTextpapijo
    * @extends H5P.Question
    * @param {Object} params Behavior settings
    * @param {Number} contentId Content identification
@@ -561,7 +561,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
    *
    * @param {ControlsEvent} event
    *
-   * @fires H5P.DragTextpapijopapijo#start
+   * @fires H5P.DragTextpapijo#start
    */
   DragTextpapijo.prototype.keyboardDraggableSelected = function (event) {
     var tmp = this.selectedElement;
@@ -1081,7 +1081,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
    *
    * @param {H5P.TextDraggable} draggable
    *
-   * @fires H5P.DragTextpapijopapijo#revert
+   * @fires H5P.DragTextpapijo#revert
    * @fires Question#resize
    */
   DragTextpapijo.prototype.revert = function (draggable) {
@@ -1103,8 +1103,8 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
    * @param {H5P.TextDraggable} draggable
    * @param {H5P.TextDroppable} droppable
    *
-   * @fires H5P.DragTextpapijopapijo#revert
-   * @fires H5P.DragTextpapijopapijo#drop
+   * @fires H5P.DragTextpapijo#revert
+   * @fires H5P.DragTextpapijo#drop
    * @fires Question#resize
    */
   DragTextpapijo.prototype.drop = function (draggable, droppable) {
@@ -1690,9 +1690,9 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
  *   }
  * ]
  *
- * @param {string} question Question text for an H5P.DragTextpapijopapijo content item
+ * @param {string} question Question text for an H5P.DragTextpapijo content item
  */
-H5P.DragTextpapijopapijo.parseText = function (question) {
+H5P.DragTextpapijo.parseText = function (question) {
   const isAnswerPart = function (part) {
     return Util.startsWith('*', part) && Util.endsWith('*', part);
   };
@@ -1709,4 +1709,4 @@ H5P.DragTextpapijopapijo.parseText = function (question) {
     );
 };
 
-export default H5P.DragTextpapijopapijo;
+export default H5P.DragTextpapijo;
