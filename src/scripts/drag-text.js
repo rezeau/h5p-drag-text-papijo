@@ -124,11 +124,24 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
 
     // Keeps track of if Question has been answered
     this.answered = false;
+    // If text was copied-pasted from another WYSIWYG editor we may need to clean potential line breaks which would ruin the display.
+    if (this.params.removeExtraLineBreaks) {
+      this.params.textField = this.params.textField.replace(/(\r\n|\n|\r)/gm, "");
+    }
+    else {
+      this.params.textField = this.params.textField.replace(/(\r\n|\n|\r)/gm, "<br />");
+    }
 
-    // Convert line breaks to HTML
-    this.textFieldHtml = this.params.textField.replace(/(\r\n|\n|\r)/gm, "<br/>");
+    // Allow some HTML tags in text. AUGUST 2022.
+    this.params.textField = this.params.textField.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+
+    // Remove potentially existing paragraph marks which might conflict with tips.
+    this.params.textField = this.params.textField.replace(/<\/p>/g, '');
+    this.params.textField = this.params.textField.replace(/<p>/g, '<p></p>');
+
+    this.textFieldHtml = this.params.textField;
     this.distractorsHtml = this.params.distractors.replace(/(\r\n|\n|\r)/gm, "<br/>");
-
+    this.distractorsHtml = this.params.distractors.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
     // introduction field id
     this.introductionId = 'h5p-drag-text-' + contentId + '-introduction';
     this.shortDropZones = this.params.behaviour.shortDropZones;
@@ -434,6 +447,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
 
 DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     const self = this;
+    console.log('self.params.behaviour.leftColumnWidth = ' + self.params.behaviour.leftColumnWidth);
     self.addDropzoneWidth();
     if (!self.params.behaviour.noWideScreenLayout &&
       (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23)) {
@@ -829,10 +843,10 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     self.$draggables = $('<div/>', {
       'class': DRAGGABLES_CONTAINER
     });
-
+    
     self.$wordContainer = $('<div/>', {'class': WORDS_CONTAINER + ' h5p-theme-lines'});
 
- /*
+    /*
        * Temporarily replace escaped asterisks & colons with a replacement character,
        * so they don't tamper with the detection of words/phrases to be dragged
        */

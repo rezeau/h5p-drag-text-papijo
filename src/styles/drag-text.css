@@ -78,7 +78,7 @@
   background-color: var(--h5p-theme-alternative-dark);
   border-radius: var(--h5p-theme-border-radius-medium);
   vertical-align: middle;
-  text-align: center;
+  ///text-align: center;
   transition: all 0.1s linear 0s;
 }
 
@@ -148,7 +148,7 @@
   padding: 0 var(--h5p-theme-spacing-xxs) 0 0;
   margin: var(--h5p-theme-spacing-xxs);
   vertical-align: top;
-  text-align: center;
+  ///text-align: center;
   line-height: var(--h5p-theme-spacing-s);
   font-weight: bold;
   background: var(--h5p-theme-alternative-base);
@@ -319,8 +319,8 @@
 
 .h5p-drag-text .transparent {
   background-color: transparent;
-  margin-left: -0.6em;
-  margin-right: -1.2em;
+  margin-left: -0.5em;
+  margin-right: -1.1em;
   border: none;
   box-shadow: none;
 }

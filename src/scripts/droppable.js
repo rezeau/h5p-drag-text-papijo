@@ -207,6 +207,14 @@ Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
       transparentbackground = ' transparent-background';
     }
     if (this.isCorrect()) {
+      if (self.$tip) {
+          if (this.params.behaviour.hideTips) {
+            self.$tip.attr('style', 'display: none;');
+            self.$dropzoneContainer.removeClass('has-tip');
+          } else {
+            this.$dropzone.attr('style', 'padding-right: 0.6em;');
+          }
+        }
       this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK + transparentbackground);
       //Draggable feedback
       this.containedDraggable.getDraggableElement().removeClass(DRAGGABLE_FEEDBACK_WRONG).addClass(DRAGGABLE_FEEDBACK_CORRECT + transparent);
