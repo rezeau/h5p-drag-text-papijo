@@ -211,8 +211,6 @@ Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
           if (this.params.behaviour.hideTips) {
             self.$tip.attr('style', 'display: none;');
             self.$dropzoneContainer.removeClass('has-tip');
-          } else {
-            this.$dropzone.attr('style', 'padding-right: 0.6em;');
           }
         }
       this.$dropzone.removeClass(WRONG_FEEDBACK).addClass(CORRECT_FEEDBACK + transparentbackground);
