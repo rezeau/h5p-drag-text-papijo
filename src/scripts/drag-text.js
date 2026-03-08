@@ -121,7 +121,6 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     if (this.contentData !== undefined && this.contentData.previousState !== undefined && this.contentData.previousState.length !== undefined) {
       this.previousState = this.contentData.previousState;
     }
-
     // Keeps track of if Question has been answered
     this.answered = false;
     // If text was copied-pasted from another WYSIWYG editor we may need to clean potential line breaks which would ruin the display.
@@ -447,7 +446,6 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
 
 DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     const self = this;
-    console.log('self.params.behaviour.leftColumnWidth = ' + self.params.behaviour.leftColumnWidth);
     self.addDropzoneWidth();
     if (!self.params.behaviour.noWideScreenLayout &&
       (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23)) {
@@ -858,6 +856,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     self.textFieldHtml = self.textFieldHtml.replaceAll('\\*', ESCAPED_ASTERISK_REPLACEMENT)
       .replaceAll('\\:', ESCAPED_COLON_REPLACEMENT);
     // parse text
+    let nbBlank = 0;
     parseText(self.textFieldHtml)
       .forEach(function (part) {
         if (self.isAnswerPart(part)) {
@@ -887,8 +886,8 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
             self.createDraggable(solutions[index]);
           });
           
-          
-          self.createDroppable(solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock);
+          nbBlank++;
+          self.createDroppable(nbBlank, solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock);
         }
         else {
           // is normal text
@@ -1014,11 +1013,10 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
    *
    * @returns {H5P.TextDroppable}
    */
-  DragTextpapijo.prototype.createDroppable = function (answer, tip, correctFeedback, incorrectFeedback, removableBlock) {
+  DragTextpapijo.prototype.createDroppable = function (nbBlank, answer, tip, correctFeedback, incorrectFeedback, removableBlock) {
     var self = this;
-
-    var draggableIndex = this.draggables.length;
-
+    var draggableIndex = nbBlank;
+    
     //Make the dropzone
     var $dropzoneContainer = $('<div/>', {
       'class': DROPZONE_CONTAINER
