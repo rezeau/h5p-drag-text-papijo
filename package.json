@@ -17,10 +17,13 @@
   "homepage": "https://github.com/rezeau/h5p-drag-text-papijo",
   "devDependencies": {
     "@ava/babel": "^2.0.0",
-    "@babel/cli": "^7.18.6",
+    "@babel/cli": "^7.28.6",
     "@babel/core": "^7.18.6",
-    "@babel/plugin-proposal-object-rest-spread": "^7.18.6",
+    "@babel/plugin-transform-dynamic-import": "^7.27.1",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^7.28.6",
     "@babel/plugin-transform-object-assign": "^7.18.6",
+    "@babel/plugin-transform-object-rest-spread": "^7.28.6",
+    "@babel/plugin-transform-optional-chaining": "^7.28.6",
     "@babel/preset-env": "^7.18.6",
     "@babel/register": "7.21.0",
     "ava": "^5.2.0",
@@ -38,6 +41,9 @@
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.0.2"
   },
+  "overrides": {
+    "glob": "^10.4.5"
+  },
   "ava": {
     "require": [
       "@babel/register",
@@ -45,6 +51,6 @@
     ]
   },
   "dependencies": {
-    "core-js": "^3.37.1"
+    "core-js": "^3.48.0"
   }
 }
