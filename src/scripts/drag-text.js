@@ -509,21 +509,9 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     },
     {
       styleType: 'secondary',
-      icon: 'show-results',
+      icon: 'show-solutions',
     });
-/*
-    //Retry button
-    self.addButton('try-again', self.params.tryAgain, function () {
-      self.resetTask();
-      self.read(self.params.taskDescription);
-    }, self.initShowTryAgainButton || false, {
-      'aria-label': self.params.a11yRetry,
-    },
-    {
-      styleType: 'secondary',
-      icon: 'retry',
-    });
-  */
+
   //Retry button
     self.addButton('try-again', self.params.tryAgain, function () {
       // Reset and shuffle draggables if Question is answered
@@ -566,7 +554,12 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
       self.read(self.params.taskDescription);
     }, self.initShowTryAgainButton || false, {
       'aria-label': self.params.a11yRetry,
-    });
+    },
+      {
+        styleType: 'secondary',
+        icon: 'retry',
+      },
+      );
   };
 
   /**
