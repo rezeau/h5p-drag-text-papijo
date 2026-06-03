@@ -44,6 +44,14 @@ const lex = solutionText => {
     }
   }
   let removableBlock = text.match(/(_([^\\*]+)_)/g);
+  console.log('text = ' + text);
+  let isWordBeginning = /\[/.test(text);
+  console.log('removableBlock = ' + removableBlock);
+  console.log('isWordBeginning = ' + isWordBeginning);
+  if (isWordBeginning) {
+    text = text.replace(/\[/g, "");
+  }
+
   if (correctFeedback) {
     text = text.replace(correctFeedback, '');
     correctFeedback = correctFeedback[0].replace('\\+', '');
@@ -60,9 +68,9 @@ const lex = solutionText => {
     removableBlock = removableBlock[0].replace('\\-', '');
     removableBlock = removableBlock.replace(/_/gm, '');
   }
-
+  
   text = text.replace(/\s+$/, ''); // remove trailing spaces and tabs
-  return { tip, correctFeedback, incorrectFeedback, removableBlock, text };
+  return { tip, correctFeedback, incorrectFeedback, removableBlock, isWordBeginning, text };
 };
 
 export { parseText, lex };

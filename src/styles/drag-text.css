@@ -3,6 +3,7 @@
   position: relative;
   background: var(--h5p-theme-ui-base);
   overflow: hidden;
+  font-size: var(--h5p-theme-font-size-m);
 }
 .h5p-drag-text .h5p-drag-draggables-container
 .h5p-drag-text .hidden {
@@ -168,9 +169,6 @@
   width: fit-content;
   margin: auto;
   color: var(--h5p-theme-text-primary);
-  ///padding: var(--h5p-theme-spacing-xxs) var(--h5p-theme-spacing-xs);
-  padding: calc(var(--h5p-theme-spacing-xxs) - 2px) calc(var(--h5p-theme-spacing-xs) - 2px);
-  
   line-height: 1;
   font-size: var(--h5p-theme-font-size-m);
 }
@@ -319,8 +317,7 @@
 
 .h5p-drag-text .transparent {
   background-color: transparent;
-  margin-left: -0.5em;
-  margin-right: -1.1em;
+  margin-inline: calc(var(--h5p-theme-spacing-xs) * -0.45);
   border: none;
   box-shadow: none;
 }
@@ -329,4 +326,7 @@
   background: transparent!important;
   border: none;  
   top: 0.14rem;
+}
+.h5p-drag-text .isWordBeginning .transparent {
+  margin-left: revert!important;
 }
