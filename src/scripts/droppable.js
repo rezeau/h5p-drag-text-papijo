@@ -26,14 +26,14 @@ H5P.TextDroppable = (function ($) {
    * @param {number} index.
    * @param {Object} params Behavior settings
    */
-  function Droppable(text, tip, correctFeedback, incorrectFeedback,removableBlock,isWordBeginning, dropzone, dropzoneContainer, index, params) {
+  function Droppable(text, tip, correctFeedback, incorrectFeedback,removableBlock,isPartOfWord, dropzone, dropzoneContainer, index, params) {
     var self = this;
     self.text = text;
     self.tip = tip;
     self.correctFeedback = correctFeedback;
     self.incorrectFeedback = incorrectFeedback;
     self.removableBlock = removableBlock;
-    self.isWordBeginning = isWordBeginning;
+    self.isPartOfWord = isPartOfWord;
     self.index = index;
     self.params = params;
     /**
@@ -44,8 +44,8 @@ H5P.TextDroppable = (function ($) {
     if (self.removableBlock) {
       self.$dropzone.addClass('autowidth');
     }
-    if (self.isWordBeginning) {
-      self.$dropzone.addClass('isWordBeginning');
+    if (self.isPartOfWord) {
+      self.$dropzone.addClass('isPartOfWord');
     }
     self.$dropzoneContainer = $(dropzoneContainer);
 

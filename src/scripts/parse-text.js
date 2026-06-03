@@ -43,13 +43,10 @@ const lex = solutionText => {
       tip = tip.replace('<img', DUMMYCHARACTER + '​<img');
     }
   }
-  let removableBlock = text.match(/(_([^\\*]+)_)/g);
-  console.log('text = ' + text);
-  let isWordBeginning = /\[/.test(text);
-  console.log('removableBlock = ' + removableBlock);
-  console.log('isWordBeginning = ' + isWordBeginning);
-  if (isWordBeginning) {
-    text = text.replace(/\[/g, "");
+  // Test if draggable is part of word (except first part)
+  let isPartOfWord = /-/.test(text);
+  if (isPartOfWord) {
+    text = text.replace(/-/g, "");
   }
 
   if (correctFeedback) {
@@ -62,7 +59,8 @@ const lex = solutionText => {
     incorrectFeedback = incorrectFeedback[0].replace('\\-', '');
     incorrectFeedback = incorrectFeedback.replace(/\s+$/, '');
   }
-
+  // Test if block is between understores.
+  let removableBlock = text.match(/(_([^\\*]+)_)/g);
   if (removableBlock) {
     text = text.replace(removableBlock, '');
     removableBlock = removableBlock[0].replace('\\-', '');
@@ -70,7 +68,7 @@ const lex = solutionText => {
   }
   
   text = text.replace(/\s+$/, ''); // remove trailing spaces and tabs
-  return { tip, correctFeedback, incorrectFeedback, removableBlock, isWordBeginning, text };
+  return { tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord, text };
 };
 
 export { parseText, lex };

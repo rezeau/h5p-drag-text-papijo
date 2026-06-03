@@ -880,7 +880,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
           });
           
           nbBlank++;
-          self.createDroppable(nbBlank, solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock, solution.isWordBeginning);
+          self.createDroppable(nbBlank, solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock, solution.isPartOfWord);
         }
         else {
           // is normal text
@@ -933,7 +933,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
    */
   
   DragTextpapijo.prototype.addDropzoneWidth = function () {
-    const defaultWidth = this.shortDropZones ? '1em' : '8em';
+    const defaultWidth = this.shortDropZones ? '2em' : '8em';
     this.droppables.forEach(function (droppable) {
       const $dropzone = droppable.getDropzone();
       if ($dropzone.is(':empty')) {
@@ -1006,7 +1006,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
    *
    * @returns {H5P.TextDroppable}
    */
-  DragTextpapijo.prototype.createDroppable = function (nbBlank, answer, tip, correctFeedback, incorrectFeedback, removableBlock, isWordBeginning) {
+  DragTextpapijo.prototype.createDroppable = function (nbBlank, answer, tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord) {
     var self = this;
     var draggableIndex = nbBlank;
     
@@ -1067,7 +1067,7 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
           self.drop(draggable, droppable);
         }
       });
-    var droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, removableBlock, isWordBeginning, $dropzone, $dropzoneContainer, draggableIndex, self.params);
+    var droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord, $dropzone, $dropzoneContainer, draggableIndex, self.params);
     droppable.appendDroppableTo(self.$wordContainer);
 
     self.droppables.push(droppable);

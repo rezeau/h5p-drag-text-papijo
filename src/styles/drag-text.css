@@ -317,7 +317,8 @@
 
 .h5p-drag-text .transparent {
   background-color: transparent;
-  margin-inline: calc(var(--h5p-theme-spacing-xs) * -0.45);
+  margin-left: revert;
+  margin-right: -5px;
   border: none;
   box-shadow: none;
 }
@@ -327,6 +328,6 @@
   border: none;  
   top: 0.14rem;
 }
-.h5p-drag-text .isWordBeginning .transparent {
-  margin-left: revert!important;
+.h5p-drag-text .isPartOfWord .transparent {
+  margin-inline: calc(var(--h5p-theme-spacing-xs) * -0.45);
 }
