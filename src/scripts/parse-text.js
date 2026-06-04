@@ -29,7 +29,7 @@ const lex = solutionText => {
   let tip = solutionText.match(/(::([^\\*]+))/g);
   let correctFeedback = solutionText.match(/(\\\+([^\\*:]+))/g);
   let incorrectFeedback = solutionText.match(/(\\-([^\\*:]+))/g);
-
+  
   // Strip the tokens
   let text = Util.cleanCharacter('*', solutionText);
 
@@ -43,12 +43,12 @@ const lex = solutionText => {
       tip = tip.replace('<img', DUMMYCHARACTER + '​<img');
     }
   }
-  // Test if draggable is part of word (except first part)
-  let isPartOfWord = /-/.test(text);
+  // Test if draggable is part of word (except first part)  
+  const hasLeadingDash = str => str.startsWith('-');
+  let isPartOfWord = hasLeadingDash(text);  
   if (isPartOfWord) {
-    text = text.replace(/-/g, "");
+    text = text.replace(/^-/, '');
   }
-
   if (correctFeedback) {
     text = text.replace(correctFeedback, '');
     correctFeedback = correctFeedback[0].replace('\\+', '');

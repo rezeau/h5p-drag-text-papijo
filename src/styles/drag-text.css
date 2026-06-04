@@ -157,7 +157,7 @@
   ///box-shadow: 0px 1px 0em 0px var(--h5p-theme-alternative-dark);
   z-index: 3;
   border: solid 2px var(--h5p-theme-alternative-base);
-  border-bottom-color: var(--h5p-theme-alternative-dark);
+  //border-bottom-color: var(--h5p-theme-alternative-dark);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -201,8 +201,8 @@
   width: auto;
   margin: 0 -2px;
   ///white-space: nowrap;
-  border: 2px solid var(--h5p-theme-alternative-base);
-  border-color: var(--h5p-theme-alternative-darker);
+  //border: 2px solid var(--h5p-theme-alternative-base);
+  //border-color: var(--h5p-theme-alternative-darker);
 }
 
 .h5p-drag-text [aria-grabbed='true'] {
@@ -213,14 +213,14 @@
 
 .h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-correct:not(.transparent) {
   box-shadow: none;
-  border: solid 2px var(--h5p-theme-feedback-correct-third);
+  //border: solid 2px var(--h5p-theme-feedback-correct-third);
   color: var(--h5p-theme-feedback-correct-main);
   background-color: var(--h5p-theme-feedback-correct-secondary);
 }
 
 .h5p-drag-text .h5p-drag-dropped.h5p-drag-draggable-wrong {
   box-shadow: none;
-  border: solid 2px var(--h5p-theme-feedback-incorrect-third);
+  //border: solid 2px var(--h5p-theme-feedback-incorrect-third);
   background-color: var(--h5p-theme-feedback-incorrect-secondary);
 }
 
