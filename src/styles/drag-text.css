@@ -312,7 +312,8 @@
 
 .h5p-drag-text .autowidth {
   width: auto!important;
-  background-color: #faebd7;
+  background-color: var(--h5p-theme-feedback-incorrect-third);
+  color: var(--h5p-theme-feedback-incorrect-main);
 }
 
 .h5p-drag-text .transparent {

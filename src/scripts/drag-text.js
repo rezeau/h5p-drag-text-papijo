@@ -444,11 +444,11 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     this.changeLayoutToFitWidth();
   };
 
-DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
+  DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     const self = this;
     self.addDropzoneWidth();
     if (!self.params.behaviour.noWideScreenLayout &&
-      (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 23)) {
+      (self.$inner.width() / parseFloat(self.$inner.css("font-size"), 10) > 50)) {
       self.$wordscontainer.css({'width': self.params.behaviour.leftColumnWidth});
       self.$wordscontainer.css({'float': 'left'});
     } else {
@@ -537,9 +537,6 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
           }
           if (droppable.removableBlock && !droppable.hasCorrectFeedback()) {
             droppable.showRemovableBlock();
-          }
-          else {
-           ///droppable.displayTip();
           }
         });
       }
@@ -914,7 +911,6 @@ DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
       .appendTo(self.$taskContainer);
     self.$draggables.appendTo(self.$taskContainer);
     self.$taskContainer.appendTo($container);
-    ///self.addDropzoneWidth();
   };
 
   /**
