@@ -1000,10 +1000,11 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       },
       drag: self.propagateDragEvent('drag', self),
       start: self.propagateDragEvent('start', self),
-      stop: function (event) {
+      stop: function () {
+        const dropzone = draggable.getInsideDropzone();
         self.trigger('stop', {
           element: draggable.getElement(),
-          target: event.target
+          target: dropzone ? dropzone.getElement() : undefined
         });
       },
       containment: self.$taskContainer
@@ -1162,7 +1163,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     }
     self.answered = true;
 
-    draggable.removeFromZone();
+    var previousDroppable = draggable.removeFromZone();
 
     // if already contains draggable
     var revertedDraggable = droppable.appendInsideDroppableTo(this.$draggables);
@@ -1180,6 +1181,9 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
 
     droppable.setDraggable(draggable);    
     draggable.appendDraggableTo(droppable.getDropzone());
+    if (previousDroppable && previousDroppable !== droppable) {
+      self.setDroppableLabel(previousDroppable.getElement(), '', previousDroppable.getIndex());
+    }
 
     if (self.params.behaviour.instantFeedback) {
       droppable.addFeedback();
