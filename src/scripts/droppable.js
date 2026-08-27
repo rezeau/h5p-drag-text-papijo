@@ -11,10 +11,6 @@ H5P.TextDroppable = (function ($) {
   const DRAGGABLE_FEEDBACK_CORRECT = 'h5p-drag-draggable-correct';
   const DRAGGABLE_FEEDBACK_WRONG = 'h5p-drag-draggable-wrong';
 
-  // variables used if this.params.behaviour.transparentBackground
-  let transparent = ' ';
-  let transparentbackground = ' ';
-
   /**
    * Private class for keeping track of droppable zones.
    * @private
@@ -206,12 +202,10 @@ Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
    */
   Droppable.prototype.addFeedback = function () {
     const self = this;
+    const transparent = this.params.behaviour.transparentBackground ? ' transparent' : ' ';
+    const transparentbackground = this.params.behaviour.transparentBackground ? ' transparent-background' : ' ';
     // Draggable is correct
     // Option for displaying transparentBackground    
-    if (this.params.behaviour.transparentBackground) {
-      transparent = ' transparent';
-      transparentbackground = ' transparent-background';
-    }
     if (this.isCorrect()) {
       if (self.$tip) {
           if (this.params.behaviour.hideTips) {
@@ -248,6 +242,8 @@ Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
    * Removes all CSS styling feedback for this drop  *  * box.
    */
   Droppable.prototype.removeFeedback = function () {
+    const transparent = this.params.behaviour.transparentBackground ? ' transparent' : ' ';
+    const transparentbackground = this.params.behaviour.transparentBackground ? ' transparent-background' : ' ';
     this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK + transparentbackground);
 
     if (this.$tip && this.params.behaviour.hideTips) {
@@ -273,6 +269,8 @@ Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
    * Returns true if the dropzone has visible correct feedback (if option Keep Answers)
    */
   Droppable.prototype.hasCorrectFeedback = function () {
+    const transparent = this.params.behaviour.transparentBackground ? ' transparent' : ' ';
+    const transparentbackground = this.params.behaviour.transparentBackground ? ' transparent-background' : ' ';
     return this.$dropzone.hasClass(CORRECT_FEEDBACK)
       || this.$dropzone.hasClass(CORRECT_FEEDBACK + transparentbackground)
       || this.$dropzone.hasClass(DRAGGABLE_FEEDBACK_CORRECT)

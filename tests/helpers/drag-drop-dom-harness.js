@@ -168,6 +168,10 @@ class FakeQuery {
     return this;
   }
 
+  children() {
+    return new FakeQuery(this.elements.flatMap(element => element.children));
+  }
+
   detach() {
     this.elements.forEach(detachElement);
     return this;
@@ -449,7 +453,33 @@ const controlModules = new Set([
   'h5p-lib-controls/src/scripts/ui/keyboard',
   'h5p-lib-controls/src/scripts/ui/mouse'
 ]);
-const ControlStub = function () {};
+const ControlStub = function () {
+  this.elements = [];
+  this.handlers = {};
+};
+ControlStub.prototype.addElement = function (element) {
+  if (!this.elements.includes(element)) {
+    this.elements.push(element);
+  }
+};
+ControlStub.prototype.insertElementAt = function (element, position) {
+  if (!this.elements.includes(element)) {
+    this.elements.splice(position, 0, element);
+  }
+};
+ControlStub.prototype.on = function (name, handler, context) {
+  this.handlers[name] = this.handlers[name] || [];
+  this.handlers[name].push({ context, handler });
+};
+ControlStub.prototype.removeElement = function (element) {
+  this.elements = this.elements.filter(candidate => candidate !== element);
+};
+ControlStub.prototype.setAllToNone = function () {};
+ControlStub.prototype.setTabbable = function (element) {
+  this.elements.forEach(candidate => candidate.setAttribute('tabindex', '-1'));
+  element.setAttribute('tabindex', '0');
+};
+ControlStub.prototype.useNegativeTabIndex = function () {};
 const originalLoad = Module._load;
 Module._load = function (request, parent, isMain) {
   if (controlModules.has(request)) {
