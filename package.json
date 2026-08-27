@@ -16,7 +16,6 @@
   "license": "MIT",
   "homepage": "https://github.com/rezeau/h5p-drag-text-papijo",
   "devDependencies": {
-    "@ava/babel": "^2.0.0",
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.18.6",
     "@babel/plugin-transform-dynamic-import": "^7.27.1",
@@ -46,8 +45,7 @@
   },
   "ava": {
     "require": [
-      "@babel/register",
-      "./tests/helpers/setup.js"
+      "@babel/register"
     ]
   },
   "dependencies": {
