@@ -182,7 +182,7 @@ test('resetTask clears correct answers even when keepCorrectAnswers is enabled',
   t.is(instance.getScore(), 0);
 });
 
-test('showEvaluation creates and triggers an answered xAPI event', t => {
+test('partial showEvaluation creates a completed answered xAPI event', t => {
   const { draggables, droppables, events, instance } = createHarness();
   instance.drop(draggables[0], droppables[0]);
 
@@ -196,6 +196,34 @@ test('showEvaluation creates and triggers an answered xAPI event', t => {
   t.is(answered.data.statement.result.score.raw, 1);
   t.is(answered.data.statement.result.score.max, 3);
   t.is(answered.data.statement.result.response, 'one[,][,]');
+  t.true(answered.data.statement.result.completion);
+  t.false(Object.hasOwn(answered.data.statement.result, 'success'));
+});
+
+test('xAPI fill-in responses preserve every drop-zone position', t => {
+  const empty = createHarness();
+  t.is(empty.instance.getXAPIResponse(), '[,][,]');
+
+  const onePartial = createHarness();
+  onePartial.instance.drop(onePartial.draggables[0], onePartial.droppables[1]);
+  t.is(onePartial.instance.getXAPIResponse(), '[,]one[,]');
+
+  const multiplePartial = createHarness();
+  multiplePartial.instance.drop(multiplePartial.draggables[0], multiplePartial.droppables[0]);
+  multiplePartial.instance.drop(multiplePartial.draggables[2], multiplePartial.droppables[2]);
+  t.is(multiplePartial.instance.getXAPIResponse(), 'one[,][,]three');
+
+  const full = createHarness();
+  full.draggables.forEach((draggable, index) => {
+    full.instance.drop(draggable, full.droppables[index]);
+  });
+  t.is(full.instance.getXAPIResponse(), 'one[,]two[,]three');
+  t.is(full.instance.getScore(), 3);
+
+  const wrong = createHarness();
+  wrong.instance.drop(wrong.draggables[0], wrong.droppables[2]);
+  t.is(wrong.instance.getXAPIResponse(), '[,][,]one');
+  t.is(wrong.instance.getScore(), 0);
 });
 
 test('getXAPIData returns the current statement contract', t => {
