@@ -45,20 +45,40 @@ const loadDragText = () => {
 
 const DragText = loadDragText();
 
-const createElement = textContent => ({
-  attributes: {},
-  focused: false,
-  focus() {
-    this.focused = true;
-  },
-  setAttribute(name, value) {
-    this.attributes[name] = value;
-  },
-  textContent
-});
+const createElement = textContent => {
+  const classes = new Set();
+
+  return {
+    attributes: {},
+    childNodes: [],
+    classList: {
+      add: (...names) => names.forEach(name => classes.add(name)),
+      contains: name => classes.has(name),
+      remove: (...names) => names.forEach(name => classes.delete(name))
+    },
+    focused: false,
+    focus() {
+      this.focused = true;
+    },
+    getAttribute(name) {
+      return this.attributes[name] === undefined ? null : this.attributes[name];
+    },
+    hasAttribute(name) {
+      return this.attributes[name] !== undefined;
+    },
+    removeAttribute(name) {
+      delete this.attributes[name];
+    },
+    setAttribute(name, value) {
+      this.attributes[name] = value;
+    },
+    textContent
+  };
+};
 
 const createDraggable = (initialIndex, text) => {
   const draggable = {
+    ariaDescription: '',
     disabled: false,
     element: createElement(text),
     initialIndex,
@@ -74,9 +94,11 @@ const createDraggable = (initialIndex, text) => {
     appendDraggableTo() {},
     disableDraggable() {
       this.disabled = true;
+      this.element.setAttribute('aria-disabled', 'true');
     },
     enableDraggable() {
       this.disabled = false;
+      this.element.setAttribute('aria-disabled', 'false');
     },
     getAnswerText() {
       return this.text;
@@ -107,7 +129,14 @@ const createDraggable = (initialIndex, text) => {
     },
     revertDraggableTo() {
       this.reverted++;
+    },
+    updateAriaDescription(description) {
+      this.ariaDescription = description;
     }
+  };
+
+  draggable.$draggable = {
+    get: () => draggable.element
   };
 
   return draggable;
@@ -122,7 +151,7 @@ const createDroppable = (index, correctText) => {
     }
   };
 
-  return {
+  const droppable = {
     containedDraggable: null,
     correctFeedback: null,
     disabled: false,
@@ -144,12 +173,14 @@ const createDroppable = (index, correctText) => {
     },
     disableDropzoneAndContainedDraggable() {
       this.disabled = true;
+      this.element.setAttribute('aria-disabled', 'true');
       if (this.containedDraggable !== null) {
         this.containedDraggable.disableDraggable();
       }
     },
     enableDropzone() {
       this.disabled = false;
+      this.element.setAttribute('aria-disabled', 'false');
     },
     getDropzone() {
       return dropzone;
@@ -195,6 +226,12 @@ const createDroppable = (index, correctText) => {
       this.solutionVisible = true;
     }
   };
+
+  droppable.$dropzone = {
+    get: () => droppable.element
+  };
+
+  return droppable;
 };
 
 const createXAPIEvent = verb => {
@@ -236,6 +273,22 @@ const createHarness = ({
       elements: [],
       removeElement() {}
     },
+    dropControls: {
+      elements: [],
+      addElement(element) {
+        this.elements.push(element);
+      },
+      count() {
+        return this.elements.length;
+      },
+      removeElement(element) {
+        this.elements = this.elements.filter(candidate => candidate !== element);
+      },
+      setTabbable(element) {
+        this.elements.forEach(candidate => candidate.setAttribute('tabindex', '-1'));
+        element.setAttribute('tabindex', '0');
+      }
+    },
     draggables,
     droppables,
     events,
@@ -252,7 +305,11 @@ const createHarness = ({
         keepCorrectAnswers
       },
       checkAnswer: 'Check',
+      contains: 'Drop Zone @index contains draggable @draggable.',
+      correctText: 'Correct!',
       dropZoneIndex: 'Drop Zone @index',
+      empty: 'Drop Zone @index is empty.',
+      incorrectText: 'Incorrect!',
       overallFeedback: [],
       scoreBarLabel: 'Score',
       showSolution: 'Show solution',

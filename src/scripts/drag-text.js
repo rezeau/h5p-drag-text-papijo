@@ -162,6 +162,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
 
     this.dragControls.on('select', this.keyboardDraggableSelected, this);
     this.dropControls.on('select', this.keyboardDroppableSelected, this);
+    this.dropControls.on('close', () => this.cancelKeyboardDrag(true));
 
     // add and remove droppables on start/stop drag from controls
     this.on('start', this.addAllDroppablesToControls, this);
@@ -200,11 +201,15 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     // on drop remove element from drag controls
     this.on('drop', function(event) {
       this.dragControls.removeElement(event.data.element);
+      event.data.element.setAttribute('tabindex', '-1');
     }, this);
 
     // on revert, re add element to drag controls
     this.on('revert', function(event) {
-      this.dragControls.insertElementAt(event.data.element, 0);
+      const draggable = this.getDraggableByElement(event.data.element);
+      if (draggable) {
+        this.addDraggableToControls(this.dragControls, draggable, 0);
+      }
     }, this);
 
     this.on('drop', this.updateDroppableElement, this);
@@ -258,14 +263,8 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
         if (droppable.removableBlock) {
           droppable.showRemovableBlock();
         }
-        if (droppable && droppable.hasDraggable()) {
-          dropZone.setAttribute('aria-dropped', 'true');
-        }
-        else {
-          dropZone.removeAttribute('aria-dropped');
-          if (droppable.removableBlock) {
-            droppable.showRemovableBlock();
-          }
+        if (droppable && !droppable.hasDraggable() && droppable.removableBlock) {
+          droppable.showRemovableBlock();
         }
     }
   };
@@ -288,6 +287,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       .map(droppable => droppable.getElement())
       .forEach(el => {
         this.dropControls.removeElement(el);
+        el.setAttribute('tabindex', '-1');
       });
   };
 
@@ -303,6 +303,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     // add droppables in correct order
     this.droppables
       .map(droppable => droppable.getElement())
+      .filter(el => !this.isElementDisabled(el))
       .forEach(el => this.dropControls.addElement(el));
   };
 
@@ -312,7 +313,10 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
   DragTextpapijo.prototype.removeAllDroppablesFromControls = function() {
     this.droppables
       .map(droppable => droppable.getElement())
-      .forEach(el => this.dropControls.removeElement(el));
+      .forEach(el => {
+        this.dropControls.removeElement(el);
+        el.setAttribute('tabindex', '-1');
+      });
   };
 
   /**
@@ -467,7 +471,9 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       // Checking answer button
       self.addButton('check-answer', self.params.checkAnswer, function () {
         self.answered = true;
+        self.cancelKeyboardDrag();
         self.removeAllElementsFromDragControl();
+        self.removeAllDroppablesFromControls();
 
         if (!self.showEvaluation()) {
           if (self.params.behaviour.enableRetry) {
@@ -565,7 +571,10 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * list.
    */
   DragTextpapijo.prototype.removeAllElementsFromDragControl = function () {
-    this.dragControls.elements.forEach(element => this.dragControls.removeElement(element));
+    this.dragControls.elements.forEach(element => {
+      this.dragControls.removeElement(element);
+      element.setAttribute('tabindex', '-1');
+    });
   };
 
   /**
@@ -576,14 +585,12 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * @fires H5P.DragTextpapijo#start
    */
   DragTextpapijo.prototype.keyboardDraggableSelected = function (event) {
-    var tmp = this.selectedElement;
     var hasSelectedElement = this.selectedElement !== undefined;
     var isSelectedElement = this.selectedElement ===  event.element;
 
     // unselect the selected
     if(hasSelectedElement) {
-      this.selectedElement = undefined;
-      this.trigger('stop', { element: tmp });
+      this.cancelKeyboardDrag();
     }
 
     // no previous selected or not the selected one
@@ -598,12 +605,39 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    * Focuses on the first empty drop zone
    */
   DragTextpapijo.prototype.focusOnFirstEmptyDropZone = function() {
-    const dropZone = this.droppables
-      .filter(droppable => !droppable.hasDraggable())[0];
+    const isEnabled = droppable => !this.isElementDisabled(droppable.getElement());
+    const dropZone = this.droppables.find(droppable => !droppable.hasDraggable() && isEnabled(droppable)) ||
+      this.droppables.find(isEnabled);
+
+    if (!dropZone) {
+      return;
+    }
+
     const element = dropZone.getElement();
 
     this.dropControls.setTabbable(element);
     element.focus();
+  };
+
+  /**
+   * Cancels the current keyboard drag operation.
+   *
+   * @param {boolean} [restoreFocus] Whether focus should return to the draggable.
+   */
+  DragTextpapijo.prototype.cancelKeyboardDrag = function(restoreFocus) {
+    if (this.selectedElement === undefined) {
+      return;
+    }
+
+    const element = this.selectedElement;
+    this.selectedElement = undefined;
+    this.trigger('stop', { element: element });
+    this.removeControlsFromEmptyDropZones();
+
+    if (restoreFocus && this.dragControls.elements.includes(element)) {
+      this.dragControls.setTabbable(element);
+      element.focus();
+    }
   };
 
   /**
@@ -1153,6 +1187,8 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
 
       if (!self.params.behaviour.enableRetry || droppable.isCorrect()) {
         droppable.disableDropzoneAndContainedDraggable();
+        this.dropControls.removeElement(droppable.getElement());
+        droppable.getElement().setAttribute('tabindex', '-1');
       }
     }
 
@@ -1165,7 +1201,16 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     
     // Resize dropzone width to fit dropped droppagle.
     droppable.getDropzone().width('fit-content');  
-    droppable.getElement().focus();
+    if (!this.isElementDisabled(droppable.getElement())) {
+      droppable.getElement().focus();
+    }
+    else if (this.dragControls.elements[0]) {
+      this.dragControls.setTabbable(this.dragControls.elements[0]);
+      this.dragControls.elements[0].focus();
+    }
+    else {
+      this.$introduction.parent().focus();
+    }
     if (droppable.removableBlock) {
       droppable.hideRemovableBlock();
     }
@@ -1242,8 +1287,16 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    *
    * @returns {H5P.TextDraggable}
    */
-  DragTextpapijo.prototype.addDraggableToControls = function (controls, draggable) {
-    controls.addElement(draggable.getElement());
+  DragTextpapijo.prototype.addDraggableToControls = function (controls, draggable, position) {
+    const element = draggable.getElement();
+    if (!controls.elements.includes(element)) {
+      if (position === undefined) {
+        controls.addElement(element);
+      }
+      else {
+        controls.insertElementAt(element, position);
+      }
+    }
     return draggable;
   };
 
