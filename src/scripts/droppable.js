@@ -54,13 +54,15 @@ H5P.TextDroppable = (function ($) {
         tipLabel: self.params.tipLabel,
         tabcontrol: true
       });
-      self.$dropzoneContainer.addClass('has-tip');
-      self.$dropzoneContainer.append(self.$tip);
+      if (self.$tip) {
+        self.$dropzoneContainer.addClass('has-tip');
+        self.$dropzoneContainer.append(self.$tip);
 
-      // toggle tabindex on tip, based on dropzone focus
-      self.$dropzone.focus(() => self.$tip.attr('tabindex', '0'));
-      self.$dropzone.blur(() => self.removeTipTabIndexIfNoFocus());
-      self.$tip.blur(() => self.removeTipTabIndexIfNoFocus());
+        // toggle tabindex on tip, based on dropzone focus
+        self.$dropzone.focus(() => self.$tip.attr('tabindex', '0'));
+        self.$dropzone.blur(() => self.removeTipTabIndexIfNoFocus());
+        self.$tip.blur(() => self.removeTipTabIndexIfNoFocus());
+      }
     }
     
     if (self.removableBlock) {
@@ -213,6 +215,10 @@ Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
     if (this.isCorrect()) {
       if (self.$tip) {
           if (this.params.behaviour.hideTips) {
+            if (self.$tip.hideSpeechBubble) {
+              self.$tip.hideSpeechBubble();
+            }
+            self.$tip.attr('tabindex', '-1');
             self.$tip.attr('style', 'display: none;');
             self.$dropzoneContainer.removeClass('has-tip');
           }
@@ -243,6 +249,11 @@ Droppable.prototype.removeTipTabIndexIfNoFocus = function () {
    */
   Droppable.prototype.removeFeedback = function () {
     this.$dropzone.removeClass(WRONG_FEEDBACK).removeClass(CORRECT_FEEDBACK + transparentbackground);
+
+    if (this.$tip && this.params.behaviour.hideTips) {
+      this.$tip.attr('style', '');
+      this.$dropzoneContainer.addClass('has-tip');
+    }
 
     //Draggable feedback
     if (this.containedDraggable !== null) {

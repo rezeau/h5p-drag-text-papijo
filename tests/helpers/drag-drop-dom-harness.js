@@ -95,7 +95,13 @@ class FakeElement {
     if (this.children.length > 0) {
       return this.children.map(child => child.textContent).join('');
     }
-    return this.htmlContent.replace(/<[^>]*>/g, '');
+    return this.htmlContent
+      .replace(/<[^>]*>/g, '')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&');
   }
 }
 
@@ -294,6 +300,9 @@ class FakeQuery {
   }
 
   text(value) {
+    if (value === undefined) {
+      return this.elements[0]?.textContent;
+    }
     return this.html(value);
   }
 
@@ -341,6 +350,12 @@ const $ = (value, attributes = {}) => {
       else if (name === 'html') {
         element.htmlContent = String(attributeValue);
       }
+      else if (name === 'appendTo') {
+        $(attributeValue).append(element);
+      }
+      else if (typeof attributeValue === 'function') {
+        element.addEventListener(name, attributeValue);
+      }
       else {
         element.setAttribute(name, attributeValue);
       }
@@ -369,16 +384,61 @@ const Question = function () {
 Question.prototype = Object.create(EventDispatcher.prototype);
 Question.determineOverallFeedback = () => '@score of @total';
 
-global.document = { activeElement: null };
+global.document = {
+  activeElement: null,
+  createElement(tagName) {
+    if (tagName === 'canvas') {
+      return {
+        getContext: () => ({
+          font: '',
+          measureText: text => ({ width: text.length * 8 })
+        })
+      };
+    }
+    return new FakeElement(tagName);
+  }
+};
+const speechBubbles = [];
+let currentSpeechBubble;
+const resetSpeechBubbles = () => {
+  speechBubbles.length = 0;
+  currentSpeechBubble = undefined;
+};
+const tooltipCalls = [];
 global.H5P = {
   ConfirmationDialog: function () {},
   DragText: {},
   EventDispatcher,
   JoubelUI: {
-    createTip: () => $('<button/>')
+    createTip: (...args) => global.H5P.JoubelTip ? global.H5P.JoubelTip(...args) : $('<button/>')
+  },
+  JoubelSpeechBubble: (button, html, width) => {
+    if (currentSpeechBubble && !currentSpeechBubble.removed) {
+      currentSpeechBubble.remove();
+    }
+    const bubble = {
+      button,
+      html,
+      removed: false,
+      width,
+      isCurrent(candidate) {
+        return !this.removed && currentSpeechBubble === this && candidate === this.button;
+      },
+      remove() {
+        this.removed = true;
+      }
+    };
+    speechBubbles.push(bubble);
+    currentSpeechBubble = bubble;
+    return bubble;
   },
   Question,
-  Tooltip: () => {},
+  Tooltip: (element, options) => {
+    tooltipCalls.push({ element, options });
+    const tooltip = new FakeElement('div');
+    tooltip.classes.add('h5p-tooltip');
+    $(element).append(tooltip);
+  },
   jQuery: $
 };
 
@@ -553,5 +613,8 @@ module.exports = {
   Draggable,
   Droppable,
   FakeElement,
-  createParentHarness
+  createParentHarness,
+  resetSpeechBubbles,
+  speechBubbles,
+  tooltipCalls
 };

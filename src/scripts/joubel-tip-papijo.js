@@ -1,5 +1,7 @@
 H5P.JoubelTip = (function ($) {
   const $conv = $('<div/>');
+  let $expandedTipButton;
+  let $expandedTipAnnouncer;
 
   /**
    * Creates a new tip element.
@@ -113,12 +115,32 @@ H5P.JoubelTip = (function ($) {
 
         $tipButton.attr('aria-expanded', false);
         $tipAnnouncer.html('');
+        if ($expandedTipButton && $expandedTipButton[0] === $tipButton[0]) {
+          $expandedTipButton = undefined;
+          $expandedTipAnnouncer = undefined;
+        }
       }
       else if (force !== false && behaviour.showSpeechBubble) {
+        if ($expandedTipButton && $expandedTipButton[0] !== $tipButton[0]) {
+          $expandedTipButton.attr('aria-expanded', false);
+          $expandedTipAnnouncer.html('');
+        }
         // Create and show new popup
         speechBubble = H5P.JoubelSpeechBubble($tipButton, tipHtml, tipTextLen);
         $tipButton.attr('aria-expanded', true);
         $tipAnnouncer.html(tipHtml);
+        $expandedTipButton = $tipButton;
+        $expandedTipAnnouncer = $tipAnnouncer;
+      }
+    };
+
+    $tipButton.hideSpeechBubble = function () {
+      toggleSpeechBubble(false);
+      $tipButton.attr('aria-expanded', false);
+      $tipAnnouncer.html('');
+      if ($expandedTipButton && $expandedTipButton[0] === $tipButton[0]) {
+        $expandedTipButton = undefined;
+        $expandedTipAnnouncer = undefined;
       }
     };
 
