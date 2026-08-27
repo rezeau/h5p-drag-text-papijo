@@ -150,8 +150,23 @@ test('retry with keepCorrectAnswers retains correct and resets incorrect answers
   t.is(droppables[2].containedDraggable, null);
   t.true(draggables[0].disabled);
   t.false(draggables[1].disabled);
-  t.false(instance.getAnswerGiven());
   t.is(instance.getScore(), 1);
+});
+
+test('retry reports an answer given when keepCorrectAnswers retains a response', t => {
+  const { buttons, draggables, droppables, instance } = createHarness({
+    keepCorrectAnswers: true
+  });
+
+  instance.drop(draggables[0], droppables[0]);
+  instance.drop(draggables[1], droppables[2]);
+  instance.addButtons();
+  buttons['check-answer']();
+  buttons['try-again']();
+
+  t.deepEqual(instance.getCurrentState(), [{ draggable: 0, droppable: 0 }]);
+  t.is(instance.getScore(), 1);
+  t.true(instance.getAnswerGiven());
 });
 
 test('resetTask clears correct answers even when keepCorrectAnswers is enabled', t => {

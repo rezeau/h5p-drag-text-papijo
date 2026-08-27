@@ -520,7 +520,8 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
         self.resetDraggables();
       }
 
-      self.answered = false;
+      // Retained correct placements still count as answers for the H5P Question contract.
+      self.answered = self.getCurrentState().length > 0;
       self.hideEvaluation();
       self.hideExplanation();
       self.hideButton('try-again');
