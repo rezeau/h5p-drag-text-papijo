@@ -13,7 +13,7 @@ H5PPresave['H5P.DragTextPapiJo'] = function (content, finished) {
   var score = 0;
   if (isContentValid()) {
     var pattern = /\*.*?\*/g;
-    score = content.textField.match(pattern || []).length;
+    score = (content.textField.match(pattern) || []).length;
   }
 
   presave.validateScore(score);

@@ -62,20 +62,17 @@ test('returns and validates zero when required content is missing', t => {
   t.deepEqual(validatedScores, [0]);
 });
 
-test('preserves the current error for a present but empty text field', t => {
+test('returns and validates zero for a present but empty text field', t => {
   const { context, validatedScores } = loadPresave();
-  let finished = false;
+  let result;
 
-  const error = t.throws(() => {
-    context.H5PPresave['H5P.DragTextPapiJo'](
-      { textField: '' },
-      () => {
-        finished = true;
-      }
-    );
-  });
+  context.H5PPresave['H5P.DragTextPapiJo'](
+    { textField: '' },
+    value => {
+      result = value;
+    }
+  );
 
-  t.is(error.name, 'TypeError');
-  t.false(finished);
-  t.deepEqual(validatedScores, []);
+  t.deepEqual(result, { maxScore: 0 });
+  t.deepEqual(validatedScores, [0]);
 });
