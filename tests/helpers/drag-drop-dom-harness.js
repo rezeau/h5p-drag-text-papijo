@@ -434,15 +434,22 @@ const createControls = () => ({
 const createParentHarness = ({ instantFeedback = false, keepCorrectAnswers = false } = {}) => {
   const instance = Object.create(DragText.prototype);
   EventDispatcher.call(instance);
+  const buttons = {};
+  const buttonVisibility = {};
   const eventLog = [];
+  const introductionParent = $('<div/>');
   const originalTrigger = instance.trigger;
 
   Object.assign(instance, {
     $draggables: $('<div/>'),
-    $introduction: { parent: () => $('<div/>') },
+    $introduction: { parent: () => introductionParent },
+    $introductionParent: introductionParent,
     $taskContainer: $('<div/>'),
     $wordContainer: $('<div/>'),
     answered: false,
+    buttons,
+    buttonVisibility,
+    contentData: {},
     dragControls: createControls(),
     draggables: [],
     dropControls: createControls(),
@@ -458,17 +465,42 @@ const createParentHarness = ({ instantFeedback = false, keepCorrectAnswers = fal
       incorrectText: 'Incorrect!',
       tipLabel: 'Show tip',
       behaviour: {
+        alphaSort: true,
+        enableCheckButton: true,
         enableRetry: true,
+        enableSolutionsButton: true,
         hideTips: false,
         instantFeedback,
         keepCorrectAnswers,
         transparentBackground: false
-      }
+      },
+      a11yCheck: 'Check answers',
+      a11yRetry: 'Retry task',
+      a11yShowSolution: 'Show solution',
+      checkAnswer: 'Check',
+      overallFeedback: [],
+      scoreBarLabel: 'Score',
+      showSolution: 'Show solution',
+      submitAnswer: 'Submit',
+      taskDescription: 'Task',
+      tryAgain: 'Retry'
     },
     read() {},
+    removeFeedback() {},
     selectedElement: undefined,
-    setDraggableAriaLabel() {},
-    triggerXAPI() {},
+    setExplanation() {},
+    setFeedback() {},
+    setDraggableAriaLabel(draggable) {
+      return draggable;
+    },
+    stopWatch: {
+      reset() {},
+      stop: () => 1
+    },
+    textFieldHtml: '*one* *two*',
+    triggerXAPI(verb) {
+      eventLog.push({ name: `xapi:${verb}` });
+    },
     trigger(name, data) {
       eventLog.push({ data, name });
       originalTrigger.call(this, name, data);
@@ -488,7 +520,31 @@ const createParentHarness = ({ instantFeedback = false, keepCorrectAnswers = fal
   instance.on('drop', instance.updateDroppableElement, instance);
   instance.on('revert', instance.updateDroppableElement, instance);
 
-  return { eventLog, instance };
+  instance.addButton = (id, label, callback, visible) => {
+    buttons[id] = callback;
+    buttonVisibility[id] = Boolean(visible);
+  };
+  instance.createXAPIEventTemplate = verb => {
+    const statement = {
+      object: { definition: {} },
+      verb: { id: `https://adlnet.gov/expapi/verbs/${verb}` }
+    };
+    return {
+      data: { statement },
+      getVerifiedStatementValue() {
+        return statement.object.definition;
+      },
+      setScoredResult() {}
+    };
+  };
+  instance.hideButton = id => {
+    buttonVisibility[id] = false;
+  };
+  instance.showButton = id => {
+    buttonVisibility[id] = true;
+  };
+
+  return { buttons, buttonVisibility, eventLog, instance };
 };
 
 module.exports = {

@@ -534,6 +534,15 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       self.hideButton('show-solution');
       if (self.params.behaviour.instantFeedback) {
         self.enableAllDropzonesAndDraggables();
+        if (self.params.behaviour.keepCorrectAnswers) {
+          self.droppables.forEach(function (droppable) {
+            if (droppable.hasCorrectFeedback()) {
+              droppable.disableDropzoneAndContainedDraggable();
+              self.dropControls.removeElement(droppable.getElement());
+              droppable.getElement().setAttribute('tabindex', '-1');
+            }
+          });
+        }
       }
       else {
         self.showButton('check-answer');
@@ -803,6 +812,8 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       this.hideButton('show-solution');
       this.hideButton('try-again');
       this.disableDraggables();
+      this.removeAllElementsFromDragControl();
+      this.removeAllDroppablesFromControls();
     }
     this.trigger('resize');
     
