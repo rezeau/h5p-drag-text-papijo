@@ -508,6 +508,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       });
       self.draggables.forEach(draggable => self.setDraggableAriaLabel(draggable));
       self.disableDraggables();
+      self.removeAllElementsFromDragControl();
       self.removeAllDroppablesFromControls();
       self.hideButton('show-solution');
     }, self.initShowShowSolutionButton || false, {
@@ -1469,6 +1470,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
 
     this.removeAllDroppablesFromControls();
     this.disableDraggables();
+    this.removeAllElementsFromDragControl();
     //Remove all buttons in "show solution" mode.
     this.hideButton('try-again');
     this.hideButton('show-solution');
