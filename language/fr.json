@@ -18,12 +18,12 @@
       "default": "Glissez-déposez les mots ou groupes de mots dans les emplacements qui leur correspondent."
     },
     {
-      "label": "Text",
+      "label": "Texte",
       "placeholder": "*Oslo* est la capitale de la Norvège, *Stockholm* est la capitale de la Suède et *Copenhague* est la capitale du Danemark. Toutes ces villes sont situées dans la péninsule *Scandinave:Partie nord de l'Europe*. Maths : *2\\*3* = 6 et *12\\:3* = 4",
       "description": "",
       "important": {
-        "description": "<ul><li>Tutoriel et Exemples: <a href=\"http://www.h5p.rezeau.org\" target=\"_blank\" rel=\"noopener\">Le site H5P de Papi Jo</a></span></li><li>Les mots (ou groupes de mots) qui seront supprimés du texte pour figurer dans la liste des éléments à glisser/déposer doivent être encadrés avec un astérisque (*) devant et derrière.</li><li>Des astérisques et deux points (:) peuvent être ajoutés à l'intérieur des mots/phrases à glisser/déposer en les échappant (avec une barre oblique inverse). Voir l'exemple 3 ci-dessous.</li><li>Vous pouvez ajouter un indice en plaçant un DOUBLE caractère 2 points (::) avant cet indice.</li><li>Vous pouvez ajouter un feedback qui apparaîtra une fois l'exercice terminé. Utilisez '\\+' pour créer le feedback en cas de réponse correcte et '\\-' pour le feedback en cas de mauvaise réponse.</li><li>Vous pouvez fournir des réponses correctes alternatives en utilisant des barres obliques comme séparateurs. Voir l'exemple 5 ci-dessous.</li><li>Vous pouvez également ajouter un bloc de texte distracteur supprimable, entre des traits de soulignement. Voir l'exemple 4 ci-dessous.</li><li>Vous pouvez utiliser un style de formatage en ligne tel que &lt;em&gt;&lt;/em&gt ;. Voir l'exemple 5 ci-dessous.</li></ul>",
-        "example": "1.- Les contenus H5P peuvent être édités en utilisant un *navigateur::Quel type de programme utilisez vous pour consulter des sites Internet ?*. <br /> 2.- Un contenu H5P est *interactif\\+Correct ! \\-Incorrect, Recommencez !*<br />3.- Maths: *2\\*3* = 6 et *12\\:3* = 4<br />4.- Ce matin, j'ai rencontré mon ami John et je lui ai dit *_Enchanté de te rencontrer_Salut, John!::Utilisez une expression plus familière*.</br>5.- Le chien a couru après *le chat <em>noir</em>/l'oiseau/le facteur*"
+        "description": "<ul><li>Tutoriel et Exemples: <a href=\"http://www.h5p.rezeau.org\" target=\"_blank\" rel=\"noopener\">Le site H5P de Papi Jo</a></li><li>Les mots (ou groupes de mots) qui seront supprimés du texte pour figurer dans la liste des éléments à glisser/déposer doivent être encadrés avec un astérisque (*) devant et derrière.</li><li>Des astérisques et deux points (:) peuvent être ajoutés à l'intérieur des mots/phrases à glisser/déposer en les échappant (avec une barre oblique inverse). Voir l'exemple 3 ci-dessous.</li><li>Vous pouvez ajouter un indice en plaçant un DOUBLE caractère 2 points (::) avant cet indice.</li><li>Vous pouvez ajouter un feedback qui apparaîtra une fois l'exercice terminé. Utilisez '\\+' pour créer le feedback en cas de réponse correcte et '\\-' pour le feedback en cas de mauvaise réponse.</li><li>Vous pouvez fournir des réponses correctes alternatives en utilisant des barres obliques comme séparateurs. Voir l'exemple 5 ci-dessous.</li><li>Vous pouvez également ajouter un bloc de texte distracteur supprimable, entre des traits de soulignement. Voir l'exemple 4 ci-dessous.</li><li>Vous pouvez utiliser un style de formatage en ligne tel que &lt;em&gt;&lt;/em&gt;. Voir l'exemple 5 ci-dessous.</li></ul>",
+        "example": "1.- Les contenus H5P peuvent être édités en utilisant un *navigateur::Quel type de programme utilisez vous pour consulter des sites Internet ?*. <br /> 2.- Un contenu H5P est *interactif\\+Correct ! \\-Incorrect, Recommencez !*<br />3.- Maths: *2\\*3* = 6 et *12\\:3* = 4<br />4.- Ce matin, j'ai rencontré mon ami John et je lui ai dit *_Enchanté de te rencontrer_Salut, John!::Utilisez une expression plus familière*.<br />5.- Le chien a couru après *le chat <em>noir</em>/l'oiseau/le facteur*"
         }
     },
     {
@@ -67,8 +67,8 @@
       "default": "Vérifier"
     },
     {
-      "label": "Text for \"Submit\" button",
-      "default": "Submit"
+      "label": "Texte du bouton \"Soumettre\"",
+      "default": "Soumettre"
     },
     {
       "label": "Texte du bouton \"Recommencer\"",
@@ -79,29 +79,29 @@
       "default": "Voir la correction"
     },
     {
-      "label": "Etiquette de la zone de dépôt numérotée",
+      "label": "Étiquette de la zone de dépôt numérotée",
       "default": "Zone de dépôt @index.",
-      "description": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce le numéro de la zone de dépôt. Variable disponible : @index"
+      "description": "Étiquette utilisée pour l'accessibilité quand la synthèse vocale annonce le numéro de la zone de dépôt. Variable disponible : @index"
     },
     {
-      "label": "Etiquette zone de dépôt vide",
+      "label": "Étiquette zone de dépôt vide",
       "default": "La zone de dépôt @index est vide.",
-      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que la zone de dépôt est vide"
+      "description": "Étiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que la zone de dépôt est vide"
     },
     {
-      "label": "Etiquette pour la zone de dépôt contient",
+      "label": "Étiquette pour la zone de dépôt contient",
       "default": "La zone de dépôt @index contient un élément déplaçable @draggable.",
-      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que la zone de dépôt contient un élément déplaçable"
+      "description": "Étiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que la zone de dépôt contient un élément déplaçable"
     },
     {
-      "label": "Etiquette pour les éléments à déplacer",
+      "label": "Étiquette pour les éléments à déplacer",
       "default": "@index sur @count éléments déplaçables.",
-      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce que c'est un élément déplaçable. Variables disponibles : @index, @count"
+      "description": "Étiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que c'est un élément déplaçable. Variables disponibles : @index, @count"
     },
     {
-      "label": "Etiquette pour le bouton d'indice",
+      "label": "Étiquette pour le bouton d'indice",
       "default": "Montrer l’indice",
-      "description": "Etiquette utilisée pour l'accessibilité quand la syntèse vocale annonce l'indice"
+      "description": "Étiquette utilisée pour l'accessibilité quand la synthèse vocale annonce l'indice"
     },
     {
       "label": "Texte exprimé par la synthèse vocale en cas de réponse correcte",
@@ -117,18 +117,18 @@
     },
     {
       "label": "Description du dialogue de confirmation pour reparamétrer un élément déplaçable",
-      "default": "Etes-vous certain de vouloir reparamétrer cet élément déplaçable ?"
+      "default": "Êtes-vous certain de vouloir reparamétrer cet élément déplaçable ?"
     },
     {
-      "label": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que le déplacement d'un élément est initié",
+      "label": "Étiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que le déplacement d'un élément est initié",
       "default": "L'élément déplaçable est saisi."
     },
     {
-      "label": "Etiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que le déplacement de l'élément est annulé",
+      "label": "Étiquette utilisée pour l'accessibilité quand la synthèse vocale annonce que le déplacement de l'élément est annulé",
       "default": "Annuler le déplacement."
     },
     {
-      "label": "Etiquette utilisée pour l'accessibilité quand la bonne réponse est annoncée par la synthèse vocale",
+      "label": "Étiquette utilisée pour l'accessibilité quand la bonne réponse est annoncée par la synthèse vocale",
       "default": "Réponse correcte :"
     },
     {
@@ -197,7 +197,7 @@
     },
     {
       "label": "Représentation textuelle du panneau du score pour les utilisateurs des outils de la vocalisation (comme ReadSpeaker)",
-      "default": "Vous avez obtenu :num sur un total de :points"
+      "default": "Vous avez obtenu :num sur un total de :total points"
     },
     {
       "label": "Étiquette de technologie d'assistance pour le bouton Vérifier",

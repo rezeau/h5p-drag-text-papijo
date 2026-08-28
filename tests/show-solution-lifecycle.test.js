@@ -57,6 +57,18 @@ test('partial Check and Show Solution preserve answers and expose every solution
   t.true(buttonVisibility['try-again']);
 });
 
+test('Show Solution remains hidden for partial input when all gaps are required', t => {
+  const { buttonVisibility, buttons, draggables, droppables, instance } = createTask({
+    showSolutionsRequiresInput: true
+  });
+  instance.drop(draggables[0], droppables[0]);
+
+  buttons['check-answer']();
+
+  t.false(buttonVisibility['show-solution']);
+  t.true(buttonVisibility['try-again']);
+});
+
 test('wrong and unanswered zones keep coherent feedback and solution state', t => {
   const { buttons, draggables, droppables, instance } = createTask();
   instance.drop(draggables[2], droppables[0]);

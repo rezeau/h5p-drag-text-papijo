@@ -521,7 +521,11 @@ const createControls = () => ({
   }
 });
 
-const createParentHarness = ({ instantFeedback = false, keepCorrectAnswers = false } = {}) => {
+const createParentHarness = ({
+  instantFeedback = false,
+  keepCorrectAnswers = false,
+  showSolutionsRequiresInput = false
+} = {}) => {
   const instance = Object.create(DragText.prototype);
   EventDispatcher.call(instance);
   const buttons = {};
@@ -559,6 +563,7 @@ const createParentHarness = ({ instantFeedback = false, keepCorrectAnswers = fal
         enableCheckButton: true,
         enableRetry: true,
         enableSolutionsButton: true,
+        showSolutionsRequiresInput,
         hideTips: false,
         instantFeedback,
         keepCorrectAnswers,

@@ -22,7 +22,7 @@
       "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula. Maths: *2\\*3* = 6 and *12\\:3* = 4",
       "description": "",
       "important": {
-        "description": "<ul><li>Tutorial and Examples: <a href=\"https://www.rezeau.org/moodle/course/view.php?id=12&lang=en\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></span></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks and colons can be added within droppable words/phrases by escaping them (with a backslash). See example #3 below.</li><li>You may add a textual tip, using a DOUBLE colon (::) in front of the tip. See examples #1 and #4 below.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback. See example #2 below.</li><li>You may provide alternative correct answers by using slashes as separators. See example #5 below.</li><li>You may also add a removable distractor block of text, between underscores. See example #4 below.</li><li>You may use inline formatting such as &lt;em&gt;&lt;/em&gt;. See example #5 below.</li></ul>"
+        "description": "<ul><li>Tutorial and Examples: <a href=\"https://www.rezeau.org/moodle/course/view.php?id=12&lang=en\" target=\"_blank\" rel=\"noopener\">Papi Jo's H5P Moodle site</a></li><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Asterisks and colons can be added within droppable words/phrases by escaping them (with a backslash). See example #3 below.</li><li>You may add a textual tip, using a DOUBLE colon (::) in front of the tip. See examples #1 and #4 below.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback. See example #2 below.</li><li>You may provide alternative correct answers by using slashes as separators. See example #5 below.</li><li>You may also add a removable distractor block of text, between underscores. See example #4 below.</li><li>You may use inline formatting such as &lt;em&gt;&lt;/em&gt;. See example #5 below.</li></ul>"
       }
     },
     {
@@ -158,8 +158,8 @@
           "description": "Check this option if you want to display short drop zones (useful when using small screens e.g. phone)."
         },
         {
-          "label": "Always display the tips",
-          "description": "Uncheck this option if you want to hide the tips when correct answers are given for gaps."
+          "label": "Hide the tips for correct answers",
+          "description": "Check this option if you want to hide the tips when correct answers are given for gaps."
         },
         {
           "label": "Sort the draggable texts in alphabetic order",

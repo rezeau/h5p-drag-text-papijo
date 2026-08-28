@@ -95,8 +95,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
         keepCorrectAnswers: false,
         transparentBackground: false,
         noWideScreenLayout: false,
-        leftColumnWidth: 'auto',
-        removeExtraLineBreaks: true
+        leftColumnWidth: 'auto'
       },
       showSolution : "Show solution",
       dropZoneIndex: "Drop Zone @index.",
@@ -479,7 +478,10 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
           if (self.params.behaviour.enableRetry) {
             self.showButton('try-again');
           }
-          if (self.params.behaviour.enableSolutionsButton) {
+          if (self.params.behaviour.enableSolutionsButton && (
+            !self.params.behaviour.showSolutionsRequiresInput ||
+            self.isAllAnswersFilled()
+          )) {
             self.showButton('show-solution');
           }
           self.hideButton('check-answer');
