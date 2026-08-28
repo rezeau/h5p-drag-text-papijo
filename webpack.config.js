@@ -14,7 +14,8 @@ module.exports = (env, argv) => {
     devtool: (isProd) ? undefined : 'inline-source-map',
     output: {
       path: path.join(__dirname, 'dist'),
-      filename: `${libraryName}.js`
+      filename: `${libraryName}.js`,
+      clean: true
     },
     module: {
       rules: [

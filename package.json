@@ -6,7 +6,8 @@
   "scripts": {
     "test": "ava",
     "build": "webpack --mode=production",
-    "watch": "webpack --watch --mode=development"
+    "watch": "webpack --watch --mode=development",
+    "verify:package": "node scripts/verify-package.cjs"
   },
   "repository": {
     "type": "git",
