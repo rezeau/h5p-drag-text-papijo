@@ -23,7 +23,7 @@
     "ava": "^5.2.0",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.1",
-    "h5p-lib-controls": "0.0.15",
+    "h5p-lib-controls": "0.0.17",
     "mini-css-extract-plugin": "^2.10.2",
     "webpack": "^5.110.1",
     "webpack-cli": "^5.0.2"

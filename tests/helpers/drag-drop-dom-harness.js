@@ -524,7 +524,8 @@ const createControls = () => ({
 const createParentHarness = ({
   instantFeedback = false,
   keepCorrectAnswers = false,
-  showSolutionsRequiresInput = false
+  showSolutionsRequiresInput = false,
+  wireLifecycle = true
 } = {}) => {
   const instance = Object.create(DragText.prototype);
   EventDispatcher.call(instance);
@@ -602,18 +603,20 @@ const createParentHarness = ({
     }
   });
 
-  instance.on('drop', event => {
-    instance.dragControls.removeElement(event.data.element);
-    event.data.element.setAttribute('tabindex', '-1');
-  });
-  instance.on('revert', event => {
-    const draggable = instance.getDraggableByElement(event.data.element);
-    if (draggable) {
-      instance.addDraggableToControls(instance.dragControls, draggable, 0);
-    }
-  });
-  instance.on('drop', instance.updateDroppableElement, instance);
-  instance.on('revert', instance.updateDroppableElement, instance);
+  if (wireLifecycle) {
+    instance.on('drop', event => {
+      instance.dragControls.removeElement(event.data.element);
+      event.data.element.setAttribute('tabindex', '-1');
+    });
+    instance.on('revert', event => {
+      const draggable = instance.getDraggableByElement(event.data.element);
+      if (draggable) {
+        instance.addDraggableToControls(instance.dragControls, draggable, 0);
+      }
+    });
+    instance.on('drop', instance.updateDroppableElement, instance);
+    instance.on('revert', instance.updateDroppableElement, instance);
+  }
 
   instance.addButton = (id, label, callback, visible) => {
     buttons[id] = callback;
