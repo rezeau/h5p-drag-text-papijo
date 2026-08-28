@@ -28,19 +28,7 @@ module.exports = (env, argv) => {
             MiniCssExtractPlugin.loader,
             'css-loader'
           ]
-        },
-        {
-          test: /\.(svg)$/,
-          include: path.join(__dirname, 'src/images'),
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                limit: 10000
-              }
-            }
-          ]
-        } // inline base64 URLs for <=10k images, direct URLs for the rest
+        }
       ]
     },
     plugins: [

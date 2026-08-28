@@ -16,39 +16,20 @@
   "license": "MIT",
   "homepage": "https://github.com/rezeau/h5p-drag-text-papijo",
   "devDependencies": {
-    "@babel/cli": "^7.28.6",
-    "@babel/core": "^7.18.6",
-    "@babel/plugin-transform-dynamic-import": "^7.27.1",
-    "@babel/plugin-transform-nullish-coalescing-operator": "^7.28.6",
-    "@babel/plugin-transform-object-assign": "^7.18.6",
-    "@babel/plugin-transform-object-rest-spread": "^7.28.6",
-    "@babel/plugin-transform-optional-chaining": "^7.28.6",
-    "@babel/preset-env": "^7.18.6",
-    "@babel/register": "7.21.0",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/register": "^7.29.7",
     "ava": "^5.2.0",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.1",
     "h5p-lib-controls": "0.0.15",
-    "mini-css-extract-plugin": "^2.6.1",
-    "raw-loader": "^4.0.2",
-    "require-extension-hooks": "^0.3.3",
-    "require-extension-hooks-babel": "^1.0.0",
-    "style-loader": "^3.3.1",
-    "timer-machine": "^1.1.0",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.81.0",
-    "webpack-bundle-analyzer": "^4.10.2",
+    "mini-css-extract-plugin": "^2.10.2",
+    "webpack": "^5.110.1",
     "webpack-cli": "^5.0.2"
-  },
-  "overrides": {
-    "glob": "^10.4.5"
   },
   "ava": {
     "require": [
       "@babel/register"
     ]
-  },
-  "dependencies": {
-    "core-js": "^3.48.0"
   }
 }
