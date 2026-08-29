@@ -1,0 +1,30 @@
+{
+  "media": {
+    "type": {
+      "library": "H5P.Video 1.5",
+      "params": {
+        "sources": [
+          {
+            "path": "videos/legacy-video.mp4",
+            "mime": "video/mp4",
+            "copyright": {
+              "license": "U"
+            }
+          }
+        ],
+        "visuals": {
+          "fit": true,
+          "controls": true
+        },
+        "playback": {
+          "autoplay": false,
+          "loop": false
+        }
+      },
+      "subContentId": "11111111-1111-4111-8111-111111111111"
+    },
+    "disableImageZooming": false
+  },
+  "taskDescription": "Move the word into place.",
+  "textField": "This is *one*."
+}

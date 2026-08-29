@@ -50,11 +50,32 @@ test('translated defaults preserve canonical substitution placeholders', t => {
   });
 });
 
-test('optional media stays content-selected instead of preloading H5P.Audio', t => {
+test('Video migration release metadata and assets remain exact', t => {
   const mediaOptions = semantics.find(field => field.name === 'media').fields
     .find(field => field.name === 'type').options;
   const preloaded = library.preloadedDependencies.map(dependency => dependency.machineName);
 
-  t.true(mediaOptions.includes('H5P.Audio 1.5'));
+  t.deepEqual({
+    majorVersion: library.majorVersion,
+    minorVersion: library.minorVersion,
+    patchVersion: library.patchVersion
+  }, {
+    majorVersion: 1,
+    minorVersion: 2,
+    patchVersion: 0
+  });
+  t.is(library.machineName, 'H5P.DragTextPapiJo');
+  t.deepEqual(mediaOptions, [
+    'H5P.Image 1.1',
+    'H5P.Video 1.6',
+    'H5P.Audio 1.5'
+  ]);
+  t.deepEqual(library.preloadedJs, [{
+    path: 'dist/h5p-drag-text-papijo.js'
+  }]);
+  t.deepEqual(library.preloadedCss, [{
+    path: 'dist/h5p-drag-text-papijo.css'
+  }]);
+  t.false(preloaded.includes('H5P.Video'));
   t.false(preloaded.includes('H5P.Audio'));
 });

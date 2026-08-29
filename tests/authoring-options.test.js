@@ -55,7 +55,7 @@ test('media semantics characterize the currently supported selector versions', t
 
   t.deepEqual(options, [
     'H5P.Image 1.1',
-    'H5P.Video 1.5',
+    'H5P.Video 1.6',
     'H5P.Audio 1.5'
   ]);
 });
