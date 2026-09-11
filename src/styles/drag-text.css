@@ -332,3 +332,14 @@
 .h5p-drag-text .isPartOfWord .transparent {
   margin-inline: calc(var(--h5p-theme-spacing-xs) * -0.45);
 }
+
+.joubel-speech-bubble .papijo-structured-tooltip-image {
+  display: block;
+  height: auto;
+  margin-top: 0.5em;
+  max-width: 100%;
+}
+
+.joubel-speech-bubble .papijo-structured-tooltip-image:first-child {
+  margin-top: 0;
+}

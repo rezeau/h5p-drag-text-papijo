@@ -92,6 +92,41 @@
     "description": "Text imported from the Source of a WYSIWYG editor may contain paragraph tags < p > or break tags < br >, which will be automatically removed. If you also want to remove potential line breaks after those paragraphs, check this option."
   },
   {
+    "name": "tooltipImages",
+    "type": "list",
+    "widget": "none",
+    "label": "Managed tooltip images",
+    "optional": true,
+    "field": {
+      "name": "tooltipImage",
+      "type": "group",
+      "label": "Managed tooltip image",
+      "fields": [
+        {
+          "name": "id",
+          "type": "text",
+          "label": "Tooltip reference identifier",
+          "regexp": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          }
+        },
+        {
+          "name": "image",
+          "type": "image",
+          "label": "Tooltip image"
+        },
+        {
+          "name": "alt",
+          "type": "text",
+          "label": "Image alternative text",
+          "regexp": {
+            "pattern": ".*\\S.*"
+          }
+        }
+      ]
+    }
+  },
+  {
     "label": "Distractors",
     "importance": "high",
     "name": "distractors",

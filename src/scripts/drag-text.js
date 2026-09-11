@@ -3,6 +3,11 @@ import StopWatch from './stop-watch';
 import Util from './util';
 import Draggable from './draggable';
 import Droppable from './droppable';
+import { prepareTooltipReferences } from './scan-text-field';
+import {
+  indexTooltipImages,
+  resolveTooltipImage
+} from './tooltip-images';
 
 import Controls from 'h5p-lib-controls/src/scripts/controls';
 import AriaDrag from 'h5p-lib-controls/src/scripts/aria/drag';
@@ -79,6 +84,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
       textField: "This is a *nice*, *flexible* content type, which allows you to highlight all the *wonderful* words in this *exciting* sentence.\n" +
         "This is another line of *fantastic* text.",
       distractors: "",
+      tooltipImages: [],
       overallFeedback: [],
       checkAnswer: "Check",
       submitAnswer: "Submit",
@@ -122,6 +128,20 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     }
     // Keeps track of if Question has been answered
     this.answered = false;
+
+    // Remove tooltip references before any legacy parsing, HTML decoding,
+    // answer identity, state or xAPI code can observe them. Associations keep
+    // the original parsed gap order and resolve only unique, valid markers.
+    const preparedTextField = prepareTooltipReferences(this.params.textField);
+    const preparedDistractors = prepareTooltipReferences(this.params.distractors, {
+      kind: 'distractors'
+    });
+    this.tooltipReferenceAssociations = preparedTextField.associations;
+    this.tooltipReferenceDiagnostics = preparedTextField.diagnostics;
+    this.tooltipImageIndex = indexTooltipImages(this.params.tooltipImages);
+    this.params.textField = preparedTextField.source;
+    this.params.distractors = preparedDistractors.source;
+
     // If text was copied-pasted from another WYSIWYG editor we may need to clean potential line breaks which would ruin the display.
     if (this.params.removeExtraLineBreaks) {
       this.params.textField = this.params.textField.replace(/(\r\n|\n|\r)/gm, "");
@@ -901,13 +921,15 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
         if (self.isAnswerPart(part)) {
           // is draggable/droppable
           const solution = lex(part);
+          let structuredTipText = solution.tip;
           solution.text = solution.text.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
             .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
           // Deal with potential escaped asterisks & escaped colons within tip.
           if (solution.tip) {
             // If tip contains image and no text, add an invisible space to make blur happy.
-            solution.tip = DUMMYCHARACTER + solution.tip.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
+            structuredTipText = solution.tip.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
               .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
+            solution.tip = DUMMYCHARACTER + structuredTipText;
           }
           if (solution.correctFeedback) {
             solution.correctFeedback = solution.correctFeedback.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
@@ -917,6 +939,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
             solution.incorrectFeedback = solution.incorrectFeedback.replaceAll(ESCAPED_ASTERISK_REPLACEMENT, ASTERISK)
               .replaceAll(ESCAPED_COLON_REPLACEMENT, COLON);
           }
+          const structuredTooltip = self.getStructuredTooltip(nbBlank, structuredTipText);
           // Accept multiple correct answers inside pairs of asterisks.
           // Split by slash _not preceded by the < character_ in case some solution.text is formatted with html tags.
           const solutions = solution.text.split(/(?<![<\\])\//);
@@ -926,7 +949,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
           });
           
           nbBlank++;
-          self.createDroppable(nbBlank, solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock, solution.isPartOfWord);
+          self.createDroppable(nbBlank, solutions, solution.tip, solution.correctFeedback, solution.incorrectFeedback, solution.removableBlock, solution.isPartOfWord, structuredTooltip);
         }
         else {
           // is normal text
@@ -971,6 +994,33 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    */
   DragTextpapijo.prototype.isAnswerPart = function(part) {
     return Util.startsWith('*', part) && Util.endsWith('*', part);
+  };
+
+  /**
+   * Build structured tooltip data for one parsed gap. The existing string tip
+   * remains available separately for the unchanged legacy rendering path.
+   *
+   * @param {number} gapIndex Zero-based authored gap index.
+   * @param {string|undefined} text Existing :: tip content.
+   * @returns {Object|null} Structured tooltip data or null.
+   */
+  DragTextpapijo.prototype.getStructuredTooltip = function (gapIndex, text) {
+    const association = this.tooltipReferenceAssociations &&
+      this.tooltipReferenceAssociations[gapIndex];
+    if (!association || association.status !== 'valid') {
+      return null;
+    }
+
+    const definition = this.tooltipImageIndex && this.tooltipImageIndex[association.id];
+    const image = resolveTooltipImage(
+      definition,
+      this.contentId,
+      typeof H5P.getPath === 'function' ? H5P.getPath.bind(H5P) : null
+    );
+    if (!text && !image) {
+      return null;
+    }
+    return { image, text: text || '' };
   };
 
 /**
@@ -1052,7 +1102,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
    *
    * @returns {H5P.TextDroppable}
    */
-  DragTextpapijo.prototype.createDroppable = function (nbBlank, answer, tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord) {
+  DragTextpapijo.prototype.createDroppable = function (nbBlank, answer, tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord, structuredTooltip) {
     var self = this;
     var draggableIndex = nbBlank;
     
@@ -1113,7 +1163,7 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
           self.drop(draggable, droppable);
         }
       });
-    var droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord, $dropzone, $dropzoneContainer, draggableIndex, self.params);
+    var droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord, $dropzone, $dropzoneContainer, draggableIndex, self.params, structuredTooltip);
     droppable.appendDroppableTo(self.$wordContainer);
 
     self.droppables.push(droppable);

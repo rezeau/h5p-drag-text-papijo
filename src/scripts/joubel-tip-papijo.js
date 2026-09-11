@@ -1,3 +1,5 @@
+import buildStructuredTooltip from './structured-tooltip';
+
 H5P.JoubelTip = (function ($) {
   const $conv = $('<div/>');
   let $expandedTipButton;
@@ -21,7 +23,14 @@ H5P.JoubelTip = (function ($) {
 
     // Keep track of the popup that appears when you click the Tip button
     let speechBubble;
-    // Check if tipHtml contains one or more images.
+    const structured = behaviour && behaviour.structuredTooltip ?
+      buildStructuredTooltip(behaviour.structuredTooltip) : null;
+    const isStructured = Boolean(structured);
+    if (isStructured) {
+      tipHtml = structured.html;
+    }
+
+    // Check if legacy tipHtml contains one or more images.
     let imgLen;
     const regex = /(.?><img\s+)src="(.*?)"|width="(.*?)"|(width: ?(\d*))(.*?)>/gm;
     const reg = /^\d+$/;
@@ -40,12 +49,15 @@ H5P.JoubelTip = (function ($) {
     }
 
     // Parse tip html to determine text
-    let tipText = $conv.html(tipHtml).text().trim();
+    let tipText = isStructured ? structured.text : $conv.html(tipHtml).text().trim();
     if (tipText === '') {
       return; // The tip has no textual content, i.e. it's invalid.
     }
 
     let tipTextLen = getWidthOfText(tipText, 'Sans-Serif', '16px');
+    if (isStructured && structured.hasImage) {
+      tipTextLen = Math.max(240, tipTextLen);
+    }
     if (imgLen !== undefined) {
       tipTextLen = Math.max(imgLen, tipTextLen);
     }

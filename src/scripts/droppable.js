@@ -22,7 +22,7 @@ H5P.TextDroppable = (function ($) {
    * @param {number} index.
    * @param {Object} params Behavior settings
    */
-  function Droppable(text, tip, correctFeedback, incorrectFeedback,removableBlock,isPartOfWord, dropzone, dropzoneContainer, index, params) {
+  function Droppable(text, tip, correctFeedback, incorrectFeedback,removableBlock,isPartOfWord, dropzone, dropzoneContainer, index, params, structuredTooltip) {
     var self = this;
     self.text = text;
     self.tip = tip;
@@ -32,6 +32,7 @@ H5P.TextDroppable = (function ($) {
     self.isPartOfWord = isPartOfWord;
     self.index = index;
     self.params = params;
+    self.structuredTooltip = structuredTooltip;
     /**
      * @type {H5P.TextDraggable}
      */
@@ -45,8 +46,9 @@ H5P.TextDroppable = (function ($) {
     }
     self.$dropzoneContainer = $(dropzoneContainer);
 
-    if (self.tip) {
-      self.$tip = H5P.JoubelUI.createTip(self.tip, {
+    if (self.tip || self.structuredTooltip) {
+      self.$tip = H5P.JoubelUI.createTip(self.tip || '', {
+        structuredTooltip: self.structuredTooltip,
         tipLabel: self.params.tipLabel,
         tabcontrol: true
       });

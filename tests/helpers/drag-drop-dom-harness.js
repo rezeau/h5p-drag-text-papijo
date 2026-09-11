@@ -23,6 +23,13 @@ class FakeElement {
     }
   }
 
+  appendChild(child) {
+    detachElement(child);
+    this.children.push(child);
+    child.parent = this;
+    return child;
+  }
+
   dispatchEvent(event) {
     event.currentTarget = this;
     (this.eventListeners[event.type] || []).forEach(listener => listener(event));
@@ -91,6 +98,19 @@ class FakeElement {
     return this.children;
   }
 
+  get innerHTML() {
+    return this.htmlContent + this.children.map(serializeElement).join('');
+  }
+
+  set innerHTML(value) {
+    this.children = [];
+    this.htmlContent = String(value);
+  }
+
+  get outerHTML() {
+    return serializeElement(this);
+  }
+
   get textContent() {
     if (this.children.length > 0) {
       return this.children.map(child => child.textContent).join('');
@@ -104,6 +124,30 @@ class FakeElement {
       .replace(/&amp;/g, '&');
   }
 }
+
+const serializeElement = element => {
+  const attributes = [];
+  const className = element.className || Array.from(element.classes).join(' ');
+  if (className) {
+    attributes.push(`class="${className}"`);
+  }
+  element.attributeOrder.forEach(name => {
+    if (name !== 'class') {
+      attributes.push(`${name}="${element.attributes[name]}"`);
+    }
+  });
+  if (element.src !== undefined) {
+    attributes.push(`src="${element.src}"`);
+  }
+  if (element.alt !== undefined) {
+    attributes.push(`alt="${element.alt}"`);
+  }
+  const opening = `<${element.tagName.toLowerCase()}${attributes.length ? ` ${attributes.join(' ')}` : ''}>`;
+  if (element.tagName === 'IMG') {
+    return opening;
+  }
+  return `${opening}${element.innerHTML}</${element.tagName.toLowerCase()}>`;
+};
 
 const detachElement = element => {
   if (element.parent) {
