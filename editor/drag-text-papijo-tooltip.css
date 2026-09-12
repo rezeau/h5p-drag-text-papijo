@@ -1,0 +1,79 @@
+.papijo-dragtext-tooltip-panel {
+  border-top: 1px solid #ddd;
+  margin-top: 1em;
+  padding-top: 0.75em;
+}
+
+.papijo-dragtext-tooltip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.papijo-dragtext-tooltip-gap {
+  border: 1px solid #ddd;
+  border-radius: 0.25em;
+  margin: 0.35em 0;
+  padding: 0.5em;
+}
+
+.papijo-dragtext-tooltip-gap-heading,
+.papijo-dragtext-tooltip-status,
+.papijo-dragtext-tooltip-warning {
+  margin: 0 0 0.35em;
+}
+
+.papijo-dragtext-tooltip-gap-heading {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em 0.75em;
+}
+
+.papijo-dragtext-tooltip-preview {
+  background: #f3f3f3;
+  border-radius: 0.2em;
+  font-weight: normal;
+  padding: 0.1em 0.35em;
+  overflow-wrap: anywhere;
+}
+
+.papijo-dragtext-tooltip-warning {
+  color: #b71c1c;
+  font-weight: 600;
+}
+
+.papijo-dragtext-tooltip-add,
+.papijo-dragtext-tooltip-edit,
+.papijo-dragtext-tooltip-remove,
+.papijo-dragtext-tooltip-form button {
+  margin: 0 0.4em 0.25em 0;
+}
+
+.papijo-dragtext-tooltip-form {
+  background: #f7f7f7;
+  margin-top: 0.5em;
+  padding: 0.6em;
+}
+
+.papijo-dragtext-tooltip-form label,
+.papijo-dragtext-tooltip-text,
+.papijo-dragtext-tooltip-alt {
+  box-sizing: border-box;
+  display: block;
+  margin-bottom: 0.75em;
+  width: 100%;
+}
+
+.papijo-dragtext-tooltip-text {
+  min-height: 3.5em;
+  resize: vertical;
+}
+
+.papijo-dragtext-tooltip-image-field {
+  margin-bottom: 0.75em;
+}
+
+.papijo-dragtext-tooltip-store {
+  display: none;
+}

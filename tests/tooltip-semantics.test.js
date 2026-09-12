@@ -5,15 +5,30 @@ import test from 'ava';
 const semantics = JSON.parse(fs.readFileSync('semantics.json', 'utf8'));
 const tooltipImages = semantics.find(field => field.name === 'tooltipImages');
 
-test('tooltipImages is an optional hidden structured list for a later custom editor', t => {
+test('tooltipImages is an optional structured list owned by the custom editor', t => {
   t.truthy(tooltipImages);
   t.is(tooltipImages.type, 'list');
   t.true(tooltipImages.optional);
-  t.is(tooltipImages.widget, 'none');
+  t.is(tooltipImages.widget, 'dragTextPapiJoTooltipImagesStore');
   t.is(tooltipImages.field.type, 'group');
   t.deepEqual(tooltipImages.field.fields.map(field => [field.name, field.type]), [
     ['id', 'text'], ['image', 'image'], ['alt', 'text']
   ]);
+});
+
+test('textField and library metadata select the dedicated editor helper', t => {
+  const library = JSON.parse(fs.readFileSync('library.json', 'utf8'));
+  const textField = semantics.find(field => field.name === 'textField');
+  const dependency = library.editorDependencies.find(item =>
+    item.machineName === 'H5PEditor.DragTextPapiJoTooltip'
+  );
+
+  t.is(textField.widget, 'dragTextPapiJoTooltip');
+  t.deepEqual(dependency, {
+    machineName: 'H5PEditor.DragTextPapiJoTooltip',
+    majorVersion: 1,
+    minorVersion: 0
+  });
 });
 
 test('tooltip image semantics requires a lowercase UUID v4 and meaningful alt text', t => {

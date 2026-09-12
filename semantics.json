@@ -72,7 +72,7 @@
     "importance": "high",
     "name": "textField",
     "type": "text",
-    "widget": "textarea",
+    "widget": "dragTextPapiJoTooltip",
     "rows": "10",
     "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula. Maths: *2\\*3* = 6 and *12\\:3* = 4",
     "description": "",
@@ -94,7 +94,7 @@
   {
     "name": "tooltipImages",
     "type": "list",
-    "widget": "none",
+    "widget": "dragTextPapiJoTooltipImagesStore",
     "label": "Managed tooltip images",
     "optional": true,
     "field": {

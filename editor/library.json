@@ -1,0 +1,26 @@
+{
+  "title": "DragText Papi Jo Tooltip Editor",
+  "description": "Adds lossless text and managed-image tooltip authoring to DragText Papi Jo.",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 0,
+  "runnable": 0,
+  "machineName": "H5PEditor.DragTextPapiJoTooltip",
+  "author": "Papi Jo",
+  "preloadedJs": [
+    {
+      "path": "drag-text-papijo-tooltip-sanitizer.js"
+    },
+    {
+      "path": "drag-text-papijo-tooltip-model.js"
+    },
+    {
+      "path": "drag-text-papijo-tooltip.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "drag-text-papijo-tooltip.css"
+    }
+  ]
+}

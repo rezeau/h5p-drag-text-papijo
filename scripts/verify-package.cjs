@@ -104,6 +104,33 @@ const expectedDistFiles = new Set([
   'dist/h5p-drag-text-papijo.css',
   'dist/h5p-drag-text-papijo.js'
 ]);
+
+const editorRoot = path.join(root, 'editor');
+const requiredEditorFiles = [
+  'library.json',
+  'drag-text-papijo-tooltip-sanitizer.js',
+  'drag-text-papijo-tooltip-model.js',
+  'drag-text-papijo-tooltip.js',
+  'drag-text-papijo-tooltip.css',
+  'language/en.json',
+  'language/fr.json'
+];
+for (const file of requiredEditorFiles) {
+  if (!fs.existsSync(path.join(editorRoot, file))) {
+    errors.push(`Editor helper file is missing: editor/${file}`);
+  }
+}
+if (fs.existsSync(path.join(editorRoot, 'library.json'))) {
+  const editorLibrary = JSON.parse(fs.readFileSync(path.join(editorRoot, 'library.json'), 'utf8'));
+  const rootLibrary = JSON.parse(fs.readFileSync(path.join(root, 'library.json'), 'utf8'));
+  const dependency = (rootLibrary.editorDependencies || []).find(item =>
+    item.machineName === editorLibrary.machineName
+  );
+  if (!dependency || dependency.majorVersion !== editorLibrary.majorVersion ||
+      dependency.minorVersion !== editorLibrary.minorVersion) {
+    errors.push('Editor helper manifest does not match the root editor dependency.');
+  }
+}
 const actualDistFiles = packageFiles.filter(file => file.startsWith('dist/'));
 
 for (const file of actualDistFiles) {
@@ -127,4 +154,5 @@ else {
   console.log(`H5P package verification passed: ${packageFiles.length} files would be included.`);
   console.log(`Language files: ${languageFiles.join(', ')}`);
   console.log(`Dist files: ${actualDistFiles.join(', ')}`);
+  console.log(`Editor helper files verified: ${requiredEditorFiles.length}`);
 }
