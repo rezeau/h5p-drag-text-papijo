@@ -62,7 +62,7 @@ test('Video migration release metadata and assets remain exact', t => {
   }, {
     majorVersion: 1,
     minorVersion: 3,
-    patchVersion: 0
+    patchVersion: 1
   });
   t.is(library.machineName, 'H5P.DragTextPapiJo');
   t.deepEqual(mediaOptions, [

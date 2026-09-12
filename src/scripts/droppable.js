@@ -21,8 +21,11 @@ H5P.TextDroppable = (function ($) {
    * @param {jQuery} dropzoneContainer Container Container for the dropzone.
    * @param {number} index.
    * @param {Object} params Behavior settings
+   * @param {Object} [structuredTooltip] Managed tooltip data.
+   * @param {Function} [onResize] Propagates content size changes to H5P.
+   * @param {Function} [setReservedSpace] Reserves in-flow tooltip space.
    */
-  function Droppable(text, tip, correctFeedback, incorrectFeedback,removableBlock,isPartOfWord, dropzone, dropzoneContainer, index, params, structuredTooltip) {
+  function Droppable(text, tip, correctFeedback, incorrectFeedback,removableBlock,isPartOfWord, dropzone, dropzoneContainer, index, params, structuredTooltip, onResize, setReservedSpace) {
     var self = this;
     self.text = text;
     self.tip = tip;
@@ -48,6 +51,8 @@ H5P.TextDroppable = (function ($) {
 
     if (self.tip || self.structuredTooltip) {
       self.$tip = H5P.JoubelUI.createTip(self.tip || '', {
+        onResize: onResize,
+        setReservedSpace: setReservedSpace,
         structuredTooltip: self.structuredTooltip,
         tipLabel: self.params.tipLabel,
         tabcontrol: true

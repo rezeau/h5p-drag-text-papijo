@@ -467,6 +467,38 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
     this.changeLayoutToFitWidth();
   };
 
+  /**
+   * Reserve temporary in-flow space so an absolutely positioned tooltip is
+   * included when H5P measures this instance's content height.
+   *
+   * @param {number} height Required space in pixels, or zero to release it.
+   */
+  DragTextpapijo.prototype.setTooltipReservedSpace = function (height) {
+    height = Math.max(0, Math.ceil(Number(height) || 0));
+    if (height === (this.tooltipReservedSpace || 0)) {
+      return;
+    }
+
+    this.tooltipReservedSpace = height;
+    if (height === 0) {
+      if (this.$tooltipReservedSpace) {
+        this.$tooltipReservedSpace.remove();
+        this.$tooltipReservedSpace = undefined;
+      }
+    }
+    else {
+      if (!this.$tooltipReservedSpace) {
+        this.$tooltipReservedSpace = $('<div/>', {
+          'aria-hidden': 'true',
+          'class': 'papijo-tooltip-reserved-space'
+        }).css({ pointerEvents: 'none', width: '100%' }).appendTo(this.$inner);
+      }
+      this.$tooltipReservedSpace.css('height', `${height}px`);
+    }
+
+    this.trigger('resize');
+  };
+
   DragTextpapijo.prototype.changeLayoutToFitWidth = function () {
     const self = this;
     self.addDropzoneWidth();
@@ -1163,7 +1195,11 @@ H5P.DragTextpapijo = (function ($, Question, ConfirmationDialog) {
           self.drop(draggable, droppable);
         }
       });
-    var droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord, $dropzone, $dropzoneContainer, draggableIndex, self.params, structuredTooltip);
+    var droppable = new Droppable(answer, tip, correctFeedback, incorrectFeedback, removableBlock, isPartOfWord, $dropzone, $dropzoneContainer, draggableIndex, self.params, structuredTooltip, function () {
+      self.trigger('resize');
+    }, function (height) {
+      self.setTooltipReservedSpace(height);
+    });
     droppable.appendDroppableTo(self.$wordContainer);
 
     self.droppables.push(droppable);

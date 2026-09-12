@@ -12,6 +12,7 @@ class FakeElement {
     this.htmlContent = '';
     this.offsetValue = { left: 0, top: 0 };
     this.parent = null;
+    this.rectValue = { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0 };
     this.style = {};
     this.tagName = tagName.toUpperCase();
   }
@@ -30,6 +31,17 @@ class FakeElement {
     return child;
   }
 
+  contains(candidate) {
+    let current = candidate;
+    while (current) {
+      if (current === this) {
+        return true;
+      }
+      current = current.parent;
+    }
+    return false;
+  }
+
   dispatchEvent(event) {
     event.currentTarget = this;
     (this.eventListeners[event.type] || []).forEach(listener => listener(event));
@@ -38,6 +50,10 @@ class FakeElement {
   focus() {
     global.document.activeElement = this;
     this.focused = true;
+  }
+
+  getBoundingClientRect() {
+    return Object.assign({}, this.rectValue);
   }
 
   getAttribute(name) {
@@ -216,6 +232,23 @@ class FakeQuery {
     return new FakeQuery(this.elements.flatMap(element => element.children));
   }
 
+  closest(selector) {
+    const className = selector.startsWith('.') ? selector.slice(1) : null;
+    const matches = [];
+    this.elements.forEach(element => {
+      let candidate = element;
+      while (candidate) {
+        if ((className && candidate.classes.has(className)) ||
+          (!className && candidate.tagName.toLowerCase() === selector.toLowerCase())) {
+          matches.push(candidate);
+          break;
+        }
+        candidate = candidate.parent;
+      }
+    });
+    return new FakeQuery(matches);
+  }
+
   detach() {
     this.elements.forEach(detachElement);
     return this;
@@ -242,11 +275,14 @@ class FakeQuery {
   }
 
   find(selector) {
+    const selectors = selector.split(',').map(part => part.trim());
     const matches = [];
     const visit = element => {
       element.children.forEach(child => {
-        if ((selector.startsWith('.') && child.classes.has(selector.slice(1))) ||
-          (!selector.startsWith('.') && child.tagName.toLowerCase() === selector.toLowerCase())) {
+        if (selectors.some(candidate =>
+          (candidate.startsWith('.') && child.classes.has(candidate.slice(1))) ||
+          (!candidate.startsWith('.') && child.tagName.toLowerCase() === candidate.toLowerCase())
+        )) {
           matches.push(child);
         }
         visit(child);
@@ -265,6 +301,9 @@ class FakeQuery {
   }
 
   get(index) {
+    if (index === undefined) {
+      return this.elements;
+    }
     return this.elements[index];
   }
 
@@ -300,8 +339,21 @@ class FakeQuery {
     return false;
   }
 
+  last() {
+    return new FakeQuery(this.elements.length ? [this.elements[this.elements.length - 1]] : []);
+  }
+
   offset() {
     return this.elements[0]?.offsetValue || { left: 0, top: 0 };
+  }
+
+  off(types) {
+    types.split(/\s+/).forEach(type => {
+      this.elements.forEach(element => {
+        delete element.eventListeners[type];
+      });
+    });
+    return this;
   }
 
   on(types, handler) {
@@ -434,6 +486,13 @@ Question.determineOverallFeedback = () => '@score of @total';
 
 global.document = {
   activeElement: null,
+  eventListeners: {},
+  addEventListener(type, listener) {
+    this.eventListeners[type] = this.eventListeners[type] || [];
+    if (!this.eventListeners[type].includes(listener)) {
+      this.eventListeners[type].push(listener);
+    }
+  },
   createElement(tagName) {
     if (tagName === 'canvas') {
       return {
@@ -444,13 +503,26 @@ global.document = {
       };
     }
     return new FakeElement(tagName);
+  },
+  dispatchEvent(event) {
+    event.currentTarget = this;
+    (this.eventListeners[event.type] || []).slice().forEach(listener => listener(event));
+  },
+  removeEventListener(type, listener) {
+    this.eventListeners[type] = (this.eventListeners[type] || [])
+      .filter(candidate => candidate !== listener);
   }
 };
 const speechBubbles = [];
 let currentSpeechBubble;
+let nextSpeechBubbleRect;
 const resetSpeechBubbles = () => {
   speechBubbles.length = 0;
   currentSpeechBubble = undefined;
+  nextSpeechBubbleRect = undefined;
+};
+const setNextSpeechBubbleRect = rect => {
+  nextSpeechBubbleRect = Object.assign({}, rect);
 };
 const tooltipCalls = [];
 global.H5P = {
@@ -464,8 +536,34 @@ global.H5P = {
     if (currentSpeechBubble && !currentSpeechBubble.removed) {
       currentSpeechBubble.remove();
     }
+    const bubbleElement = new FakeElement('div');
+    bubbleElement.classes.add('joubel-speech-bubble');
+    bubbleElement.classes.add('joubel-speech-bubble-bottom');
+    bubbleElement.rectValue = Object.assign(
+      {},
+      bubbleElement.rectValue,
+      nextSpeechBubbleRect || {}
+    );
+    const tail = new FakeElement('div');
+    tail.classes.add('joubel-speech-bubble-tail');
+    const innerTail = new FakeElement('div');
+    innerTail.classes.add('joubel-speech-bubble-inner-tail');
+    const inner = new FakeElement('div');
+    inner.classes.add('joubel-speech-bubble-inner');
+    bubbleElement.appendChild(tail);
+    bubbleElement.appendChild(innerTail);
+    bubbleElement.appendChild(inner);
+    let frame = button.closest('.h5p-frame');
+    if (!frame.length) {
+      frame = button.closest('.h5p-container');
+    }
+    if (frame.length) {
+      frame.append(bubbleElement);
+    }
+
     const bubble = {
       button,
+      element: bubbleElement,
       html,
       removed: false,
       width,
@@ -697,6 +795,7 @@ module.exports = {
   FakeElement,
   createParentHarness,
   resetSpeechBubbles,
+  setNextSpeechBubbleRect,
   speechBubbles,
   tooltipCalls
 };
