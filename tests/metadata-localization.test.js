@@ -61,7 +61,7 @@ test('Video migration release metadata and assets remain exact', t => {
     patchVersion: library.patchVersion
   }, {
     majorVersion: 1,
-    minorVersion: 2,
+    minorVersion: 3,
     patchVersion: 0
   });
   t.is(library.machineName, 'H5P.DragTextPapiJo');

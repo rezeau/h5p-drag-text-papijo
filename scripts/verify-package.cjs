@@ -60,6 +60,7 @@ const requiredFiles = [
 ];
 const forbiddenPaths = [
   'node_modules',
+  'editor',
   'tests',
   'src',
   '.git',
@@ -115,9 +116,32 @@ const requiredEditorFiles = [
   'language/en.json',
   'language/fr.json'
 ];
+const actualEditorFiles = [];
+const collectEditorFiles = (directory, relativeDirectory = '') => {
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const relativePath = normalize(path.join(relativeDirectory, entry.name));
+
+    if (entry.isDirectory()) {
+      collectEditorFiles(path.join(directory, entry.name), relativePath);
+    }
+    else if (entry.isFile()) {
+      actualEditorFiles.push(relativePath);
+    }
+  }
+};
+
+collectEditorFiles(editorRoot);
+if (!ignorePatterns.includes('editor')) {
+  errors.push('editor/ must be excluded from the runtime library payload.');
+}
 for (const file of requiredEditorFiles) {
   if (!fs.existsSync(path.join(editorRoot, file))) {
     errors.push(`Editor helper file is missing: editor/${file}`);
+  }
+}
+for (const file of actualEditorFiles) {
+  if (!requiredEditorFiles.includes(file)) {
+    errors.push(`Unexpected editor helper package file: editor/${file}`);
   }
 }
 if (fs.existsSync(path.join(editorRoot, 'library.json'))) {
